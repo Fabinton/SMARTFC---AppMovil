@@ -15,7 +15,7 @@ class AppNavigatorWithState extends ReduxifyApp {
       BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
     }
     handleBackPress = () => {
-      console.log("Entra en el Handle")
+      console.log("Entra en LIZ el Handle")
       this.goBack(); // works best when the goBack is async
       return true;
     }
