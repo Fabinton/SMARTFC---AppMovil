@@ -41,9 +41,11 @@ class Login extends Component {
     if(dataStudents.length==0){
     }else{
       for (var i = 0; i<=dataStudents.length-1;i++){
-        if (dataStudents[i].correo_electronico == this.state.email){
+        //if (dataStudents[i].correo_electronico == this.state.email){
+          if (dataStudents[i].correo_electronico == 'estudiante10@fc.com'){
           console.log("Entro")
-          if(dataStudents[i].contrasena == this.state.password){
+          if(dataStudents[i].contrasena == '1234'){
+          //if(dataStudents[i].contrasena == this.state.password){
             dataCompleted = dataStudents[i];
           }else{
             Alert.alert(
