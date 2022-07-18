@@ -20,11 +20,29 @@ import CloseSession from './screen/containers/closeSession';
 import Profile from './screen/containers/Profile'
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { Ionicons , Octicons } from '@expo/vector-icons';
-import {BackHandler} from 'react-native';
+import {BackHandler, Alert} from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
-function goodBye(){
-    BackHandler.exitApp();
+function goodBye({ navigation }){
+    
+    var bandera = 0;
+       Alert.alert(
+           'Alerta',
+           '¿Deseas salir de la app?', 
+           [{
+               text: 'Cancelar', onPress: () => {bandera=1},style: 'cancel'
+            }, 
+            {
+               text: 'OK', onPress: () => BackHandler.exitApp()
+            },], 
+            {
+               cancelable: true
+            }
+        )
+        if(bandera=1){navigation.navigate('Activities');}
+        
+        return false;
+
 }
 const Main = createStackNavigator(
     {
@@ -154,7 +172,7 @@ const DrawerNavigator = createDrawerNavigator(
         
     },
     {
-        initialRouteName:'Login',
+        initialRouteName:'Activities',
         drawerWidth:200,
         drawerBackgroundColor:'#272D34',
         contentOptions:{
