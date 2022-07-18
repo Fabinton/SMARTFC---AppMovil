@@ -159,7 +159,7 @@ class Configure extends Component {
                 <TextInput style={styles.textData} secureTextEntry={true} onChangeText={(text) => this.setState({password: text})}></TextInput>
           </View>
           <View style={styles.containerText}>
-          <Text style={[styles.textDocument, marginBottom=20]}>Recuerde que para registrarse necesita estar conectado con el servicio, en caso de no estar conectado dirijase a su director o al docente para que se le proporcione la conexión; tambien recuerde que en la aplicación puedes acceder a contenido adicional de manera de invitado. Al momento de Registrarse usted acepta los terminos de uso de datos para futuras investigaciones</Text>
+          
           <TouchableOpacity style={[styles.touchableButtonSignIn, marginBottom=20,]} onPress={() => this.actualizaUser()}>
                     <LinearGradient
                         colors={['#272d34', '#0f2545', '#272d34']}

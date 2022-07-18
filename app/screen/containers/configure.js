@@ -187,8 +187,7 @@ class Configure extends Component {
                 <Text style={styles.textText}>Contraseña: </Text>
                 <TextInput style={styles.textData} secureTextEntry={true} onChangeText={(text) => this.setState({password: text})}></TextInput>
           </View>
-          <Text style={[styles.textDocument, marginBottom=20]}>Recuerde que para registrarse necesita estar conectado con el servicio, en caso de no estar conectado dirijase a su director o al docente para que se le proporcione la conexión; tambien recuerde que en la aplicación puedes acceder a contenido adicional de manera de invitado. Al momento de Registrarse usted acepta los terminos de uso de datos para futuras investigaciones</Text>
-
+        
           <View style={[styles.containerText, marginBottom=50 ]}>
           <TouchableOpacity style={styles.touchableButtonSignIn} onPress={() => this.funcionCargada()}>
                     <LinearGradient

@@ -260,12 +260,12 @@ class selectMoment extends Component{
                  animationType="slide"
                  transparent={false}
                  visible={this.state.modalVisible}
-                 onRequestClose={() => {
-                 Alert.alert('Modal has been closed.');
-                  }}>
-          <View style={{ marginTop: 22, marginLeft: 30, }}>
-            <View>
-              <Text>Realiza tu pregunta:</Text>
+                 onRequestClose={() => { this.setModalVisible(!this.state.modalVisible)}}
+                 >
+
+                 <View style={{ marginTop: 22, marginLeft: 30, }}>
+                    <View>
+                    <Text>Realiza tu pregunta:</Text>
                 <TextInput style={styles.email} placeholder='Pregunta???'
                   autoCapitalize='none'
                   onChangeText={(text) => this.setState({ pregunta: text })}
