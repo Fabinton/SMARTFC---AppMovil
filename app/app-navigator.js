@@ -24,25 +24,7 @@ import {BackHandler, Alert} from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
 function goodBye({ navigation }){
-    
-    var bandera = 0;
-       Alert.alert(
-           'Alerta',
-           '¿Deseas salir de la app?', 
-           [{
-               text: 'Cancelar', onPress: () => {bandera=1},style: 'cancel'
-            }, 
-            {
-               text: 'OK', onPress: () => BackHandler.exitApp()
-            },], 
-            {
-               cancelable: true
-            }
-        )
-        if(bandera=1){navigation.navigate('Activities');}
-        
-        return false;
-
+    BackHandler.exitApp()
 }
 const Main = createStackNavigator(
     {
