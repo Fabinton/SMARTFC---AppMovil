@@ -322,7 +322,8 @@ class Login extends Component {
           transparent={false}
           visible={this.state.modalVisible}
           onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
+            //Alert.alert("Modal has been closed.");
+            this.setModalVisible(false);
           }}
         >
           <View style={{ marginTop: 22, marginLeft: 20 }}>
