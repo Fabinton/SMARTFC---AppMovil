@@ -18,6 +18,7 @@ import * as SQLite from "expo-sqlite";
 import HeaderLogin from "../../components/headerLogin";
 import API from "../../../utils/api";
 import { LinearGradient } from "expo-linear-gradient";
+import { Button } from "react-native";
 const db = SQLite.openDatabase("db5.db");
 function goodBye() {
   BackHandler.exitApp();
@@ -114,9 +115,9 @@ class Login extends Component {
     console.log(d.getFullYear());
     var year = d.getFullYear();
     console.log(typeof year);
-    if (year != 2020) {
-      goodBye();
-    }
+    // if (year != 2020) {
+    //   goodBye();
+    // }
     this.props.dispatch({
       type: "SET_STUDENT",
       payload: {
@@ -296,97 +297,25 @@ class Login extends Component {
           secureTextEntry={true}
           onChangeText={(text) => this.setState({ password: text })}
         ></TextInput>
-        <TouchableOpacity
-          style={styles.touchableButtonSignIn}
-          onPress={() => this.signIn()}
-        >
-          <LinearGradient
-            colors={["#6CD492", "#5FCABB", "#5DC5E6"]}
-            style={{
-              padding: 10,
-              alignItems: "center",
-              borderRadius: 18,
-              height: 40,
-            }}
-          >
-            <Text
-              style={{
-                backgroundColor: "transparent",
-                fontSize: 15,
-                fontWeight: "bold",
-                color: "#fff",
-                borderRadius: 16,
-              }}
-            >
-              INICIAR SESION
-            </Text>
-          </LinearGradient>
+
+        <Button onPress={() => this.signIn()} title="INICIAR SESION" />
+
+        <TouchableOpacity style={styles.touchableButtonSignIn}>
+          <Button
+            title="SINCRONIZA DATOS USUARIO"
+            onPress={() => this.sincronizarDatas()}
+          />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.touchableButtonSignIn}
-          onPress={() => this.sincronizarDatas()}
-        >
-          <LinearGradient
-            colors={["#6CD492", "#5FCABB", "#5DC5E6"]}
-            style={{
-              padding: 10,
-              alignItems: "center",
-              borderRadius: 18,
-              height: 40,
-              marginTop: 15,
-            }}
-          >
-            <Text
-              style={{
-                backgroundColor: "transparent",
-                fontSize: 10,
-                fontWeight: "bold",
-                color: "#fff",
-                borderRadius: 16,
-                marginTop: 3,
-              }}
-            >
-              SINCRONIZA DATOS USUARIO
-            </Text>
-          </LinearGradient>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.touchableButtonSignIn}
-          onPress={() => this.loginAdmin()}
-        >
-          <LinearGradient
-            colors={["#6CD492", "#5FCABB", "#5DC5E6"]}
-            style={{
-              padding: 10,
-              alignItems: "center",
-              borderRadius: 18,
-              height: 40,
-              marginTop: 15,
-            }}
-          >
-            <Text
-              style={{
-                backgroundColor: "transparent",
-                fontSize: 10,
-                fontWeight: "bold",
-                color: "#fff",
-                borderRadius: 16,
-                marginTop: 3,
-              }}
-            >
-              LOGIN COMO ADMIN
-            </Text>
-          </LinearGradient>
+        <TouchableOpacity style={styles.touchableButtonSignIn}>
+          <Button title="LOGIN COMO ADMIN" onPress={() => this.loginAdmin()} />
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => this.registrateForm()}
           style={styles.registrate}
         >
-          <Text style={{ color: "#FFFFFF" }}>
-            {" "}
-            No tienes una Cuenta? Registrate
-          </Text>
+          <Text style={{ color: "#FFFFFF" }}>¿No tienes Cuenta?</Text>
+          <Text style={{ color: "#24A0ED", marginLeft: 5 }}>Registrate</Text>
         </TouchableOpacity>
         <Modal
           animationType="slide"
@@ -540,8 +469,11 @@ const styles = StyleSheet.create({
   },
   touchableButtonSignIn: {
     justifyContent: "center",
+    marginTop: 15,
   },
   registrate: {
+    display: "flex",
+    flexDirection: "row",
     marginTop: 10,
     color: "#E7E7E7",
   },
