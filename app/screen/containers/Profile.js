@@ -177,10 +177,25 @@ class Profile extends Component {
     });
     console.log(this.state.storage);
   }
-  keyExtractor = item => item.id_actividad.toString();
+  keyExtractor = item => item.id_actividad.toString(); 
+
+  viewContenido=(item)=>{
+    this.props.dispatch({
+      type:'SET_SELECT_ACTIVITIES_SUBJECT_LIST',
+      payload:{
+          activity: item,
+      }
+    })
+    console.log(this.props.dispatch)
+    this.props.dispatch(NavigationActions.navigate({
+      routeName: 'SelectMoment'
+    }))
+  }
+
   renderItem = ({ item }) => {
     return (
-      <ActivityEvents {...item} />
+      <ActivityEvents {...item} 
+      onPress={()=>{this.viewContenido(item)}} />
     )
   }
   render() {
@@ -204,6 +219,9 @@ class Profile extends Component {
     );
   }
 }
+
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
