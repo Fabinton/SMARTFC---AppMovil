@@ -20,14 +20,13 @@ const styles = StyleSheet.create({
     grado:{
         fontWeight:'bold',
         color:'#9C9C9C',
-        fontSize: 15,
+        fontSize: 17,
         marginTop: 10,
         marginLeft: 10,
     },
     sentence:{
-        fontWeight:'bold',
         color:'#000',
-        fontSize: 12,
+        fontSize: 17,
         marginTop: 10,
         marginLeft: 10,
     }

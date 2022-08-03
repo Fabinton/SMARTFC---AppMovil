@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import ContenidoLayout from '../components/detailActivity';
-import { StyleSheet,Button} from 'react-native';
+import { StyleSheet,Button, TouchableOpacity} from 'react-native';
 import Details from '../../components/detailActivity';
 import {Animated} from 'react-native';
 import {connect} from 'react-redux';
@@ -179,14 +179,18 @@ class detailActivity extends Component{
     render(){
         console.log(this.state.source);
         return(
-            <Animated.View
-                style={{flex:1, opacity:this.state.opacity, }}
-            >
+            <Animated.View style={styles.container}>
+                
                 <ContenidoLayout>
                     <Details {...this.props.activity} />
                 </ContenidoLayout>
                 
-                <Button title="Continua Aprendiendo" onPress={()=>this.continuarContenido()}/>
+                <TouchableOpacity style={styles.touchableButton}>
+                    <Button
+                        title="Continua Aprendiendo"
+                        onPress={()=>this.continuarContenido()}
+                    />
+                </TouchableOpacity>
             </Animated.View>
         );
     }
@@ -198,5 +202,21 @@ function mapStateToProps(state){
         ipconfig: state.videos.selectedIPConfig
     }
 }
+const styles = StyleSheet.create({
+  touchableButton: {
+    height: 40,
+    width: 185,
+    backgroundColor: "#5DC5E6",
+    textAlign: "center",
+    marginTop: 30,
+    
+},
+  container: {
+    flex: 1,
+    alignItems: "center",
+    paddingRight: 20,
+    paddingLeft: 20,
+},
+})
 
 export default connect(mapStateToProps)(detailActivity);

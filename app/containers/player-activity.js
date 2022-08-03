@@ -253,8 +253,6 @@ update() {
             onPress={this.handlePlayAndPause}
           />
         </View>
-
-        <Button title="Continua Aprendiendo" onPress={()=>this.continuarContenido()}/>
       </View>
     );
   }

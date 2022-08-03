@@ -37,9 +37,7 @@ class contenido extends Component{
         console.log('Prueba')
         console.log(this.props.contenido);
         return(
-            <Animated.View
-                style={{flex:1, opacity:this.state.opacity, }}
-            >
+            <Animated.View style={styles.container}>
                 <ContenidoLayout>
                     <Player {...this.props.contenido} />
                     <Details {...this.props.contenido} />
@@ -54,7 +52,13 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight:"bold",
         marginLeft: 20,
-      }
+    },
+    container: {
+        flex: 1,
+        alignItems: "center",
+        paddingRight: 20,
+        paddingLeft: 20,
+    },
 })
 function mapStateToProps(state){
     return{

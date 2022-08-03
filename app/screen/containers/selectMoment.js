@@ -12,7 +12,7 @@ const db = SQLite.openDatabase("db5.db");
 class selectMoment extends Component{
     static navigationOptions=({navigation})=>{
         return{
-            header: (<HeaderReturn onPress={()=>navigation.goBack()}>Selecciona El Lugar</HeaderReturn>)
+            header: (<HeaderReturn onPress={()=>navigation.goBack()}>Selecciona la etapa</HeaderReturn>)
         }
     }
     state={
@@ -187,8 +187,8 @@ class selectMoment extends Component{
         return (
           <View style={styles.container}>
             <View style={styles.box0}>
-            <Text style={styles.textActivity}>Nombre de la Actividad: {this.props.activity.titulo_actividad}</Text>
-            <Text style={styles.textSelected}>Selecciona un Lugar para continuar: </Text>
+            <Text style={styles.textActivity}>{this.props.activity.titulo_actividad}</Text>
+            <Text style={styles.textSelected}>Selecciona una etapa para continuar: </Text>
             <TouchableOpacity style={styles.touchableButtonSignIn} onPress={() => this.detailActivity()}>
                     <LinearGradient
                         colors={['#272d34', '#0f2545', '#272d34']}
@@ -263,80 +263,40 @@ class selectMoment extends Component{
                  onRequestClose={() => { this.setModalVisible(!this.state.modalVisible)}}
                  >
 
-                 <View style={{ marginTop: 22, marginLeft: 30, }}>
-                    <View>
-                    <Text>Realiza tu pregunta:</Text>
-                <TextInput style={styles.email} placeholder='Pregunta???'
-                  autoCapitalize='none'
-                  onChangeText={(text) => this.setState({ pregunta: text })}
-                >
-                </TextInput>
-                <TouchableOpacity style={{marginTop: 20, marginRight: 25, marginBottom: 20,}}
-                  onPress={ ()=>this.registrateDoubt()
-                }>
-                  <LinearGradient
-                        colors={['#272d34', '#0f2545', '#272d34']}
-                        style={{ padding: 10, alignItems: 'center', borderRadius: 18, height: 40 }}>
-                        <Text
-                            style={{
-                                backgroundColor: 'transparent',
-                                fontSize: 15,
-                                fontWeight: 'bold',
-                                color: '#fff',
-                                borderRadius: 16
-                            }}>
-                            GUARDA TU PREGUNTA
-                        </Text>
-                    </LinearGradient>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={{marginTop: 20, marginRight: 25, marginBottom: 20,}}
-                  onPress={ ()=>this.sincronizaDoubt()
-                }>
-                  <LinearGradient
-                        colors={['#272d34', '#0f2545', '#272d34']}
-                        style={{ padding: 10, alignItems: 'center', borderRadius: 18, height: 40 }}>
-                        <Text
-                            style={{
-                                backgroundColor: 'transparent',
-                                fontSize: 15,
-                                fontWeight: 'bold',
-                                color: '#fff',
-                                borderRadius: 16
-                            }}>
-                            SINCRONIZA TU PREGUNTA
-                        </Text>
-                    </LinearGradient>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={{marginTop: 20, marginRight: 25, marginBottom: 20}}
-                  onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);
-                }}>  
-                  <LinearGradient
-                        colors={['#272d34', '#0f2545', '#272d34']}
-                        style={{ padding: 10, alignItems: 'center', borderRadius: 18, height: 40 }}>
-                        <Text
-                            style={{
-                                backgroundColor: 'transparent',
-                                fontSize: 15,
-                                fontWeight: 'bold',
-                                color: '#fff',
-                                borderRadius: 16
-                            }}>
-                            CANCELAR
-                        </Text>
-                    </LinearGradient>
-              </TouchableOpacity>
-            </View>
-          </View>
+                 <View style={styles.container}>
+                    <View style={styles.container}>
+                        <Text style={{fontSize: 20, fontWeight: 'bold'}}>Realiza tu pregunta</Text>
+                        <TextInput style={styles.pregunta} multiline numberOfLines={4} placeholder='Escribe aquí tu pregunta'
+                            onChangeText={(text) => this.setState({ pregunta: text })}>
+                        </TextInput>
+                        <TouchableOpacity style={{marginTop: 20}}>
+                            <Button
+                                title="Guarda tu pregunta"
+                                onPress={ ()=>this.registrateDoubt()}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{marginTop: 20}}>
+                            <Button
+                                title="Sincroniza tu pregunta"
+                                onPress={ ()=>this.sincronizaDoubt()}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{marginTop: 20}}>
+                            <Button
+                                title="Cancelar"
+                                onPress={() => {
+                                    this.setModalVisible(!this.state.modalVisible)}}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </View>
         </Modal>
           </View>
         );
       }
 }
 const styles = StyleSheet.create({
-    email:{
+    pregunta:{
         marginTop: 25,
         borderRadius:15,
         color: '#000000',
@@ -345,7 +305,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         height: 100,
         width: 300,
-        backgroundColor: '#FFFFFF'
+        backgroundColor: '#FFFFFF'      
       },
     box0:{
         flex: 11
@@ -357,13 +317,16 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         marginLeft: 200
     },
+    touchableButtonSignIn:{
+        justifyContent: 'center',
+        marginBottom: 50,
+        marginLeft:50,
+        marginRight:50
+    },
     container: {
       flex: 1,
-      backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#FFFFFF'
-
     },
     textSelected:{
         marginTop: 20,
@@ -374,10 +337,11 @@ const styles = StyleSheet.create({
         color: '#2C2C2C',
     },
     textActivity:{
-        marginLeft: 5,
         marginTop: 35,
-        fontSize: 15,
-        fontWeight: 'bold'
+        fontSize: 20,
+        fontWeight: 'bold',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     buttonSignIn:{
       borderRadius:17,
@@ -387,11 +351,12 @@ const styles = StyleSheet.create({
       textAlign:'center',
       marginTop:7
     },
-    touchableButtonSignIn:{
-      justifyContent: 'center',
-      marginBottom: 50,
-      marginLeft:50,
-      marginRight:50
+    touchableButton: {
+        height: 40,
+        width: 185,
+        backgroundColor: "#5DC5E6",
+        textAlign: "center",
+        marginTop: 30,
     },
     registrate:{
       marginTop: 10,
