@@ -18,6 +18,7 @@ class SuggestionList extends Component {
     renderEmpty=()=><Empty text="No hay actividades asociadas a la materia"></Empty>
     itemSeparatos=()=><Separator text="No hay actividades asociadas a la materia"></Separator>
     viewContenido=(item)=>{
+        console.log("esta es la actividad selec:", item)
         this.props.dispatch({
             type:'SET_SELECT_ACTIVITIES_SUBJECT_LIST',
             payload:{
@@ -60,7 +61,7 @@ class SuggestionList extends Component {
         await this.props.list.filter(esActividad);
         console.log("Imprimiendo filtro")
         this.setState({ storage: data })
-        console.log(this.state.storage);
+        //console.log(this.state.storage);
     }
     async doubleSend(){
         this.filtro();
@@ -86,7 +87,7 @@ class SuggestionList extends Component {
         await this.props.list.filter(esActividad);
         console.log("Imprimiendo filtro")
         this.setState({ storage: data })
-        console.log(this.state.storage);
+        //console.log(this.state.storage);
     }
     keyExtractor = item=>item.id_actividad.toString()
     render(){

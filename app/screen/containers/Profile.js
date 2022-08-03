@@ -32,8 +32,10 @@ class Profile extends Component {
     }
   }
   state = {
-    storage: []
+    storage: [],
   }
+  
+  
   componentDidMount() {
 
     db.transaction(tx => {
@@ -54,6 +56,17 @@ class Profile extends Component {
     console.log(this.state.storage);
     this.loadActivities();
   }
+
+  async filtro (activeSub){
+    const data = [];
+    async function esActividad(elemento) {
+        if (elemento.id_actividad==activeSub){
+            data.push(elemento);
+        }
+    }
+    await this.props.list.filter(esActividad);
+    return data;
+}
   
   async loadActivities() {
     active = "ESTOS SON SU PROGRESO EN LA ACTIVIDAD";
@@ -65,7 +78,6 @@ class Profile extends Component {
     db.transaction(tx => {
       tx.executeSql(`select * from events where id_estudiante = ?;`, [this.props.student.id_estudiante], (_, { rows: { _array } }) =>
         this.setState({ storage: _array }),
-        //console.log(this.state.storage)
       );
     });
     storagesEvents = this.state.storage;
@@ -74,7 +86,6 @@ class Profile extends Component {
     var activity = await API.getActivities(this.props.ipconfig);
     //console.log("Trayendo todas las actividades");
     //console.log(activity);
-    
     console.log("Capturando Eventos Por Actividad");
     var notaF = 0;
     var notaFEvaluation = 0;
@@ -160,13 +171,15 @@ class Profile extends Component {
                 count_videos: storageActividad.find(s => s.id_actividad === id_actividad).count_videos,
                 progresso: storageActividad.find(s => s.id_actividad === id_actividad).progresso,
                 id_evento: storageActividad.find(s => s.id_actividad === id_actividad).id_evento,
+                subject: this.filtro(id_actividad) ,
               };
             });
+           
         }
       }
     }
     var elementoEliminado = resultado.splice(0, 1);
-    console.log(elementoEliminado)
+    console.log("elemento eliminado", elementoEliminado)
   }
   consulta(){
     db.transaction(tx => {
@@ -180,13 +193,18 @@ class Profile extends Component {
   keyExtractor = item => item.id_actividad.toString(); 
 
   viewContenido=(item)=>{
-    this.props.dispatch({
+   let activity = {};
+   const handler = async () => {   const res = await item.subject; //handler to send data for the selected activity.
+     activity = await res;
+     this.props.dispatch({
       type:'SET_SELECT_ACTIVITIES_SUBJECT_LIST',
       payload:{
-          activity: item,
+          activity: activity[0],
       }
     })
-    console.log(this.props.dispatch)
+  }; 
+  handler();  
+   // console.log("dispatch:",this.props.dispatch)
     this.props.dispatch(NavigationActions.navigate({
       routeName: 'SelectMoment'
     }))
@@ -263,7 +281,9 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     student: state.videos.selectedStudent,
-    ipconfig: state.videos.selectedIPConfig
+    ipconfig: state.videos.selectedIPConfig,
+    subject:state.videos.selectedSubjects,
+    list: state.videos.activity,
   }
 }
 
