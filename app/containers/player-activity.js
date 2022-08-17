@@ -85,8 +85,6 @@ class Player extends Component {
     const video = await FileSystem.getInfoAsync(path);
     console.log("Antes de Entrar al Video");
     if (video.exists) {
-      console.log(video.uri);
-      console.log("Entra al Video");
       this.setState({
         source: {
           uri: video.uri,
@@ -287,32 +285,13 @@ class Player extends Component {
       <View>
         <Video
           source={this.state.source}
+          posterSource={this.state.source}
           shouldPlay={this.state.shouldPlay}
-          resizeMode="cover"
+          resizeMode="contain"
           style={styles.video}
           isMuted={this.state.mute}
           useNativeControls
           onFullscreenUpdate={this.setOrientation}
-        />
-        {/* <View style={styles.container}>
-          <MaterialIcons
-            name={this.state.mute ? "volume-mute" : "volume-up"}
-            size={40}
-            color="white"
-            onPress={this.handleVolume}
-          />
-          <MaterialIcons
-            name={this.state.shouldPlay ? "pause" : "play-arrow"}
-            size={45}
-            color="white"
-            style={{ marginLeft: 10 }}
-            onPress={this.handlePlayAndPause}
-          />
-        </View> */}
-
-        <Button
-          title="Continua Aprendiendo"
-          onPress={() => this.continuarContenido()}
         />
       </View>
     );
