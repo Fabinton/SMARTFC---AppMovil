@@ -9,49 +9,69 @@ class SearchBar extends Component {
     super(props);
   }
 
+  state = {
+    clicked: false,
+    val: "",
+  };
+
   handlePress = (text) => {
     // Need to check to prevent null exception.
-    this.props.filterSearch?.(text); // Same as this.props.onPress && this.props.onPress();
+    this.props.filterSearch?.(text);
   };
 
   render() {
     return (
       <View style={styles.container}>
-        <View>
-          {/* search Icon */}
+        <View
+          style={
+            this.state.clicked
+              ? styles.searchBar__clicked
+              : styles.searchBar__unclicked
+          }
+        >
           <Feather
             name="search"
             size={20}
             color="black"
-            style={{ marginLeft: 1 }}
+            style={{ marginLeft: 1, marginRight: 1 }}
           />
-          {/* Input field */}
           <TextInput
             style={styles.input}
             placeholder="Busca contenido"
-            onChangeText={(text) => this.handlePress?.(text)}
-          />
-          {/*
-        {clicked && (
-          <Entypo name="cross" size={20} color="black" style={{ padding: 1 }} onPress={() => {
-              setSearchPhrase("")
-          }}/>
-        )}
-      </View>
-      {/* cancel button, depending on whether the search bar is clicked or not 
-      {clicked && (
-        <View>
-          <Button
-            title="Cancel"
-            onPress={() => {
-              Keyboard.dismiss();
-              setClicked(false);
-
+            value={this.state.val}
+            onChangeText={(text) => {
+              this.handlePress?.(text);
+              this.setState({ val: text });
             }}
-          ></Button>
+            //onChangeText={(text) => this.handlePress?.(text)}
+            onFocus={() => {
+              this.setState({ clicked: true });
+            }}
+          />
+          {this.state.clicked && (
+            <Entypo
+              name="cross"
+              size={20}
+              color="black"
+              style={{ padding: 2 }}
+              onPress={() => {
+                this.setState({ val: "" });
+              }}
+            />
+          )}
         </View>
-        )}*/}
-        </View>
+        {this.state.clicked && (
+          <View style={styles.button}>
+            <Button
+              title="Cancel"
+              onPress={() => {
+                Keyboard.dismiss();
+                this.setState({ clicked: false });
+                this.setState({ val: "" });
+              }}
+            />
+          </View>
+        )}
       </View>
     );
   }
@@ -70,7 +90,7 @@ const styles = StyleSheet.create({
   searchBar__unclicked: {
     padding: 10,
     flexDirection: "row",
-    width: "95%",
+    width: "100%",
     backgroundColor: "#d9dbda",
     borderRadius: 15,
     alignItems: "center",
@@ -78,7 +98,7 @@ const styles = StyleSheet.create({
   searchBar__clicked: {
     padding: 10,
     flexDirection: "row",
-    width: "80%",
+    width: "75%",
     backgroundColor: "#d9dbda",
     borderRadius: 15,
     alignItems: "center",
@@ -88,5 +108,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 10,
     width: "90%",
+  },
+  button: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginLeft: "auto",
+    position: "absolute",
+    right: 0,
   },
 });

@@ -49,9 +49,7 @@ class SuggestionList extends Component {
     var count = Object.keys(data).length;
     for (var i = 0; i < count; i++) {
       if (
-        data[i].nombre_CREA
-          .toUpperCase()
-          .includes(text.toUpperCase().trim().replace(/\s/g, ""))
+        data[i].nombre_CREA.toUpperCase().includes(text.toUpperCase().trim())
       ) {
         newData.push(data[i]);
         this.setState({ stateData: newData });
