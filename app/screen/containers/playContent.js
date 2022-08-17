@@ -12,6 +12,7 @@ import Audio from "../../containers/audio-activity";
 import { NavigationActions } from "react-navigation";
 import Reader from "../../containers/reader-activity";
 import HeaderReturn from "../../components/headerReturn";
+import QuestionActivity from "../../components/QuestionActivity";
 
 class playContent extends Component {
   state = {
@@ -59,6 +60,7 @@ class playContent extends Component {
                 onPress={() => this.continuarContenido()}
               />
             </TouchableOpacity>
+            <QuestionActivity />
           </ContenidoLayout>
         </Animated.View>
       );
@@ -73,6 +75,7 @@ class playContent extends Component {
                 onPress={() => this.continuarContenido()}
               />
             </TouchableOpacity>
+            <QuestionActivity />
           </ContenidoLayout>
         </Animated.View>
       );
@@ -87,12 +90,16 @@ class playContent extends Component {
                 onPress={() => this.continuarContenido()}
               />
             </TouchableOpacity>
+            <QuestionActivity />
           </ContenidoLayout>
         </Animated.View>
       );
     } else {
       return (
-        <Button title="Regresa" onPress={() => this.continuarContenido()} />
+        <>
+          <Button title="Regresa" onPress={() => this.continuarContenido()} />
+          <QuestionActivity />
+        </>
       );
     }
   }
@@ -100,8 +107,8 @@ class playContent extends Component {
 
 const styles = StyleSheet.create({
   touchableButton: {
-    height: 30,
-    width: 300,
+    height: 40,
+    width: 185,
     backgroundColor: "#5DC5E6",
     textAlign: "center",
     marginTop: 30,

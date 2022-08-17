@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import HeaderReturn from "../../components/headerReturn";
 import { NavigationActions } from "react-navigation";
 import * as SQLite from "expo-sqlite";
+import QuestionActivity from "../../components/QuestionActivity";
 const db = SQLite.openDatabase("db5.db");
 //import * as FileSystem from 'expo-file-system';
 //import shorthash from 'shorthash';
@@ -234,6 +235,7 @@ class detailActivity extends Component {
             onPress={() => this.continuarContenido()}
           />
         </TouchableOpacity>
+        <QuestionActivity />
       </Animated.View>
     );
   }
