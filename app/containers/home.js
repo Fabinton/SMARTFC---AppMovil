@@ -32,13 +32,9 @@ class Home extends Component{
         
       }
     render(){
-      console.log("Prueba")
-      console.log(this.props.student);
         return(
-            <Fragment>
-                <Search/>
-                <SuggestionList></SuggestionList>
-            </Fragment>
+
+            <SuggestionList/>
         );
     }
 }
