@@ -2,8 +2,15 @@ import React, { Component } from "react";
 import HeaderReturn from "../../components/headerReturn";
 import { NavigationActions } from "react-navigation";
 import ContenidoLayout from "../components/detailActivity";
-import { StyleSheet, Button, Text, ScrollView, Alert } from "react-native";
-import { Animated, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Button,
+  Text,
+  ScrollView,
+  Alert,
+  View,
+} from "react-native";
+import { Animated } from "react-native";
 import { connect } from "react-redux";
 import RadioForm, {
   RadioButton,
@@ -12,7 +19,7 @@ import RadioForm, {
 } from "react-native-simple-radio-button";
 import * as SQLite from "expo-sqlite";
 import API from "../../../utils/api";
-import { View } from "react-native";
+import QuestionActivity from "../../components/QuestionActivity";
 //import Audio from '../../containers/audio-activity';
 
 const db = SQLite.openDatabase("db5.db");
@@ -70,6 +77,7 @@ class testActivity extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFlats: _array })
       );
     });
+    console.log(this.state.storageFlats);
   }
   update() {
     db.transaction((tx) => {
@@ -77,6 +85,7 @@ class testActivity extends Component {
         this.setState({ storage: _array })
       );
     });
+    console.log(this.state.storage[this.state.storage.length - 1]);
     db.transaction(
       (tx) => {
         tx.executeSql(
@@ -111,10 +120,13 @@ class testActivity extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFilter: _array })
       );
     });
+    console.log("Aqui Imprimo El Filter 1");
+    console.log(this.state.storageFilter);
 
     var storageFilterGood = this.state.storageFilter;
     var storageFilter = storageFilterGood.reverse();
     if (storageFilter.length == 0) {
+      console.log("Entro a Cero");
       resultado = [
         {
           check_a1: 0,
@@ -129,6 +141,7 @@ class testActivity extends Component {
           check_download: 0,
         },
       ];
+      console.log(resultado[0]);
     }
     if (storageFilter.length != 0) {
       resultado = Array.from(
@@ -199,6 +212,7 @@ class testActivity extends Component {
           this.setState({ storage: _array })
         );
       });
+      //console.log(this.state.storage [this.state.storage.length-1]);
       this.update();
       Alert.alert(
         "Almacenamiento Exitoso",
@@ -214,12 +228,15 @@ class testActivity extends Component {
         [{ text: "OK", onPress: () => console.log("OK Pressed") }],
         { cancelable: false }
       );
+    } else {
+      console.log("No carga nada");
     }
   }
   consulta() {
     db.transaction((tx) => {
       tx.executeSql(`drop table events;`, [26]);
     });
+    console.log(this.state.storage[this.state.storage.length - 1]);
   }
   async sendServer() {
     //this.consulta();
@@ -236,6 +253,9 @@ class testActivity extends Component {
     //this.updateFlat();
     var data = this.state.storage;
     var Flats = this.state.storageFlats;
+
+    console.log("Trayendo Flats");
+    console.log(this.state.storage);
     for (var i = 0; i < Flats.length; i++) {
       if (Flats[i].upload == 0) {
         for (var j = 0; j < data.length; j++) {
@@ -247,6 +267,8 @@ class testActivity extends Component {
             var id_estudianteF = parseInt(id_estudianteF);
             data[j].id_evento = id_estudianteF;
             var id_eventoFs = Flats[j].id_evento;
+            console.log("ID EVENTOS");
+            console.log(id_eventoFs);
             db.transaction((tx) => {
               tx.executeSql(
                 `update flatEvent set upload = ? where id_evento = ? ;`,
@@ -268,6 +290,8 @@ class testActivity extends Component {
         }
       }
     }
+    console.log(data);
+    console.log(query2);
     Alert.alert(
       "Sincronización exitosa",
       "La sincronización de respuestas fue exitosa",
@@ -283,6 +307,8 @@ class testActivity extends Component {
     );
   }
   render() {
+    console.log("Trayendo al Estudiante");
+    console.log(this.props.student.id_estudiante);
     var Question_One = [
       { label: this.props.activity.A11, value: 1 },
       { label: this.props.activity.A12, value: 2 },
@@ -301,46 +327,58 @@ class testActivity extends Component {
       { label: this.props.activity.A33, value: 3 },
       { label: this.props.activity.A34, value: 4 },
     ];
+    console.log("Abriendo PlayContents");
+    console.log(this.props.activity.video);
     return (
-      <ScrollView contentContainerStyle={styles.container}>
-        <View>
-          <Text style={styles.texto}>{this.props.activity.Q1}</Text>
-          <RadioForm
-            radio_props={Question_One}
-            initial={0}
-            onPress={(value) => {
-              this.setState({ value1: value });
-            }}
-            labelColor={"#9C9C9C"}
-          />
-          <Text style={styles.texto}>{this.props.activity.Q2}</Text>
-          <RadioForm
-            radio_props={Question_Two}
-            initial={0}
-            onPress={(value) => {
-              this.setState({ value2: value });
-            }}
-            labelColor={"#9C9C9C"}
-          />
-          <Text style={styles.texto}>{this.props.activity.Q3}</Text>
-          <RadioForm
-            radio_props={Question_Three}
-            initial={0}
-            onPress={(value) => {
-              this.setState({ value3: value });
-            }}
-            labelColor={"#9C9C9C"}
-          />
-
-          <TouchableOpacity style={styles.touchableButton}>
+      <ScrollView style={styles.container}>
+        <Text style={styles.texto}>{this.props.activity.Q1}</Text>
+        <RadioForm
+          radio_props={Question_One}
+          initial={0}
+          onPress={(value) => {
+            this.setState({ value1: value });
+          }}
+          labelColor={"#9C9C9C"}
+        />
+        <Text style={styles.texto}>{this.props.activity.Q2}</Text>
+        <RadioForm
+          radio_props={Question_Two}
+          initial={0}
+          onPress={(value) => {
+            this.setState({ value2: value });
+          }}
+          labelColor={"#9C9C9C"}
+        />
+        <Text style={styles.texto}>{this.props.activity.Q3}</Text>
+        <RadioForm
+          radio_props={Question_Three}
+          initial={0}
+          onPress={(value) => {
+            this.setState({ value3: value });
+          }}
+          labelColor={"#9C9C9C"}
+        />
+        <View style={styles.buttonContainer}>
+          <View style={styles.buttonstyle}>
             <Button title="Guardar" onPress={() => this.storageTest()} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.touchableButton}>
-            <Button title="Sincronizar" onPress={() => this.sendServer()} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.touchableButton}>
-            <Button title="Regresar" onPress={() => this.regresaMateria()} />
-          </TouchableOpacity>
+          </View>
+          <View style={styles.buttonstyle}>
+            <Button
+              title="Sincronizar"
+              style={styles.buttonstyle}
+              onPress={() => this.sendServer()}
+            />
+          </View>
+          <View style={styles.buttonstyle}>
+            <Button
+              title="Regresa a Materias"
+              style={styles.buttonstyle}
+              onPress={() => this.regresaMateria()}
+            />
+          </View>
+          <QuestionActivity
+            style={{ position: "absolute", top: "-40%", left: "10%" }}
+          />
         </View>
       </ScrollView>
     );
@@ -355,25 +393,24 @@ function mapStateToProps(state) {
 }
 const styles = StyleSheet.create({
   container: {
+    position: "relative",
     marginLeft: 15,
     marginRight: 15,
-    flexGrow: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   texto: {
     fontWeight: "bold",
     fontSize: 16,
     marginTop: 10,
     marginBottom: 10,
-    textAlign: "left",
   },
-  touchableButton: {
-    height: 30,
-    width: 300,
-    backgroundColor: "#5DC5E6",
-    textAlign: "center",
+  buttonContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignContent: "space-around",
     marginTop: 30,
+  },
+  buttonstyle: {
+    padding: 10,
   },
 });
 export default connect(mapStateToProps)(testActivity);

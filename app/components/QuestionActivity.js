@@ -17,6 +17,10 @@ import { connect } from "react-redux";
 const db = SQLite.openDatabase("db5.db");
 
 class QuestionActiviy extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   state = {
     modalVisible: false,
     pregunta: null,

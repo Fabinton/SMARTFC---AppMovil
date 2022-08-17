@@ -2,15 +2,8 @@ import React, { Component } from "react";
 import HeaderReturn from "../../components/headerReturn";
 import { NavigationActions } from "react-navigation";
 import ContenidoLayout from "../components/detailActivity";
-import {
-  StyleSheet,
-  Button,
-  Text,
-  ScrollView,
-  Alert,
-  View,
-} from "react-native";
-import { Animated, TouchableOpacity } from "react-native";
+import { StyleSheet, Button, Text, ScrollView, Alert } from "react-native";
+import { Animated } from "react-native";
 import { connect } from "react-redux";
 import RadioForm, {
   RadioButton,
@@ -19,6 +12,8 @@ import RadioForm, {
 } from "react-native-simple-radio-button";
 import * as SQLite from "expo-sqlite";
 import API from "../../../utils/api";
+import QuestionActivity from "../../components/QuestionActivity";
+import { View } from "react-native";
 //import Audio from '../../containers/audio-activity';
 
 const db = SQLite.openDatabase("db5.db");
@@ -321,41 +316,53 @@ class evaluationActivity extends Component {
     console.log("Abriendo PlayContents");
     console.log(this.props.activity.video);
     return (
-      <ScrollView contentContainerStyle={styles.container}>
-        <View>
-          <Text style={styles.texto}>{this.props.activity.EQ1}</Text>
-          <RadioForm
-            radio_props={Question_One}
-            initial={0}
-            onPress={(value) => {
-              this.setState({ value1: value });
-            }}
-            labelColor={"#9C9C9C"}
+      <ScrollView style={styles.container}>
+        <Text style={styles.texto}>{this.props.activity.EQ1}</Text>
+        <RadioForm
+          radio_props={Question_One}
+          initial={0}
+          onPress={(value) => {
+            this.setState({ value1: value });
+          }}
+          labelColor={"#9C9C9C"}
+        />
+        <Text style={styles.texto}>{this.props.activity.EQ2}</Text>
+        <RadioForm
+          radio_props={Question_Two}
+          initial={0}
+          onPress={(value) => {
+            this.setState({ value2: value });
+          }}
+          labelColor={"#9C9C9C"}
+        />
+        <Text style={styles.texto}>{this.props.activity.EQ3}</Text>
+        <RadioForm
+          radio_props={Question_Three}
+          initial={0}
+          onPress={(value) => {
+            this.setState({ value3: value });
+          }}
+          labelColor={"#9C9C9C"}
+        />
+
+        <View style={styles.buttonContainer}>
+          <View style={styles.buttonstyle}>
+            <Button
+              title="Guardar"
+              style={styles.buttonstyle}
+              onPress={() => this.storageTest()}
+            />
+          </View>
+          <View style={styles.buttonstyle}>
+            <Button
+              title="Sincronizar"
+              style={styles.buttonstyle}
+              onPress={() => this.sendServer()}
+            />
+          </View>
+          <QuestionActivity
+            style={{ position: "absolute", top: "-40%", left: "10%" }}
           />
-          <Text style={styles.texto}>{this.props.activity.EQ2}</Text>
-          <RadioForm
-            radio_props={Question_Two}
-            initial={0}
-            onPress={(value) => {
-              this.setState({ value2: value });
-            }}
-            labelColor={"#9C9C9C"}
-          />
-          <Text style={styles.texto}>{this.props.activity.EQ3}</Text>
-          <RadioForm
-            radio_props={Question_Three}
-            initial={0}
-            onPress={(value) => {
-              this.setState({ value3: value });
-            }}
-            labelColor={"#9C9C9C"}
-          />
-          <TouchableOpacity style={styles.touchableButton}>
-            <Button title="Guardar" onPress={() => this.storageTest()} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.touchableButton}>
-            <Button title="Sincronizar" onPress={() => this.sendServer()} />
-          </TouchableOpacity>
         </View>
       </ScrollView>
     );
@@ -372,23 +379,21 @@ const styles = StyleSheet.create({
   container: {
     marginLeft: 15,
     marginRight: 15,
-    flexGrow: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   texto: {
     fontWeight: "bold",
     fontSize: 16,
     marginTop: 10,
     marginBottom: 10,
-    textAlign: "left",
   },
-  touchableButton: {
-    height: 30,
-    width: 300,
-    backgroundColor: "#5DC5E6",
-    textAlign: "center",
+  buttonContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignContent: "space-around",
     marginTop: 30,
+  },
+  buttonstyle: {
+    padding: 10,
   },
 });
 export default connect(mapStateToProps)(evaluationActivity);
