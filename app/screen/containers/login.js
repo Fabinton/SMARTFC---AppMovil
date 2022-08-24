@@ -291,6 +291,10 @@ class Login extends Component {
           style={{ width: 300, height: 200 }}
           source={require("../../../assets/images/LogoSinFondo.png")}
         />
+        <Image
+          style={{ width: 350, height: 84 }}
+          source={require("../../../assets/images/SmartFC.png")}
+        />
 
         <TextInput
           style={styles.email}
@@ -305,7 +309,12 @@ class Login extends Component {
           onChangeText={(text) => this.setState({ password: text })}
         ></TextInput>
 
-        <Button onPress={() => this.signIn()} title="INICIAR SESION" />
+        <TouchableOpacity
+          onPress={() => this.signIn()}
+          style={styles.touchableButtonSignIn}
+        >
+          <Text>Iniciar sesión</Text>
+        </TouchableOpacity>
 
         <TouchableOpacity style={styles.touchableButtonSignIn}>
           <Button
@@ -321,9 +330,10 @@ class Login extends Component {
           onPress={() => this.registrateForm()}
           style={styles.registrate}
         >
-          <Text style={{ color: "#FFFFFF" }}>¿No tienes Cuenta?</Text>
-          <Text style={{ color: "#24A0ED", marginLeft: 5 }}>Registrate</Text>
+          <Text style={{ color: "#424B5B" }}>¿No tienes Cuenta?</Text>
+          <Text style={{ color: "#70C2E5", marginLeft: 5 }}>Registrate</Text>
         </TouchableOpacity>
+
         <Modal
           animationType="slide"
           transparent={false}
@@ -335,7 +345,7 @@ class Login extends Component {
         >
           <View style={{ marginTop: 22, marginLeft: 20 }}>
             <View>
-              <Text style={{ fontWeight: "bold", fontSize: 17 }}>
+              <Text style={{ fontWeight: "bold", color: "#70C2E5" }}>
                 Conecta Tu IP:
               </Text>
               <TextInput
@@ -348,29 +358,17 @@ class Login extends Component {
                 style={styles.touchableButtonSignIn}
                 onPress={() => this.registrateIP()}
               >
-                <LinearGradient
-                  colors={["#272d34", "#0f2545", "#272d34"]}
+                <Text
                   style={{
-                    padding: 10,
-                    alignItems: "center",
-                    borderRadius: 18,
-                    height: 40,
-                    marginTop: 15,
-                    marginRight: 150,
+                    backgroundColor: "transparent",
+                    fontSize: 15,
+                    fontWeight: "bold",
+                    color: "#fff",
+                    borderRadius: 16,
                   }}
                 >
-                  <Text
-                    style={{
-                      backgroundColor: "transparent",
-                      fontSize: 15,
-                      fontWeight: "bold",
-                      color: "#fff",
-                      borderRadius: 16,
-                    }}
-                  >
-                    GUARDAR IP
-                  </Text>
-                </LinearGradient>
+                  GUARDAR IP
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.touchableButtonSignIn}
@@ -436,7 +434,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#424B5B",
+    backgroundColor: "#F5F5F5",
   },
   textInit: {
     marginTop: 30,
@@ -446,11 +444,9 @@ const styles = StyleSheet.create({
   },
   email: {
     marginTop: 25,
-    borderRadius: 15,
     color: "#000000",
-    borderColor: "#6E6060",
-    borderWidth: 1,
     textAlign: "center",
+    borderRadius: 10,
     height: 40,
     width: 300,
     backgroundColor: "#FFFFFF",
@@ -458,32 +454,31 @@ const styles = StyleSheet.create({
   password: {
     marginTop: 25,
     marginBottom: 25,
-    borderRadius: 15,
     color: "#000000",
-    borderColor: "#6E6060",
-    borderWidth: 1,
+    borderRadius: 10,
     textAlign: "center",
     height: 40,
     width: 300,
     backgroundColor: "#FFFFFF",
   },
-  buttonSignIn: {
-    borderRadius: 17,
-    height: 40,
-    width: 300,
-    backgroundColor: "#5DC5E6",
-    textAlign: "center",
-    marginTop: 7,
-  },
   touchableButtonSignIn: {
     justifyContent: "center",
     marginTop: 15,
+    backgroundColor: "#70C2E5",
+    height: 50,
+    width: 200,
+    borderRadius: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  registrate: {
-    display: "flex",
-    flexDirection: "row",
-    marginTop: 10,
-    color: "#E7E7E7",
+  buttonText: {
+    color: "#36EBC3",
   },
 });
 function mapStateToProps(state) {

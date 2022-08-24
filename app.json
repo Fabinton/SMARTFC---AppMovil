@@ -24,10 +24,16 @@
       "**/*"
     ],
     "android": {
-      "package": "com.unicauca.fcunicauca"
+      "package": "com.unicauca.fcunicauca",
+      "versionCode": 1
     },
     "ios": {
       "supportsTablet": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "7323a376-e65e-4b84-942d-09777d02ed58"
+      }
     }
   }
 }

@@ -4,7 +4,7 @@ import { View, StyleSheet, StatusBar } from "react-native";
 function Header(props) {
   return (
     <View>
-      <StatusBar backgroundColor="#424B5B" barStyle="light-content" />
+      <StatusBar backgroundColor="#F5F5F5" barStyle="light-content" />
       <SafeAreaView style={style.statusBar}></SafeAreaView>
     </View>
   );
@@ -18,7 +18,7 @@ const style = StyleSheet.create({
   statusBar: {
     marginTop: 0,
     height: 0,
-    backgroundColor: "#424B5B",
+    backgroundColor: "#F5F5F5",
   },
   container: {
     backgroundColor: "#272D34",
