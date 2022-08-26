@@ -313,26 +313,33 @@ class Login extends Component {
           onPress={() => this.signIn()}
           style={styles.touchableButtonSignIn}
         >
-          <Text>Iniciar sesión</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.touchableButtonSignIn}>
-          <Button
-            title="SINCRONIZA DATOS USUARIO"
-            onPress={() => this.sincronizarDatas()}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.touchableButtonSignIn}>
-          <Button title="LOGIN COMO ADMIN" onPress={() => this.loginAdmin()} />
+          <Text style={styles.buttonText}>Iniciar sesión</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => this.registrateForm()}
-          style={styles.registrate}
+          onPress={() => this.sincronizarDatas()}
+          style={styles.touchableButtonSignIn}
         >
-          <Text style={{ color: "#424B5B" }}>¿No tienes Cuenta?</Text>
-          <Text style={{ color: "#70C2E5", marginLeft: 5 }}>Registrate</Text>
+          <Text style={styles.buttonText}>Sincroniza datos usuario</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => this.loginAdmin()}
+          style={styles.touchableButtonSignIn}
+        >
+          <Text style={styles.buttonText}>Login como admin</Text>
+        </TouchableOpacity>
+
+        <View style={styles.registrate}>
+          <Text style={{ color: "#424B5B", fontSize: 20 }}>
+            ¿No tienes Cuenta?
+          </Text>
+          <TouchableOpacity onPress={() => this.registrateForm()}>
+            <Text style={{ color: "#70C2E5", marginLeft: 5, fontSize: 20 }}>
+              Registrate
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         <Modal
           animationType="slide"
@@ -344,7 +351,7 @@ class Login extends Component {
           }}
         >
           <View style={{ marginTop: 22, marginLeft: 20 }}>
-            <View>
+            <View style={{ marginTop: 10 }}>
               <Text style={{ fontWeight: "bold", color: "#70C2E5" }}>
                 Conecta Tu IP:
               </Text>
@@ -436,11 +443,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#F5F5F5",
   },
-  textInit: {
-    marginTop: 30,
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#E7E7E7",
+  registrate: {
+    marginTop: 15,
+    flexDirection: "row",
   },
   email: {
     marginTop: 25,
@@ -466,7 +471,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     backgroundColor: "#70C2E5",
     height: 50,
-    width: 200,
+    width: 250,
     borderRadius: 15,
     shadowColor: "#000",
     shadowOffset: {
@@ -478,7 +483,11 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonText: {
-    color: "#36EBC3",
+    color: "#FFFFFF",
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold",
+    fontFamily: "Roboto",
   },
 });
 function mapStateToProps(state) {

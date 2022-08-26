@@ -4,11 +4,7 @@
     "slug": "myfc_init",
     "privacy": "public",
     "sdkVersion": "35.0.0",
-    "platforms": [
-      "android",
-      "ios",
-      "web"
-    ],
+    "platforms": ["android", "ios", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,20 +16,12 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "android": {
-      "package": "com.unicauca.fcunicauca",
-      "versionCode": 1
+      "package": "com.unicauca.fcunicauca"
     },
     "ios": {
       "supportsTablet": true
-    },
-    "extra": {
-      "eas": {
-        "projectId": "7323a376-e65e-4b84-942d-09777d02ed58"
-      }
     }
   }
 }
