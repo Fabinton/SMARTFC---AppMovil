@@ -107,8 +107,8 @@ class playContent extends Component {
 
 const styles = StyleSheet.create({
   touchableButton: {
-    height: 40,
-    width: 185,
+    height: 30,
+    width: 300,
     backgroundColor: "#5DC5E6",
     textAlign: "center",
     marginTop: 30,
