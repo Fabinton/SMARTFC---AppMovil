@@ -16,6 +16,7 @@ import { Ionicons, Octicons } from "@expo/vector-icons";
 import * as SQLite from "expo-sqlite";
 import { connect } from "react-redux";
 import API from "../../../utils/api";
+import CustomButton from "../../components/customButton";
 
 const db = SQLite.openDatabase("db5.db");
 
@@ -248,32 +249,10 @@ class Configure extends Component {
         </View>
 
         <View style={[styles.containerText, (marginBottom = 50)]}>
-          <TouchableOpacity
-            style={styles.touchableButtonSignIn}
+          <CustomButton
+            text="ACTUALIZA TUS DATOS"
             onPress={() => this.funcionCargada()}
-          >
-            <LinearGradient
-              colors={["#272d34", "#0f2545", "#272d34"]}
-              style={{
-                padding: 10,
-                alignItems: "center",
-                borderRadius: 18,
-                height: 40,
-              }}
-            >
-              <Text
-                style={{
-                  backgroundColor: "transparent",
-                  fontSize: 12,
-                  fontWeight: "bold",
-                  color: "#fff",
-                  borderRadius: 16,
-                }}
-              >
-                ACTUALIZA TUS DATOS
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
+          />
         </View>
       </View>
     );

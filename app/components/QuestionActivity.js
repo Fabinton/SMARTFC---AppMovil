@@ -13,6 +13,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import API from "../../utils/api";
 import * as SQLite from "expo-sqlite";
 import { connect } from "react-redux";
+import CustomButton from "./customButton";
 
 const db = SQLite.openDatabase("db5.db");
 
@@ -141,6 +142,7 @@ class QuestionActiviy extends Component {
     return (
       <View style={this.props.style}>
         <View style={styles.box}>
+          {/* <CustomButton text="Realiza una Pregunta" onPress={() => this.doubtActivity()} /> */}
           <TouchableOpacity onPress={() => this.doubtActivity()}>
             <LinearGradient
               colors={["#272d34", "#0f2545", "#272d34"]}

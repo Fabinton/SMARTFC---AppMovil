@@ -15,6 +15,7 @@ import Header from "../../components/header";
 import * as SQLite from "expo-sqlite";
 import API from "../../../utils/api";
 import ActivityEvents from "../../components/profileActivity";
+import CustomButton from "../../components/customButton";
 const db = SQLite.openDatabase("db5.db");
 const actividades = [1];
 
@@ -342,7 +343,11 @@ class Profile extends Component {
             {" "}
             Grado: {this.props.student.grado_estudiante}
           </Text>
-          <Button title="Carga Datos" onPress={() => this.loadActivities()} />
+          <CustomButton
+            text="Cargar Datos"
+            onPress={() => this.loadActivities()}
+          />
+
           <Text style={styles.TextoDatos}>{active}</Text>
         </View>
         <FlatList
@@ -362,6 +367,7 @@ const styles = StyleSheet.create({
   },
   TextoDatos: {
     marginBottom: 15,
+    marginTop: 15,
     fontSize: 14,
     color: "#4F4F4F",
     fontWeight: "bold",
@@ -378,11 +384,6 @@ const styles = StyleSheet.create({
   },
   correo: {
     fontSize: 14,
-    color: "#6b6b6b",
-    fontWeight: "bold",
-  },
-  colegio: {
-    fontSize: 16,
     color: "#6b6b6b",
     fontWeight: "bold",
   },

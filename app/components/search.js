@@ -3,6 +3,7 @@ import React, { Component, useState } from "react";
 import { StyleSheet, TextInput, View, Keyboard, Button } from "react-native";
 import { Feather, Entypo } from "@expo/vector-icons";
 import { connect } from "react-redux";
+import CustomButton from "./customButton";
 
 class SearchBar extends Component {
   constructor(props) {
@@ -61,16 +62,22 @@ class SearchBar extends Component {
           )}
         </View>
         {this.state.clicked && (
-          <View style={styles.button}>
-            <Button
-              title="Cancel"
-              onPress={() => {
-                Keyboard.dismiss();
-                this.setState({ clicked: false });
-                this.setState({ val: "" });
-              }}
-            />
-          </View>
+          <CustomButton
+            text="Cancelar"
+            onPress={() => {
+              Keyboard.dismiss();
+              this.setState({ clicked: false });
+              this.setState({ val: "" });
+            }}
+            textTouchable={styles.touchableButtonSignIn}
+            textStyle={{
+              color: "#FFFFFF",
+              textAlign: "center",
+              fontSize: 14,
+              fontWeight: "bold",
+              fontFamily: "Roboto",
+            }}
+          />
         )}
       </View>
     );
@@ -109,11 +116,21 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     width: "90%",
   },
-  button: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginLeft: "auto",
-    position: "absolute",
-    right: 0,
+
+  touchableButtonSignIn: {
+    justifyContent: "center",
+    marginLeft: 12,
+    backgroundColor: "#70C2E5",
+    height: 45,
+    width: 100,
+    borderRadius: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });

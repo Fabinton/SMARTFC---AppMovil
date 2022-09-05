@@ -16,6 +16,7 @@ import * as SQLite from "expo-sqlite";
 import API from "../../../utils/api";
 import { Ionicons, Octicons } from "@expo/vector-icons";
 import { connect } from "react-redux";
+import CustomButton from "../../components/customButton";
 
 const db = SQLite.openDatabase("db5.db");
 
@@ -260,58 +261,16 @@ class Register extends Component {
           de uso de datos para futuras investigaciones{" "}
         </Text>
         <View style={[styles.containerTest, (marginBottom = 50)]}>
-          <TouchableOpacity
-            style={styles.touchableButtonSignIn}
+          <CustomButton
+            text="REGISTRATE"
             onPress={() => this.Registrate()}
-          >
-            <LinearGradient
-              colors={["#6CD492", "#5FCABB", "#5DC5E6"]}
-              style={{
-                padding: 10,
-                alignItems: "center",
-                borderRadius: 18,
-                height: 40,
-              }}
-            >
-              <Text
-                style={{
-                  backgroundColor: "transparent",
-                  fontSize: 15,
-                  fontWeight: "bold",
-                  color: "#fff",
-                  borderRadius: 16,
-                }}
-              >
-                REGISTRATE
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.touchableButtonSignIn}
+            textTouchable={styles.textTouchable}
+          />
+          <CustomButton
+            text="CANCELAR"
             onPress={() => this.close()}
-          >
-            <LinearGradient
-              colors={["#6CD492", "#5FCABB", "#5DC5E6"]}
-              style={{
-                padding: 10,
-                alignItems: "center",
-                borderRadius: 18,
-                height: 40,
-              }}
-            >
-              <Text
-                style={{
-                  backgroundColor: "transparent",
-                  fontSize: 15,
-                  fontWeight: "bold",
-                  color: "#fff",
-                  borderRadius: 16,
-                }}
-              >
-                CANCELAR
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
+            textTouchable={styles.textTouchable}
+          />
         </View>
       </View>
     );
@@ -388,9 +347,22 @@ const styles = StyleSheet.create({
     height: 44,
     color: "white",
   },
-  touchableButtonSignIn: {
-    marginLeft: 10,
-    marginBottom: 15,
+
+  textTouchable: {
+    justifyContent: "center",
+    marginTop: 15,
+    backgroundColor: "#70C2E5",
+    height: 45,
+    width: 150,
+    borderRadius: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
 function mapStateToProps(state) {

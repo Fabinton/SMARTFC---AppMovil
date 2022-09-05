@@ -5,6 +5,7 @@ import HeaderReturn from "../../components/headerReturn";
 import { LinearGradient } from "expo-linear-gradient";
 import { NavigationActions } from "react-navigation";
 import QuestionActiviy from "../../components/QuestionActivity";
+import CustomButton from "../../components/customButton";
 
 class selectMoment extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -104,84 +105,18 @@ class selectMoment extends Component {
           <Text style={styles.textSelected}>
             Selecciona una etapa para continuar:{" "}
           </Text>
-          <TouchableOpacity
-            style={styles.touchableButtonSignIn}
+          <CustomButton
+            text="PRACTICA EN CASA"
             onPress={() => this.detailActivity()}
-          >
-            <LinearGradient
-              colors={["#272d34", "#0f2545", "#272d34"]}
-              style={{
-                padding: 10,
-                alignItems: "center",
-                borderRadius: 18,
-                height: 40,
-              }}
-            >
-              <Text
-                style={{
-                  backgroundColor: "transparent",
-                  fontSize: 15,
-                  fontWeight: "bold",
-                  color: "#fff",
-                  borderRadius: 16,
-                }}
-              >
-                PRACTICA EN CASA
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.touchableButtonSignIn}
+          />
+          <CustomButton
+            text="PRACTICA EN CLASE"
             onPress={() => this.excersiceActivity()}
-          >
-            <LinearGradient
-              colors={["#272d34", "#0f2545", "#272d34"]}
-              style={{
-                padding: 10,
-                alignItems: "center",
-                borderRadius: 18,
-                height: 40,
-              }}
-            >
-              <Text
-                style={{
-                  backgroundColor: "transparent",
-                  fontSize: 15,
-                  fontWeight: "bold",
-                  color: "#fff",
-                  borderRadius: 16,
-                }}
-              >
-                PRACTICA EN CLASE
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.touchableButtonSignIn}
+          />
+          <CustomButton
+            text="REALIZA TU EXAMEN"
             onPress={() => this.evaluationActivity()}
-          >
-            <LinearGradient
-              colors={["#272d34", "#0f2545", "#272d34"]}
-              style={{
-                padding: 10,
-                alignItems: "center",
-                borderRadius: 18,
-                height: 40,
-              }}
-            >
-              <Text
-                style={{
-                  backgroundColor: "transparent",
-                  fontSize: 15,
-                  fontWeight: "bold",
-                  color: "#fff",
-                  borderRadius: 16,
-                }}
-              >
-                REALIZA TU EXAMEN
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
+          />
         </View>
         <QuestionActiviy
           style={{ position: "absolute", top: "90%", left: "15%" }}
@@ -193,13 +128,6 @@ class selectMoment extends Component {
 const styles = StyleSheet.create({
   box0: {
     flex: 11,
-  },
-
-  touchableButtonSignIn: {
-    justifyContent: "center",
-    marginBottom: 50,
-    marginLeft: 50,
-    marginRight: 50,
   },
   container: {
     flex: 1,
@@ -221,25 +149,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignItems: "center",
     justifyContent: "center",
-  },
-  buttonSignIn: {
-    borderRadius: 17,
-    height: 40,
-    width: 300,
-    backgroundColor: "#5DC5E6",
-    textAlign: "center",
-    marginTop: 7,
-  },
-  touchableButton: {
-    height: 40,
-    width: 185,
-    backgroundColor: "#5DC5E6",
-    textAlign: "center",
-    marginTop: 30,
-  },
-  registrate: {
-    marginTop: 10,
-    color: "#E7E7E7",
   },
 });
 

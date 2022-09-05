@@ -19,6 +19,7 @@ import HeaderLogin from "../../components/headerLogin";
 import API from "../../../utils/api";
 import { LinearGradient } from "expo-linear-gradient";
 import { Button } from "react-native";
+import CustomButton from "../../components/customButton";
 const db = SQLite.openDatabase("db5.db");
 function goodBye() {
   BackHandler.exitApp();
@@ -285,7 +286,7 @@ class Login extends Component {
         />
 
         <TextInput
-          style={styles.email}
+          style={styles.IP}
           placeholder="Correo Electronico"
           autoCapitalize="none"
           onChangeText={(text) => this.setState({ email: text })}
@@ -296,37 +297,25 @@ class Login extends Component {
           secureTextEntry={true}
           onChangeText={(text) => this.setState({ password: text })}
         ></TextInput>
-
-        <TouchableOpacity
-          onPress={() => this.signIn()}
-          style={styles.touchableButtonSignIn}
-        >
-          <Text style={styles.buttonText}>Iniciar sesión</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
+        <CustomButton text="Iniciar sesión" onPress={() => this.signIn()} />
+        <CustomButton
+          text="Sincroniza datos usuario"
           onPress={() => this.sincronizarDatas()}
-          style={styles.touchableButtonSignIn}
-        >
-          <Text style={styles.buttonText}>Sincroniza datos usuario</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
+        />
+        <CustomButton
+          text="Login como Admin"
           onPress={() => this.loginAdmin()}
-          style={styles.touchableButtonSignIn}
-        >
-          <Text style={styles.buttonText}>Login como admin</Text>
-        </TouchableOpacity>
-
+        />
         <View style={styles.registrate}>
           <Text style={{ color: "#424B5B", fontSize: 20 }}>
             ¿No tienes Cuenta?
           </Text>
-          <TouchableOpacity onPress={() => this.registrateForm()}>
-            <Text style={{ color: "#70C2E5", marginLeft: 5, fontSize: 20 }}>
-              Registrate
-            </Text>
-          </TouchableOpacity>
+          <CustomButton
+            text="Registrate"
+            textStyle={{ color: "#70C2E5", marginLeft: 5, fontSize: 20 }}
+            textTouchable={{}} //empty cuz of default style in button
+            onPress={() => this.registrateForm()}
+          />
         </View>
 
         <Modal
@@ -338,63 +327,42 @@ class Login extends Component {
             this.setModalVisible(false);
           }}
         >
-          <View style={{ marginTop: 22, marginLeft: 20 }}>
+          <View
+            style={{
+              marginTop: 22,
+              marginLeft: 20,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
             <View style={{ marginTop: 10 }}>
-              <Text style={{ fontWeight: "bold", color: "#70C2E5" }}>
-                Conecta Tu IP:
-              </Text>
-              <TextInput
-                style={styles.email}
-                placeholder="Introduce tu IP"
-                autoCapitalize="none"
-                onChangeText={(text) => this.setState({ ipconfig: text })}
-              ></TextInput>
-              <TouchableOpacity
-                style={styles.touchableButtonSignIn}
-                onPress={() => this.registrateIP()}
-              >
+              <View style={{ display: "flex", flexDirection: "row" }}>
                 <Text
                   style={{
-                    backgroundColor: "transparent",
-                    fontSize: 15,
                     fontWeight: "bold",
-                    color: "#fff",
-                    borderRadius: 16,
+                    color: "#70C2E5",
+                    marginRight: 5,
                   }}
                 >
-                  GUARDAR IP
+                  Conecta Tu IP:
                 </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.touchableButtonSignIn}
+                <TextInput
+                  style={styles.IP}
+                  placeholder="Introduce tu IP"
+                  autoCapitalize="none"
+                  onChangeText={(text) => this.setState({ ipconfig: text })}
+                ></TextInput>
+              </View>
+              <CustomButton
+                text="Guardar IP"
+                onPress={() => this.registrateIP()}
+              />
+              <CustomButton
+                text="CANCELAR"
                 onPress={() => {
                   this.setModalVisible(!this.state.modalVisible);
                 }}
-              >
-                <LinearGradient
-                  colors={["#272d34", "#0f2545", "#272d34"]}
-                  style={{
-                    padding: 10,
-                    alignItems: "center",
-                    borderRadius: 18,
-                    height: 40,
-                    marginTop: 15,
-                    marginRight: 150,
-                  }}
-                >
-                  <Text
-                    style={{
-                      backgroundColor: "transparent",
-                      fontSize: 15,
-                      fontWeight: "bold",
-                      color: "#fff",
-                      borderRadius: 16,
-                    }}
-                  >
-                    CANCELAR
-                  </Text>
-                </LinearGradient>
-              </TouchableOpacity>
+              />
               <Text style={styles.textDocument}>
                 Recuerde que se requitere estar conectado con el servicio, en
                 caso de no estar conectado dirijase a su director o al docente
@@ -435,8 +403,8 @@ const styles = StyleSheet.create({
     marginTop: 15,
     flexDirection: "row",
   },
-  email: {
-    marginTop: 25,
+  IP: {
+    marginTop: 0,
     color: "#000000",
     textAlign: "center",
     borderRadius: 10,
@@ -453,29 +421,6 @@ const styles = StyleSheet.create({
     height: 40,
     width: 300,
     backgroundColor: "#FFFFFF",
-  },
-  touchableButtonSignIn: {
-    justifyContent: "center",
-    marginTop: 15,
-    backgroundColor: "#70C2E5",
-    height: 50,
-    width: 250,
-    borderRadius: 15,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  buttonText: {
-    color: "#FFFFFF",
-    textAlign: "center",
-    fontSize: 20,
-    fontWeight: "bold",
-    fontFamily: "Roboto",
   },
 });
 function mapStateToProps(state) {
