@@ -260,11 +260,8 @@ class Login extends Component {
   }
   consulta() {
     db.transaction((tx) => {
-      tx.executeSql(
-        "select * from students",
-        [],
-        (_, { rows: { _array } }) => this.setState({ storage: _array }),
-        console.log(this.state.storage)
+      tx.executeSql("select * from students", [], (_, { rows: { _array } }) =>
+        this.setState({ storage: _array })
       );
     });
   }
