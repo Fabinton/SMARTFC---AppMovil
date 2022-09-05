@@ -40,14 +40,15 @@ class Login extends Component {
     this.setState({ modalVisible: visible });
   }
   async signIn(data) {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "select * from students",
-        [],
-        (_, { rows: { _array } }) => this.setState({ storage: _array })
-        //console.log(this.state.storage)
-      );
-    });
+    // db.transaction((tx) => {
+    //   tx.executeSql(
+    //     "select * from students",
+    //     [],
+    //     (_, { rows: { _array } }) => this.setState({ storage: _array })
+    //     //console.log(this.state.storage)
+    //   );
+    // });
+    this.consulta();
     dataStudents = this.state.storage;
     console.log("Filtro");
     var dataCompleted = null;
@@ -249,12 +250,12 @@ class Login extends Component {
             correo_electronico,
           ]
         );
-        tx.executeSql("select * from students", [], (_, { rows: { _array } }) =>
-          console.log(_array)
-        );
+        // tx.executeSql("select * from students", [], (_, { rows: { _array } }) =>
+        //   console.log(_array)
+        // );
       },
-      null,
-      this.consulta()
+      null
+      //this.consulta()
     );
   }
   consulta() {
