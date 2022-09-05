@@ -214,7 +214,7 @@ class Player extends Component {
             onPress={this._handlePress}
             style={styles.buttonText}
           >
-            Download Your PDF
+            Descarga tu taller
           </Text>
         </TouchableOpacity>
       </View>

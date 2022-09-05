@@ -54,8 +54,12 @@ class SuggestionList extends Component {
         newData.push(data[i]);
         this.setState({ stateData: newData });
       } else {
+        data = this.props.list;
         newData.length == 0 && this.setState({ stateData: [] });
       }
+    }
+    if (text == "" || text == null) {
+      data = this.props.list;
     }
   };
 
