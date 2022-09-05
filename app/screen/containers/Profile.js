@@ -8,8 +8,8 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from "react-native";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import Header from "../../components/header";
 import * as SQLite from "expo-sqlite";
@@ -298,13 +298,21 @@ class Profile extends Component {
         },
       });
     };
-    handler();
-    // console.log("dispatch:",this.props.dispatch)
-    this.props.dispatch(
-      NavigationActions.navigate({
-        routeName: "SelectMoment",
-      })
-    );
+    if (item.subject) {
+      handler();
+      this.props.dispatch(
+        NavigationActions.navigate({
+          routeName: "SelectMoment",
+        })
+      );
+    } else {
+      Alert.alert(
+        "Error",
+        "Recuerde Cargar datos Previamente",
+        [{ text: "OK" }],
+        { cancelable: true }
+      );
+    }
   };
 
   renderItem = ({ item }) => {
