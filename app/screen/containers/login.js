@@ -116,9 +116,6 @@ class Login extends Component {
     console.log(d.getFullYear());
     var year = d.getFullYear();
     console.log(typeof year);
-    // if (year != 2020) {
-    //   goodBye();
-    // }
     this.props.dispatch({
       type: "SET_STUDENT",
       payload: {
@@ -233,30 +230,23 @@ class Login extends Component {
     contrasena,
     correo_electronico
   ) {
-    db.transaction(
-      (tx) => {
-        tx.executeSql(
-          "insert into students (id_estudiante, tipo_usuario, nombre_estudiante, apellido_estudiante, grado_estudiante, curso_estudiante, id_colegio, nombre_usuario, contrasena, correo_electronico) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-          [
-            id_estudiante,
-            tipo_usuario,
-            nombre_estudiante,
-            apellido_estudiante,
-            grado_estudiante,
-            curso_estudiante,
-            id_colegio,
-            nombre_usuario,
-            contrasena,
-            correo_electronico,
-          ]
-        );
-        // tx.executeSql("select * from students", [], (_, { rows: { _array } }) =>
-        //   console.log(_array)
-        // );
-      },
-      null
-      //this.consulta()
-    );
+    db.transaction((tx) => {
+      tx.executeSql(
+        "insert into students (id_estudiante, tipo_usuario, nombre_estudiante, apellido_estudiante, grado_estudiante, curso_estudiante, id_colegio, nombre_usuario, contrasena, correo_electronico) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        [
+          id_estudiante,
+          tipo_usuario,
+          nombre_estudiante,
+          apellido_estudiante,
+          grado_estudiante,
+          curso_estudiante,
+          id_colegio,
+          nombre_usuario,
+          contrasena,
+          correo_electronico,
+        ]
+      );
+    }, null);
   }
   consulta() {
     db.transaction((tx) => {
