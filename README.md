@@ -6,13 +6,13 @@ This project was generated with [React Native Expo-CLI](https://github.com/expo/
 
 Run `npm run start` or `expo-cli start` for a dev mode. Navigate to `http://localhost:19000/`. The app will automatically reload if you change any of the source files, and you can use Android Expo or Apple Expo for visualization the full application.
 
-## Code 
+## Code
 
-Run `npm install` to generate a all information about package nodejs and React. 
+Run `npm install` to generate a all information about package nodejs and React.
 
 ## Build
 
-Run `expo build:android` to build the project. The build artifacts will be stored in the `url` directory. 
+Run `expo build:android` to build the project. The build artifacts will be stored in the `url` directory.
 
 ## Further help
 
