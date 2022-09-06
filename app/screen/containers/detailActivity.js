@@ -8,6 +8,7 @@ import HeaderReturn from "../../components/headerReturn";
 import { NavigationActions } from "react-navigation";
 import * as SQLite from "expo-sqlite";
 import QuestionActivity from "../../components/QuestionActivity";
+import CustomButton from "../../components/customButton";
 
 const db = SQLite.openDatabase("db5.db");
 //import * as FileSystem from 'expo-file-system';
@@ -229,14 +230,13 @@ class detailActivity extends Component {
         <ContenidoLayout>
           <Details {...this.props.activity} />
         </ContenidoLayout>
-
-        <TouchableOpacity style={styles.touchableButton}>
-          <Button
-            title="Continua Aprendiendo"
-            onPress={() => this.continuarContenido()}
-          />
-        </TouchableOpacity>
-        <QuestionActivity />
+        <CustomButton
+          text="Continua Aprendiendo"
+          onPress={() => this.continuarContenido()}
+        />
+        <QuestionActivity
+          style={{ position: "absolute", top: "90%", left: "-17%" }}
+        />
       </Animated.View>
     );
   }

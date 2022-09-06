@@ -119,7 +119,7 @@ class selectMoment extends Component {
           />
         </View>
         <QuestionActiviy
-          style={{ position: "absolute", top: "90%", left: "15%" }}
+          style={{ position: "absolute", top: "90%", left: "-17%" }}
         />
       </View>
     );

@@ -130,7 +130,7 @@ class SuggestionList extends Component {
           />
         </Layout>
         <QuestionActiviy
-          style={{ position: "absolute", top: "85%", left: "15%" }}
+          style={{ position: "absolute", top: "85%", left: "-17%" }}
         />
       </View>
     );

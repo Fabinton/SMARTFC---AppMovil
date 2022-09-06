@@ -13,6 +13,7 @@ import { NavigationActions } from "react-navigation";
 import Reader from "../../containers/reader-activity";
 import HeaderReturn from "../../components/headerReturn";
 import QuestionActivity from "../../components/QuestionActivity";
+import CustomButton from "../../components/customButton";
 
 class playContent extends Component {
   state = {
@@ -54,13 +55,15 @@ class playContent extends Component {
         <Animated.View style={styles.container}>
           <ContenidoLayout>
             <Player {...this.props.activity} />
-            <TouchableOpacity style={styles.touchableButton}>
-              <Button
-                title="Continua Aprendiendo"
-                onPress={() => this.continuarContenido()}
-              />
-            </TouchableOpacity>
-            <QuestionActivity />
+
+            <CustomButton
+              text="Continua Aprendiendo"
+              onPress={() => this.continuarContenido()}
+            />
+
+            <QuestionActivity
+              style={{ position: "absolute", top: "90%", left: "-17%" }}
+            />
           </ContenidoLayout>
         </Animated.View>
       );
@@ -69,13 +72,13 @@ class playContent extends Component {
         <Animated.View style={styles.container}>
           <ContenidoLayout>
             <Reader {...this.props.activity} />
-            <TouchableOpacity style={styles.touchableButton}>
-              <Button
-                title="Continua Aprendiendo"
-                onPress={() => this.continuarContenido()}
-              />
-            </TouchableOpacity>
-            <QuestionActivity />
+            <CustomButton
+              text="Continua Aprendiendo"
+              onPress={() => this.continuarContenido()}
+            />
+            <QuestionActivity
+              style={{ position: "absolute", top: "90%", left: "-17%" }}
+            />
           </ContenidoLayout>
         </Animated.View>
       );
@@ -84,19 +87,22 @@ class playContent extends Component {
         <Animated.View style={styles.container}>
           <ContenidoLayout>
             <Audio {...this.props.activity} />
-            <TouchableOpacity style={styles.touchableButton}>
-              <Button
-                title="Continua Aprendiendo"
-                onPress={() => this.continuarContenido()}
-              />
-            </TouchableOpacity>
-            <QuestionActivity />
+            <CustomButton
+              text="Continua Aprendiendo"
+              onPress={() => this.continuarContenido()}
+            />
+            <QuestionActivity
+              style={{ position: "absolute", top: "90%", left: "-17%" }}
+            />
           </ContenidoLayout>
         </Animated.View>
       );
     } else {
       return (
-        <Button title="Regresa" onPress={() => this.continuarContenido()} />
+        <CustomButton
+          text="Continua Aprendiendo"
+          onPress={() => this.continuarContenido()}
+        />
       );
     }
   }

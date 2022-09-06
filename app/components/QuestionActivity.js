@@ -142,32 +142,10 @@ class QuestionActiviy extends Component {
     return (
       <View style={this.props.style}>
         <View style={styles.box}>
-          {/* <CustomButton text="Realiza una Pregunta" onPress={() => this.doubtActivity()} /> */}
-          <TouchableOpacity onPress={() => this.doubtActivity()}>
-            <LinearGradient
-              colors={["#272d34", "#0f2545", "#272d34"]}
-              style={{
-                padding: 7,
-                alignItems: "center",
-                borderRadius: 30,
-                height: 50,
-              }}
-            >
-              <Text
-                style={{
-                  backgroundColor: "transparent",
-                  fontSize: 18,
-                  fontWeight: "bold",
-                  color: "#fff",
-                  borderRadius: 30,
-                  width: 100,
-                  padding: 4,
-                }}
-              >
-                Pregunta ?
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
+          <CustomButton
+            text="Realiza una Pregunta"
+            onPress={() => this.doubtActivity()}
+          />
         </View>
         <Modal
           animationType="slide"
@@ -189,26 +167,20 @@ class QuestionActiviy extends Component {
                 placeholder="Escribe aquí tu pregunta"
                 onChangeText={(text) => this.setState({ pregunta: text })}
               ></TextInput>
-              <TouchableOpacity style={{ marginTop: 20 }}>
-                <Button
-                  title="Guarda tu pregunta"
-                  onPress={() => this.registrateDoubt()}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity style={{ marginTop: 20 }}>
-                <Button
-                  title="Sincroniza tu pregunta"
-                  onPress={() => this.sincronizaDoubt()}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity style={{ marginTop: 20 }}>
-                <Button
-                  title="Cancelar"
-                  onPress={() => {
-                    this.setModalVisible(!this.state.modalVisible);
-                  }}
-                />
-              </TouchableOpacity>
+              <CustomButton
+                text="Guarda tu pregunta"
+                onPress={() => this.registrateDoubt()}
+              />
+              <CustomButton
+                text="Sincroniza tu pregunta"
+                onPress={() => this.sincronizaDoubt()}
+              />
+              <CustomButton
+                text="Cancelar"
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}
+              />
             </View>
           </View>
         </Modal>
