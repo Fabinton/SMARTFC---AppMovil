@@ -44,6 +44,7 @@ class SuggestionList extends Component {
   };
   keyExtractor = (item) => item.id_CREA.toString();
   filterSearch = (text) => {
+    console.log("esta vacio?" + text + "a.");
     data = this.props.list;
     var newData = [];
     var count = Object.keys(data).length;
@@ -54,15 +55,10 @@ class SuggestionList extends Component {
         newData.push(data[i]);
         this.setState({ stateData: newData });
       } else {
-        data = this.props.list;
         newData.length == 0 && this.setState({ stateData: [] });
       }
     }
-    if (text == "" || text == null) {
-      data = this.props.list;
-    }
   };
-
   render() {
     return (
       <View>

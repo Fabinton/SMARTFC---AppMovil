@@ -44,7 +44,6 @@ class SearchBar extends Component {
               this.handlePress?.(text);
               this.setState({ val: text });
             }}
-            //onChangeText={(text) => this.handlePress?.(text)}
             onFocus={() => {
               this.setState({ clicked: true });
             }}
@@ -56,6 +55,7 @@ class SearchBar extends Component {
               color="black"
               style={{ padding: 2 }}
               onPress={() => {
+                this.handlePress?.("");
                 this.setState({ val: "" });
               }}
             />
@@ -67,6 +67,7 @@ class SearchBar extends Component {
             onPress={() => {
               Keyboard.dismiss();
               this.setState({ clicked: false });
+              this.handlePress?.("");
               this.setState({ val: "" });
             }}
             textTouchable={styles.touchableButtonSignIn}
