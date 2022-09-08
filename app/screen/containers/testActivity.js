@@ -21,6 +21,7 @@ import * as SQLite from "expo-sqlite";
 import API from "../../../utils/api";
 //import Audio from '../../containers/audio-activity';
 import QuestionActivity from "../../components/QuestionActivity";
+import CustomButton from "../../components/customButton";
 
 const db = SQLite.openDatabase("db5.db");
 class testActivity extends Component {

@@ -189,26 +189,21 @@ class QuestionActiviy extends Component {
                 placeholder="Escribe aquí tu pregunta"
                 onChangeText={(text) => this.setState({ pregunta: text })}
               ></TextInput>
-              <TouchableOpacity style={{ marginTop: 20 }}>
-                <Button
-                  title="Guarda tu pregunta"
-                  onPress={() => this.registrateDoubt()}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity style={{ marginTop: 20 }}>
-                <Button
-                  title="Sincroniza tu pregunta"
-                  onPress={() => this.sincronizaDoubt()}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity style={{ marginTop: 20 }}>
-                <Button
-                  title="Cancelar"
-                  onPress={() => {
-                    this.setModalVisible(!this.state.modalVisible);
-                  }}
-                />
-              </TouchableOpacity>
+              <View style={{ marginTop: 20 }}></View>
+              <CustomButton
+                text="Guarda tu pregunta"
+                onPress={() => this.registrateDoubt()}
+              />
+              <CustomButton
+                text="Sincroniza tu pregunta"
+                onPress={() => this.sincronizaDoubt()}
+              />
+              <CustomButton
+                text="Cancelar"
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}
+              />
             </View>
           </View>
         </Modal>
@@ -238,7 +233,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    marginTop: 25,
   },
 });
 

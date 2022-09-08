@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import ContenidoLayout from "../components/detailActivity";
 import { StyleSheet, Button, TouchableOpacity } from "react-native";
 import Details from "../../components/detailActivity";
-import { Animated } from "react-native";
+import { Animated, View } from "react-native";
 import { connect } from "react-redux";
 import HeaderReturn from "../../components/headerReturn";
 import { NavigationActions } from "react-navigation";
 import * as SQLite from "expo-sqlite";
 import QuestionActivity from "../../components/QuestionActivity";
+import CustomButton from "../../components/customButton";
 
 const db = SQLite.openDatabase("db5.db");
 //import * as FileSystem from 'expo-file-system';
@@ -229,13 +230,11 @@ class detailActivity extends Component {
         <ContenidoLayout>
           <Details {...this.props.activity} />
         </ContenidoLayout>
-
-        <TouchableOpacity style={styles.touchableButton}>
-          <Button
-            title="Continua Aprendiendo"
-            onPress={() => this.continuarContenido()}
-          />
-        </TouchableOpacity>
+        <View style={{ marginTop: 20 }}></View>
+        <CustomButton
+          text="Continua Aprendiendo"
+          onPress={() => this.continuarContenido()}
+        />
         <QuestionActivity />
       </Animated.View>
     );

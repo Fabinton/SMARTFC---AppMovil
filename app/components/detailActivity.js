@@ -12,14 +12,15 @@ function Details(props) {
 const styles = StyleSheet.create({
   texto: {
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 25,
     marginTop: 10,
     marginLeft: 10,
+    textAlign: "center",
   },
   grado: {
     fontWeight: "bold",
     color: "#9C9C9C",
-    fontSize: 15,
+    fontSize: 18,
     marginTop: 10,
     marginLeft: 10,
   },

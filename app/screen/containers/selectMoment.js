@@ -105,14 +105,17 @@ class selectMoment extends Component {
           <Text style={styles.textSelected}>
             Selecciona una etapa para continuar:{" "}
           </Text>
+          <View style={{ marginTop: 20 }}></View>
           <CustomButton
             text="PRACTICA EN CASA"
             onPress={() => this.detailActivity()}
           />
+          <View style={{ marginTop: 20 }}></View>
           <CustomButton
             text="PRACTICA EN CLASE"
             onPress={() => this.excersiceActivity()}
           />
+          <View style={{ marginTop: 20 }}></View>
           <CustomButton
             text="REALIZA TU EXAMEN"
             onPress={() => this.evaluationActivity()}
@@ -128,6 +131,7 @@ class selectMoment extends Component {
 const styles = StyleSheet.create({
   box0: {
     flex: 11,
+    alignItems: "center",
   },
   container: {
     flex: 1,
