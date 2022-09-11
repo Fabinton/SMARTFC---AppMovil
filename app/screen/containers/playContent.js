@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, View } from "react";
 import ContenidoLayout from "../components/detailActivity";
 import { StyleSheet, Button, TouchableOpacity, Animated } from "react-native";
 import Close from "../../components/close";
@@ -13,6 +13,7 @@ import { NavigationActions } from "react-navigation";
 import Reader from "../../containers/reader-activity";
 import HeaderReturn from "../../components/headerReturn";
 import QuestionActivity from "../../components/QuestionActivity";
+import CustomButton from "../../components/customButton";
 import CustomButton from "../../components/customButton";
 
 class playContent extends Component {
