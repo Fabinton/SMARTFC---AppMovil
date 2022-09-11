@@ -9,7 +9,6 @@ import { NavigationActions } from "react-navigation";
 import * as SQLite from "expo-sqlite";
 import QuestionActivity from "../../components/QuestionActivity";
 import CustomButton from "../../components/customButton";
-import CustomButton from "../../components/customButton";
 
 const db = SQLite.openDatabase("db5.db");
 //import * as FileSystem from 'expo-file-system';

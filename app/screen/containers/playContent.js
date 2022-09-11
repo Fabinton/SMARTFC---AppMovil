@@ -14,7 +14,6 @@ import Reader from "../../containers/reader-activity";
 import HeaderReturn from "../../components/headerReturn";
 import QuestionActivity from "../../components/QuestionActivity";
 import CustomButton from "../../components/customButton";
-import CustomButton from "../../components/customButton";
 
 class playContent extends Component {
   state = {
