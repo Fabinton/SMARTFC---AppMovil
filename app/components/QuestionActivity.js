@@ -1,14 +1,5 @@
 import React, { Component } from "react";
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  Modal,
-  TextInput,
-  Button,
-  StyleSheet,
-  Alert,
-} from "react-native";
+import { View, Text, Modal, TextInput, StyleSheet, Alert } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import API from "../../utils/api";
 import * as SQLite from "expo-sqlite";
@@ -17,7 +8,7 @@ import CustomButton from "./customButton";
 
 const db = SQLite.openDatabase("db5.db");
 
-class QuestionActiviy extends Component {
+class QuestionActivity extends Component {
   constructor(props) {
     super(props);
   }
@@ -142,32 +133,10 @@ class QuestionActiviy extends Component {
     return (
       <View style={this.props.style}>
         <View style={styles.box}>
-          {/* <CustomButton text="Realiza una Pregunta" onPress={() => this.doubtActivity()} /> */}
-          <TouchableOpacity onPress={() => this.doubtActivity()}>
-            <LinearGradient
-              colors={["#272d34", "#0f2545", "#272d34"]}
-              style={{
-                padding: 7,
-                alignItems: "center",
-                borderRadius: 30,
-                height: 50,
-              }}
-            >
-              <Text
-                style={{
-                  backgroundColor: "transparent",
-                  fontSize: 18,
-                  fontWeight: "bold",
-                  color: "#fff",
-                  borderRadius: 30,
-                  width: 100,
-                  padding: 4,
-                }}
-              >
-                Pregunta ?
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
+          <CustomButton
+            text="Realiza una Pregunta"
+            onPress={() => this.doubtActivity()}
+          />
         </View>
         <Modal
           animationType="slide"
@@ -189,7 +158,6 @@ class QuestionActiviy extends Component {
                 placeholder="Escribe aquí tu pregunta"
                 onChangeText={(text) => this.setState({ pregunta: text })}
               ></TextInput>
-              <View style={{ marginTop: 20 }}></View>
               <CustomButton
                 text="Guarda tu pregunta"
                 onPress={() => this.registrateDoubt()}
@@ -245,4 +213,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(QuestionActiviy);
+export default connect(mapStateToProps)(QuestionActivity);

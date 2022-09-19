@@ -360,25 +360,14 @@ class testActivity extends Component {
           labelColor={"#9C9C9C"}
         />
         <View style={styles.buttonContainer}>
-          <View style={styles.buttonstyle}>
-            <Button title="Guardar" onPress={() => this.storageTest()} />
-          </View>
-          <View style={styles.buttonstyle}>
-            <Button
-              title="Sincronizar"
-              style={styles.buttonstyle}
-              onPress={() => this.sendServer()}
-            />
-          </View>
-          <View style={styles.buttonstyle}>
-            <Button
-              title="Regresa a Materias"
-              style={styles.buttonstyle}
-              onPress={() => this.regresaMateria()}
-            />
-          </View>
+          <CustomButton text="Guardar" onPress={() => this.storageTest()} />
+          <CustomButton text="Sincronizar" onPress={() => this.sendServer()} />
+          <CustomButton
+            text="Regresa a Materias"
+            onPress={() => this.regresaMateria()}
+          />
           <QuestionActivity
-            style={{ position: "absolute", top: "-40%", left: "10%" }}
+            style={{ position: "absolute", top: "-50%", left: "-25%" }}
           />
         </View>
       </ScrollView>
@@ -408,7 +397,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     alignContent: "space-around",
-    marginTop: 30,
+    marginTop: 2,
   },
   buttonstyle: {
     padding: 10,

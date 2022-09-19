@@ -55,11 +55,15 @@ class playContent extends Component {
         <Animated.View style={styles.container}>
           <ContenidoLayout>
             <Player {...this.props.activity} />
+
             <CustomButton
               text="Realiza el TEST"
               onPress={() => this.continuarContenido()}
             />
-            <QuestionActivity />
+
+            <QuestionActivity
+              style={{ position: "absolute", top: "90%", left: "-17%" }}
+            />
           </ContenidoLayout>
         </Animated.View>
       );
@@ -72,7 +76,9 @@ class playContent extends Component {
               text="Realiza el TEST"
               onPress={() => this.continuarContenido()}
             />
-            <QuestionActivity />
+            <QuestionActivity
+              style={{ position: "absolute", top: "90%", left: "-17%" }}
+            />
           </ContenidoLayout>
         </Animated.View>
       );
@@ -85,13 +91,18 @@ class playContent extends Component {
               text="Realiza el TEST"
               onPress={() => this.continuarContenido()}
             />
-            <QuestionActivity />
+            <QuestionActivity
+              style={{ position: "absolute", top: "90%", left: "-17%" }}
+            />
           </ContenidoLayout>
         </Animated.View>
       );
     } else {
       return (
-        <Button title="Regresa" onPress={() => this.continuarContenido()} />
+        <CustomButton
+          text="Continua Aprendiendo"
+          onPress={() => this.continuarContenido()}
+        />
       );
     }
   }

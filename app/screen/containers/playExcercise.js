@@ -42,7 +42,7 @@ class playExcercise extends Component {
           <ContenidoLayout>
             <Reader {...this.props.activity} />
             <QuestionActivity
-              style={{ position: "absolute", top: "85%", left: "15%" }}
+              style={{ position: "absolute", top: "85%", left: "-17%" }}
             />
           </ContenidoLayout>
         </Animated.View>

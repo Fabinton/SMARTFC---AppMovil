@@ -15,6 +15,7 @@ import API from "../../../utils/api";
 //import Audio from '../../containers/audio-activity';
 import QuestionActivity from "../../components/QuestionActivity";
 import { View } from "react-native";
+import CustomButton from "../../components/customButton";
 
 const db = SQLite.openDatabase("db5.db");
 
@@ -346,22 +347,10 @@ class evaluationActivity extends Component {
         />
 
         <View style={styles.buttonContainer}>
-          <View style={styles.buttonstyle}>
-            <Button
-              title="Guardar"
-              style={styles.buttonstyle}
-              onPress={() => this.storageTest()}
-            />
-          </View>
-          <View style={styles.buttonstyle}>
-            <Button
-              title="Sincronizar"
-              style={styles.buttonstyle}
-              onPress={() => this.sendServer()}
-            />
-          </View>
+          <CustomButton text="Guardar" onPress={() => this.storageTest()} />
+          <CustomButton text="Sincronizar" onPress={() => this.sendServer()} />
           <QuestionActivity
-            style={{ position: "absolute", top: "-40%", left: "10%" }}
+            style={{ position: "absolute", top: "-50%", left: "-27%" }}
           />
         </View>
       </ScrollView>

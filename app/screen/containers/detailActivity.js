@@ -230,12 +230,13 @@ class detailActivity extends Component {
         <ContenidoLayout>
           <Details {...this.props.activity} />
         </ContenidoLayout>
-        <View style={{ marginTop: 20 }}></View>
         <CustomButton
           text="Visualiza el contenido"
           onPress={() => this.continuarContenido()}
         />
-        <QuestionActivity />
+        <QuestionActivity
+          style={{ position: "absolute", top: "90%", left: "-17%" }}
+        />
       </Animated.View>
     );
   }
