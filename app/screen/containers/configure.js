@@ -24,7 +24,9 @@ class Configure extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
       header: (
-        <Header onPress={() => navigation.openDrawer()}>Configuración</Header>
+        <Header onPress={() => navigation.openDrawer()}>
+          Actualiza tus datos
+        </Header>
       ),
     };
   };
@@ -178,9 +180,6 @@ class Configure extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.containerText}>
-          <Text style={styles.styleTextIni}>Actualiza Tus Datos</Text>
-        </View>
         <View style={styles.containerTest}>
           <Text style={styles.textText}>Nombre: </Text>
           <TextInput
@@ -269,7 +268,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#F5F5F5",
     marginTop: 10,
   },
   containerText: {
@@ -280,6 +279,7 @@ const styles = StyleSheet.create({
   containerTest: {
     flex: 1,
     flexDirection: "row",
+    marginRight: 10,
   },
   textText: {
     marginTop: 10,
@@ -294,14 +294,13 @@ const styles = StyleSheet.create({
     color: "#000000",
   },
   textData: {
-    fontSize: 14,
-    marginTop: 5,
-    color: "#FFFFFF",
-    borderColor: "#6E6060",
-    borderWidth: 1,
+    marginTop: 0,
+    color: "#000000",
+    textAlign: "center",
+    borderRadius: 10,
     height: 40,
-    width: 200,
-    backgroundColor: "#4F4F4F",
+    width: 300,
+    backgroundColor: "#FFFFFF",
   },
   styleTextIni: {
     marginBottom: 15,

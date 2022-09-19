@@ -232,7 +232,7 @@ class detailActivity extends Component {
         </ContenidoLayout>
         <View style={{ marginTop: 20 }}></View>
         <CustomButton
-          text="Continua Aprendiendo"
+          text="Visualiza el contenido"
           onPress={() => this.continuarContenido()}
         />
         <QuestionActivity />

@@ -130,7 +130,7 @@ const DrawerNavigator = createDrawerNavigator(
     Configuracion: {
       screen: Configuration,
       navigationOptions: {
-        title: "Configuracion",
+        title: "Actualiza datos",
         drawerIcon: <Ionicons name="md-settings" size={28} color="white" />,
       },
     },

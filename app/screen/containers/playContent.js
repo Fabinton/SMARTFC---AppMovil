@@ -23,7 +23,7 @@ class playContent extends Component {
     return {
       header: (
         <HeaderReturn onPress={() => navigation.goBack()}>
-          Visualiza tu contenido
+          Visualiza el contenido
         </HeaderReturn>
       ),
     };
@@ -56,7 +56,7 @@ class playContent extends Component {
           <ContenidoLayout>
             <Player {...this.props.activity} />
             <CustomButton
-              text="Continua Aprendiendo"
+              text="Realiza el TEST"
               onPress={() => this.continuarContenido()}
             />
             <QuestionActivity />
@@ -69,7 +69,7 @@ class playContent extends Component {
           <ContenidoLayout>
             <Reader {...this.props.activity} />
             <CustomButton
-              text="Continua Aprendiendo"
+              text="Realiza el TEST"
               onPress={() => this.continuarContenido()}
             />
             <QuestionActivity />
@@ -82,7 +82,7 @@ class playContent extends Component {
           <ContenidoLayout>
             <Audio {...this.props.activity} />
             <CustomButton
-              text="Continua Aprendiendo"
+              text="Realiza el TEST"
               onPress={() => this.continuarContenido()}
             />
             <QuestionActivity />
