@@ -14,9 +14,10 @@ import HeaderLogin from "../../components/headerLogin";
 import { LinearGradient } from "expo-linear-gradient";
 import * as SQLite from "expo-sqlite";
 import API from "../../../utils/api";
-import { Ionicons, Octicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import CustomButton from "../../components/customButton";
+import { Feather } from "@expo/vector-icons";
 
 const db = SQLite.openDatabase("db5.db");
 
@@ -180,12 +181,14 @@ class Register extends Component {
     //console.log(this.props.navigation);
     return (
       <View style={styles.container}>
-        <View style={styles.containerLogo}>
-          <Image
-            style={{ width: 60, height: 60, marginLeft: 10 }}
-            source={require("../../../assets/images/LogoSinFondo.png")}
+        <Text style={styles.textInit}>Crea una cuenta</Text>
+        <View style={styles.searchSection}>
+          <Feather name="user" size={24} color="black" />
+          <TextInput
+            style={styles.input}
+            placeholder="User Nickname"
+            underlineColorAndroid="transparent"
           />
-          <Text style={styles.textInit}>SMART FC</Text>
         </View>
         <View style={styles.containerTest}>
           <Text style={styles.textText}>Nombre: </Text>
@@ -285,29 +288,23 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginBottom: 20,
   },
-  containerLogo: {
-    marginTop: 30,
-    flex: 1,
-    flexDirection: "row",
-    marginBottom: 10,
-  },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "flex-start",
+    alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#424B5B",
+    backgroundColor: "#F5F5F5",
   },
   containerTest: {
+    marginTop: 20,
     flex: 1,
     flexDirection: "row",
   },
   textInit: {
     marginTop: 20,
-    marginLeft: 30,
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: "bold",
-    color: "#E7E7E7",
+    color: "#70C2E3",
+    margin: "auto",
   },
   textText: {
     marginTop: 10,
@@ -363,6 +360,25 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  searchSection: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+  },
+  searchIcon: {
+    padding: 10,
+  },
+  input: {
+    flex: 1,
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
+    paddingLeft: 0,
+    backgroundColor: "#fff",
+    color: "#424242",
   },
 });
 function mapStateToProps(state) {
