@@ -1,27 +1,21 @@
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  Image,
-  TextInput,
-  Picker,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Text, CheckBox, Picker } from "react-native";
 import HeaderLogin from "../../components/headerLogin";
-import { LinearGradient } from "expo-linear-gradient";
 import * as SQLite from "expo-sqlite";
 import API from "../../../utils/api";
-import { Ionicons } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import CustomButton from "../../components/customButton";
-import { Feather } from "@expo/vector-icons";
+import { Feather, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Stack, TextInput, Flex, Spacer } from "@react-native-material/core";
 
 const db = SQLite.openDatabase("db5.db");
 
 class Register extends Component {
+  state = {
+    val: "ed",
+    seePass: true,
+  };
   static navigationOptions = ({ navigation }) => {
     return {
       header: <HeaderLogin></HeaderLogin>,
@@ -180,51 +174,58 @@ class Register extends Component {
 
     //console.log(this.props.navigation);
     return (
-      <View style={styles.container}>
+      <Stack
+        style={styles.container}
+        direction="column"
+        alignItems="stretch"
+        spacing={6}
+      >
         <Text style={styles.textInit}>Crea una cuenta</Text>
-        <View style={styles.searchSection}>
-          <Feather name="user" size={24} color="black" />
-          <TextInput
-            style={styles.input}
-            placeholder="User Nickname"
-            underlineColorAndroid="transparent"
+        <TextInput
+          color="#70C2E5"
+          variant="standard"
+          placeholder="Nombre *"
+          onChangeText={(text) => this.setState({ name: text })}
+          leading={() => <Feather name="user" size={24} color="black" />}
+        />
+        <TextInput
+          color="#70C2E5"
+          variant="standard"
+          placeholder="Apellido *"
+          onChangeText={(text) => this.setState({ last_name: text })}
+          leading={() => <Feather name="user" size={24} color="black" />}
+        />
+        <Flex inline center>
+          <AntDesign
+            style={{ marginTop: 5 }}
+            name="book"
+            size={24}
+            color="black"
           />
-        </View>
-        <View style={styles.containerTest}>
-          <Text style={styles.textText}>Nombre: </Text>
-          <TextInput
-            style={styles.textData}
-            onChangeText={(text) => this.setState({ name: text })}
-          ></TextInput>
-        </View>
-        <View style={styles.containerTest}>
-          <Text style={styles.textText}>Apellido: </Text>
-          <TextInput
-            style={styles.textData}
-            onChangeText={(text) => this.setState({ last_name: text })}
-          ></TextInput>
-        </View>
-        <View style={styles.containerTest}>
-          <Text style={styles.textText}>Grado: </Text>
+          <Spacer />
           <Picker
+            mode="dropdown"
             style={[styles.picker]}
-            itemStyle={styles.pickerItem}
             selectedValue={this.state.grado}
+            itemStyle={styles.pickerItem}
             onValueChange={(itemValue, itemIndex) =>
               this.setState({ grado: itemValue })
             }
           >
-            <Picker.Item label="6" value="6" />
+            <Picker.Item color="gray" label="Curso" value="" />
+            <Picker.Item label="7" value="7" />
             <Picker.Item label="7" value="7" />
             <Picker.Item label="8" value="8" />
             <Picker.Item label="9" value="9" />
             <Picker.Item label="10" value="10" />
             <Picker.Item label="11" value="11" />
           </Picker>
-        </View>
-        <View style={styles.containerTest}>
-          <Text style={styles.textText}>Colegio: </Text>
+        </Flex>
+        <Flex inline center>
+          <MaterialCommunityIcons name="warehouse" size={24} color="black" />
+          <Spacer />
           <Picker
+            mode="dropdown"
             style={[styles.picker]}
             itemStyle={styles.pickerItem}
             selectedValue={this.state.schoolSelected}
@@ -232,67 +233,59 @@ class Register extends Component {
               this.setState({ schoolSelected: itemValue })
             }
           >
+            <Picker.Item color="gray" label="Colegio" value="" />
             {itemsInPicker}
           </Picker>
-        </View>
-        <View style={styles.containerTest}>
-          <Text style={styles.textText}>Usuario: </Text>
-          <TextInput
-            style={styles.textData}
-            onChangeText={(text) => this.setState({ user: text })}
-          ></TextInput>
-        </View>
-        <View style={styles.containerTest}>
-          <Text style={styles.textText}>Correo: </Text>
-          <TextInput
-            style={styles.textData}
-            onChangeText={(text) => this.setState({ email: text })}
-          ></TextInput>
-        </View>
-        <View style={styles.containerTest}>
-          <Text style={styles.textText}>Contraseña: </Text>
-          <TextInput
-            style={styles.textData}
-            secureTextEntry={true}
-            onChangeText={(text) => this.setState({ password: text })}
-          ></TextInput>
-        </View>
+        </Flex>
+        <TextInput
+          color="#70C2E5"
+          variant="standard"
+          placeholder="Correo electrónico *"
+          onChangeText={(text) => this.setState({ user: text, email: text })}
+          leading={() => <Feather name="mail" size={24} color="black" />}
+        />
+        <TextInput
+          secureTextEntry={true}
+          color="#70C2E5"
+          variant="standard"
+          placeholder="Contraseña *"
+          onChangeText={(text) => this.setState({ password: text })}
+          leading={() => (
+            <MaterialCommunityIcons name="key" size={24} color="black" />
+          )}
+        />
+        <Flex inline center style={{ marginLeft: 10 }}>
+          <CheckBox />
+          <Text style={styles.textDocument}>
+            Acepto los terminos de uso de datos para futuras investigaciones.
+          </Text>
+        </Flex>
         <Text style={styles.textDocument}>
-          * Para registrarse necesita conexión, en caso de no estar conectado
-          dirijase a su director o al docente para que se le proporcione la
-          conexión {"\n"} ** Al momento de registrarse usted acepta los terminos
-          de uso de datos para futuras investigaciones{" "}
+          Para registrarse necesita conexión, en caso de no estar conectado
+          dirijase a su director o docente para que se le proporcione la
+          conexión
         </Text>
-        <View style={[styles.containerTest, (marginBottom = 50)]}>
-          <CustomButton
-            text="REGISTRATE"
-            onPress={() => this.Registrate()}
-            textTouchable={styles.textTouchable}
-          />
-          <CustomButton
-            text="CANCELAR"
-            onPress={() => this.close()}
-            textTouchable={styles.textTouchable}
-          />
-        </View>
-      </View>
+
+        <Flex center>
+          <CustomButton text="Registrate" onPress={() => this.Registrate()} />
+          <CustomButton text="Cancelar" onPress={() => this.close()} />
+        </Flex>
+      </Stack>
     );
   }
 }
 const styles = StyleSheet.create({
   textDocument: {
-    color: "#fff",
+    color: "#424B5B",
     textAlign: "justify",
-    marginTop: 30,
     marginRight: 15,
     marginLeft: 15,
-    marginBottom: 20,
+    marginTop: 20,
   },
   container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#F5F5F5",
+    backgroundColor: "white",
+    marginLeft: 20,
+    marginRight: 20,
   },
   containerTest: {
     marginTop: 20,
@@ -331,16 +324,13 @@ const styles = StyleSheet.create({
   },
   picker: {
     marginTop: 5,
-    width: 200,
+    width: 330,
     borderRadius: 15,
     height: 40,
     color: "#000000",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#6E6060",
     borderWidth: 1,
   },
   pickerItem: {
-    borderRadius: 15,
     height: 44,
     color: "white",
   },

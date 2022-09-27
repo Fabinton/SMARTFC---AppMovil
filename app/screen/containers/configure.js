@@ -5,7 +5,6 @@ import {
   Text,
   View,
   Button,
-  TextInput,
   Picker,
   TouchableOpacity,
   Alert,
@@ -17,6 +16,8 @@ import * as SQLite from "expo-sqlite";
 import { connect } from "react-redux";
 import API from "../../../utils/api";
 import CustomButton from "../../components/customButton";
+import { Feather, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Stack, TextInput, Flex, Spacer } from "@react-native-material/core";
 
 const db = SQLite.openDatabase("db5.db");
 
@@ -179,25 +180,36 @@ class Configure extends Component {
     });
 
     return (
-      <View style={styles.container}>
-        <View style={styles.containerTest}>
-          <Text style={styles.textText}>Nombre: </Text>
-          <TextInput
-            style={styles.textData}
-            value={this.state.name}
-            onChangeText={(text) => this.setState({ name: text })}
-          ></TextInput>
-        </View>
-        <View style={styles.containerTest}>
-          <Text style={styles.textText}>Apellido: </Text>
-          <TextInput
-            style={styles.textData}
-            value={this.state.last_name}
-            onChangeText={(text) => this.setState({ last_name: text })}
-          ></TextInput>
-        </View>
-        <View style={styles.containerTest}>
-          <Text style={styles.textText}>Grado: </Text>
+      <Stack
+        style={styles.container}
+        direction="column"
+        alignItems="stretch"
+        spacing={6}
+      >
+        <TextInput
+          color="#70C2E5"
+          variant="standard"
+          placeholder="Nombre *"
+          value={this.state.name}
+          onChangeText={(text) => this.setState({ name: text })}
+          leading={() => <Feather name="user" size={24} color="black" />}
+        />
+        <TextInput
+          color="#70C2E5"
+          variant="standard"
+          placeholder="Apellido *"
+          value={this.state.last_name}
+          onChangeText={(text) => this.setState({ last_name: text })}
+          leading={() => <Feather name="user" size={24} color="black" />}
+        />
+        <Flex inline center>
+          <AntDesign
+            style={{ marginTop: 5 }}
+            name="book"
+            size={24}
+            color="black"
+          />
+          <Spacer />
           <Picker
             style={[styles.picker]}
             itemStyle={styles.pickerItem}
@@ -208,9 +220,10 @@ class Configure extends Component {
           >
             {itemsInPicker2}
           </Picker>
-        </View>
-        <View style={styles.containerTest}>
-          <Text style={styles.textText}>Colegio: </Text>
+        </Flex>
+        <Flex inline center>
+          <MaterialCommunityIcons name="warehouse" size={24} color="black" />
+          <Spacer />
           <Picker
             style={[styles.picker]}
             itemStyle={styles.pickerItem}
@@ -221,39 +234,32 @@ class Configure extends Component {
           >
             {itemsInPicker}
           </Picker>
-        </View>
-        <View style={styles.containerTest}>
-          <Text style={styles.textText}>Usuario: </Text>
-          <TextInput
-            style={styles.textData}
-            value={this.state.user}
-            onChangeText={(text) => this.setState({ user: text })}
-          ></TextInput>
-        </View>
-        <View style={styles.containerTest}>
-          <Text style={styles.textText}>Correo: </Text>
-          <TextInput
-            style={styles.textData}
-            value={this.state.email}
-            onChangeText={(text) => this.setState({ email: text })}
-          ></TextInput>
-        </View>
-        <View style={styles.containerTest}>
-          <Text style={styles.textText}>Contraseña: </Text>
-          <TextInput
-            style={styles.textData}
-            secureTextEntry={true}
-            onChangeText={(text) => this.setState({ password: text })}
-          ></TextInput>
-        </View>
-
-        <View style={[styles.containerText, (marginBottom = 50)]}>
+        </Flex>
+        <TextInput
+          color="#70C2E5"
+          variant="standard"
+          placeholder="Correo electrónico *"
+          value={this.state.email}
+          onChangeText={(text) => this.setState({ user: text, email: text })}
+          leading={() => <Feather name="mail" size={24} color="black" />}
+        />
+        <TextInput
+          secureTextEntry={true}
+          color="#70C2E5"
+          variant="standard"
+          placeholder="Digita tu contraseña"
+          onChangeText={(text) => this.setState({ password: text })}
+          leading={() => (
+            <MaterialCommunityIcons name="key" size={24} color="black" />
+          )}
+        />
+        <Flex center>
           <CustomButton
-            text="ACTUALIZA TUS DATOS"
+            text="Actualizar datos"
             onPress={() => this.funcionCargada()}
           />
-        </View>
-      </View>
+        </Flex>
+      </Stack>
     );
   }
 }
@@ -268,8 +274,10 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
-    marginTop: 10,
+    backgroundColor: "white",
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 15,
   },
   containerText: {
     alignItems: "center",
@@ -310,16 +318,13 @@ const styles = StyleSheet.create({
   },
   picker: {
     marginTop: 5,
-    width: 200,
+    width: 330,
     borderRadius: 15,
     height: 40,
-    color: "#FFFFFF",
-    backgroundColor: "#4F4F4F",
-    borderColor: "#6E6060",
+    color: "#000000",
     borderWidth: 1,
   },
   pickerItem: {
-    borderRadius: 15,
     height: 44,
     color: "white",
   },

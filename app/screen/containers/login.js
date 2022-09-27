@@ -8,7 +8,6 @@ import {
   View,
   Image,
   TextInput,
-  ScrollView,
   TouchableOpacity,
   Alert,
 } from "react-native";
@@ -17,9 +16,9 @@ import * as SQLite from "expo-sqlite";
 //import Header from '../../components/header';
 import HeaderLogin from "../../components/headerLogin";
 import API from "../../../utils/api";
-import { LinearGradient } from "expo-linear-gradient";
-import { Button } from "react-native";
 import CustomButton from "../../components/customButton";
+import { Stack, Flex, Spacer } from "@react-native-material/core";
+
 const db = SQLite.openDatabase("db5.db");
 function goodBye() {
   BackHandler.exitApp();
@@ -327,58 +326,47 @@ class Login extends Component {
             this.setModalVisible(false);
           }}
         >
-          <View
-            style={{
-              marginTop: 22,
-              marginLeft: 20,
-              display: "flex",
-              flexDirection: "column",
-            }}
+          <Stack
+            style={styles.container}
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+            spacing={6}
           >
-            <View style={{ marginTop: 10 }}>
-              <View style={{ display: "flex", flexDirection: "row" }}>
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                    color: "#70C2E5",
-                    marginRight: 5,
-                  }}
-                >
-                  Conecta Tu IP:
-                </Text>
-                <TextInput
-                  style={styles.IP}
-                  placeholder="Introduce tu IP"
-                  autoCapitalize="none"
-                  onChangeText={(text) => this.setState({ ipconfig: text })}
-                ></TextInput>
-              </View>
+            <Text style={styles.textInit}>Conectar IP</Text>
+            <TextInput
+              style={styles.IP}
+              placeholder="Introduce tu IP"
+              autoCapitalize="none"
+              onChangeText={(text) => this.setState({ ipconfig: text })}
+            ></TextInput>
+            <Text style={styles.textDocument}>
+              Para guardar el IP necesita conexión, en caso de no estar
+              conectado dirijase a su director o docente para que se le
+              proporcione la conexión
+            </Text>
+            <Flex inline center self="baseline">
               <CustomButton
-                text="Guardar IP"
+                textTouchable={styles.touchableButtonSignIn}
+                text="Guardar"
                 onPress={() => this.registrateIP()}
               />
               <CustomButton
-                text="CANCELAR"
+                textTouchable={styles.touchableButtonSignIn}
+                text="Cancelar"
                 onPress={() => {
                   this.setModalVisible(!this.state.modalVisible);
                 }}
               />
-              <Text style={styles.textDocument}>
-                Recuerde que se requitere estar conectado con el servicio, en
-                caso de no estar conectado dirijase a su director o al docente
-                para que se le proporcione la conexión; tambien recuerde que en
-                la aplicación puedes acceder a contenido adicional de manera de
-                invitado.
-              </Text>
-            </View>
-          </View>
+            </Flex>
+          </Stack>
         </Modal>
         <TouchableOpacity
           onPress={() => {
             this.setModalVisible(true);
           }}
         >
-          <Text>Conecte tu IP</Text>
+          <Text>Conectar IP</Text>
         </TouchableOpacity>
       </View>
     );
@@ -386,11 +374,36 @@ class Login extends Component {
 }
 const styles = StyleSheet.create({
   textDocument: {
-    color: "#000",
+    color: "#424B5B",
     textAlign: "justify",
-    marginTop: 30,
-    marginRight: 30,
-    marginBottom: 20,
+    marginRight: 15,
+    marginLeft: 15,
+    marginTop: 20,
+  },
+  touchableButtonSignIn: {
+    justifyContent: "center",
+    marginTop: 15,
+    marginLeft: 10,
+    marginRight: 10,
+    backgroundColor: "#70C2E5",
+    height: 50,
+    width: 170,
+    borderRadius: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  textInit: {
+    marginTop: 20,
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#70C2E3",
+    margin: "auto",
   },
   container: {
     flex: 1,
@@ -405,7 +418,6 @@ const styles = StyleSheet.create({
   },
   IP: {
     marginTop: 0,
-    color: "#000000",
     textAlign: "center",
     borderRadius: 10,
     height: 40,
