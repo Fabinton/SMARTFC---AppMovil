@@ -187,7 +187,7 @@ class Login extends Component {
     } else {
       Alert.alert(
         "ERROR",
-        "RECUERDA QUE DEBES ESTAR CONECTADO A INTERNET PARA GUARDAR TU IP.",
+        "Recuerda que debes estar conectado a internet para guardar tu IP.",
         [{ text: "OK", onPress: () => console.log("OK Pressed") }],
         { cancelable: false }
       );

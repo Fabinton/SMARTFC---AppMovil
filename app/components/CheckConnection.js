@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
-import { useNetInfo } from "@react-native-community/netinfo";
+import NetInfo from "@react-native-community/netinfo";
 import { Text } from "react-native";
 import { useDispatch } from "react-redux";
 
 const CheckConnection = () => {
-  const netInfo = useNetInfo();
   const dispatch = useDispatch();
   useEffect(() => {
-    netInfo.isConnected &&
+    NetInfo.addEventListener((networkState) => {
       dispatch({
         type: "SET_CONNECTION_STATUS",
-        payload: netInfo.isConnected,
+        payload: networkState.isConnected,
       });
-  }, [netInfo]);
+    });
+  }, [NetInfo]);
 
   return <Text>{}</Text>;
 };
