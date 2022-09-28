@@ -134,19 +134,19 @@ class Api {
     return data2;
   }
   async updateStudents(BASE_IP, Student) {
-    console.log("JSON EVENTOS");
     var BASE_UPDATE_API_STUDENTS =
       "http://" + BASE_IP + ":3000" + "/uploadEstudiante";
-    const query2 = await fetch(`${BASE_UPDATE_API_STUDENTS}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(Student),
-    });
-    const data2 = await query2.json();
-    //console.log(data2);
-    return data2;
+    return axios.post(`${BASE_UPDATE_API_STUDENTS}`, Student);
+    // const query2 = await fetch(`${BASE_UPDATE_API_STUDENTS}`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(Student),
+    // });
+    // const data2 = await query2.json();
+    // //console.log(data2);
+    // return data2;
   }
   async allStudent(BASE_IP) {
     var BASE_API_ALL_STUDENTS =

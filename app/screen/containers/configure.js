@@ -54,6 +54,10 @@ class Configure extends Component {
   async actualizaUser() {
     //update items set done = 1 where id = ?;
     if (this.state.password === this?.props?.student?.contrasena) {
+      this.props.dispatch({
+        type: "SET_LOADING",
+        payload: true,
+      });
       const data = {
         id_estudiante: this.props.student.id_estudiante,
         //tipo_usuario: 1,
@@ -66,46 +70,62 @@ class Configure extends Component {
         contrasena: this.state.password,
         correo_electronico: this.state.email,
       };
-      var student = await API.updateStudents(this.props.ipconfig, data);
-      console.log(student);
-      db.transaction(
-        (tx) => {
-          //id_estudiante, tipo_usuario, nombre_estudiante, apellido_estudiante, grado_estudiante, curso_estudiante, id_colegio, nombre_usuario, contrasena, correo_electronico
-          tx.executeSql(
-            "update students set nombre_estudiante = ? , apellido_estudiante = ?, grado_estudiante = ?,curso_estudiante = ?, id_colegio = ?, nombre_usuario = ?, contrasena = ?, correo_electronico = ? where id_estudiante = ? ",
-            [
-              this.state.name,
-              this.state.last_name,
-              this.state.grado,
-              1,
-              this.state.schoolSelected,
-              this.state.user,
-              this.state.password,
-              this.state.email,
-              this.props.student.id_estudiante,
-            ]
+      API.updateStudents(this.props.ipconfig, data)
+        .then(() => {
+          Alert.alert(
+            "Actualización Exitosa",
+            "La actualización de sus datos es exitosa",
+            [{ text: "OK", onPress: () => {} }],
+            { cancelable: false }
           );
-          tx.executeSql(
-            "select * from students",
-            [],
-            (_, { rows: { _array } }) => console.log(_array)
+          this.props.dispatch({
+            type: "SET_STUDENT",
+            payload: {
+              student: data,
+            },
+          });
+          db.transaction(
+            (tx) => {
+              //id_estudiante, tipo_usuario, nombre_estudiante, apellido_estudiante, grado_estudiante, curso_estudiante, id_colegio, nombre_usuario, contrasena, correo_electronico
+              tx.executeSql(
+                "update students set nombre_estudiante = ? , apellido_estudiante = ?, grado_estudiante = ?,curso_estudiante = ?, id_colegio = ?, nombre_usuario = ?, contrasena = ?, correo_electronico = ? where id_estudiante = ? ",
+                [
+                  this.state.name,
+                  this.state.last_name,
+                  this.state.grado,
+                  1,
+                  this.state.schoolSelected,
+                  this.state.user,
+                  this.state.password,
+                  this.state.email,
+                  this.props.student.id_estudiante,
+                ]
+              );
+              tx.executeSql(
+                "select * from students", // to verify if data is different
+                [],
+                (_, { rows: { _array } }) => {}
+              );
+            },
+            null,
+            null
           );
-        },
-        null,
-        null
-      );
-      Alert.alert(
-        "Actualización Exitosa",
-        "La actualización de sus datos es exitosa",
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-        { cancelable: false }
-      );
-      this.props.dispatch({
-        type: "SET_STUDENT",
-        payload: {
-          student: data,
-        },
-      });
+        })
+        .catch((e) => {
+          console.log("error", e);
+          Alert.alert(
+            "Error",
+            "Ha ocurrido un error al actualizar datos.",
+            [{ text: "OK", onPress: () => {} }],
+            { cancelable: false }
+          );
+        })
+        .finally(() => {
+          this.props.dispatch({
+            type: "SET_LOADING",
+            payload: false,
+          });
+        });
     } else {
       Alert.alert(
         "Error",
@@ -138,7 +158,6 @@ class Configure extends Component {
     if (this.state.school == null) {
       itemsInPicker = null;
     } else {
-      console.log("Imprimiendo State");
       //console.log(datasSchool);
       datasSchoolFull = this.state.school;
       itemsInPicker = datasSchoolFull.map((data) => {

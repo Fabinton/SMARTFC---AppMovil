@@ -286,7 +286,7 @@ class Register extends Component {
         <Flex center>
           <CustomButton
             text="Registrate"
-            onPress={() => console.log("si entro xd")}
+            onPress={() => this.Registrate()}
             disabled={!this.validateForm()}
           />
           <CustomButton text="Cancelar" onPress={() => this.close()} />
