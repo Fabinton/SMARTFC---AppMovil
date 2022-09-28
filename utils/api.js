@@ -151,10 +151,10 @@ class Api {
   async allStudent(BASE_IP) {
     var BASE_API_ALL_STUDENTS =
       "http://" + BASE_IP + ":3000" + "/loadAllStudent";
-    const query = await fetch(`${BASE_API_ALL_STUDENTS}`);
-    const data = await query.json();
+    return axios.get(`${BASE_API_ALL_STUDENTS}`);
+    // const query = await fetch(`${BASE_API_ALL_STUDENTS}`);
+    // const data = await query.json();
     //console.log(data);
-    return data;
   }
   async allDoubts(BASE_IP) {
     var BASE_API_ALL_STUDENTS = "http://" + BASE_IP + ":3000" + "/loadAllDudas";

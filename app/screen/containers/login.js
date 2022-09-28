@@ -43,75 +43,54 @@ class Login extends Component {
     this.setState({ modalVisible: visible });
   }
   async signIn(data) {
-    // db.transaction((tx) => {
-    //   tx.executeSql(
-    //     "select * from students",
-    //     [],
-    //     (_, { rows: { _array } }) => this.setState({ storage: _array })
-    //     //console.log(this.state.storage)
-    //   );
-    // });
+    this.props.dispatch({
+      type: "SET_LOADING",
+      payload: true,
+    });
     this.consulta();
-    dataStudents = this.state.storage;
-    console.log("Filtro");
-    var dataCompleted = null;
-    console.log(dataStudents.length);
-    if (dataStudents.length == 0) {
-    } else {
-      for (var i = 0; i <= dataStudents.length - 1; i++) {
-        //if (dataStudents[i].correo_electronico == this.state.email){
-        if (dataStudents[i].correo_electronico == "estudiante10@fc.com") {
-          console.log("Entro");
-          if (dataStudents[i].contrasena == "1234") {
-            //if(dataStudents[i].contrasena == this.state.password){
-            dataCompleted = dataStudents[i];
-          } else {
-            Alert.alert(
-              "Datos Incorrectos",
-              "La contraseña o email son incorrecto",
-              [
-                {
-                  text: "Cancel",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel",
-                },
-                { text: "OK", onPress: () => console.log("OK Pressed") },
-              ],
-              { cancelable: false }
-            );
-          }
-        }
+    if (this.state.storage) {
+      const studentExist = this?.state?.storage?.find((student) => {
+        return (
+          student.correo_electronico == "estudiante10@fc.com" && // reminder to check email and password from form.
+          student.contrasena == "1234" // this.state.email this.state.password
+        );
+      });
+      if (studentExist) {
+        this.props.dispatch({
+          type: "SET_STUDENT",
+          payload: {
+            student: studentExist,
+          },
+        });
+        setTimeout(() => {
+          this.props.dispatch({
+            type: "SET_LOADING",
+            payload: false,
+          });
+        }, 2000);
+        setTimeout(() => {
+          this.props.dispatch(
+            NavigationActions.navigate({
+              routeName: "Activities",
+            })
+          );
+        }, 1500);
+      } else {
+        Alert.alert(
+          "Datos Incorrectos",
+          "La contraseña o email son incorrecto",
+          [
+            {
+              text: "Cancel",
+              onPress: () => {},
+              style: "cancel",
+            },
+            { text: "OK", onPress: {} },
+          ],
+          { cancelable: false }
+        );
       }
     }
-    console.log(dataCompleted);
-    if (dataCompleted != null) {
-      this.props.dispatch({
-        type: "SET_STUDENT",
-        payload: {
-          student: dataCompleted,
-        },
-      });
-      this.props.dispatch(
-        NavigationActions.navigate({
-          routeName: "Activities",
-        })
-      );
-    } else {
-      Alert.alert(
-        "Datos Incorrectos",
-        "La contraseña o email son incorrecto",
-        [
-          {
-            text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel",
-          },
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ],
-        { cancelable: false }
-      );
-    }
-    console.log("Filtro Final");
   }
 
   componentDidMount() {
@@ -208,48 +187,44 @@ class Login extends Component {
       type: "SET_LOADING",
       payload: true,
     });
-    const query = await API.allStudent(this.props.ipconfig);
-    //console.log(query)
-    console.log("Entrando al Sistema de Sincronizacion");
-
-    for (var i = 0; i < query.length; i++) {
-      var id_estudiante = query[i].id_estudiante;
-      var id_colegio = query[i].id_colegio;
-      var nombre_estudiante = query[i].nombre_estudiante;
-      var nombre_usuario = query[i].nombre_usuario;
-      var tipo_usuario = query[i].tipo_usuario;
-      var grado_estudiante = query[i].grado_estudiante;
-      var curso_estudiante = query[i].curso_estudiante;
-      var apellido_estudiante = query[i].apellido_estudiante;
-      var contrasena = query[i].contrasena;
-      var correo_electronico = query[i].correo_electronico;
-      console.log("Datos User");
-      console.log(id_estudiante);
-      console.log(nombre_estudiante);
-      console.log(apellido_estudiante);
-      this.envioDatosSQL(
-        id_estudiante,
-        id_colegio,
-        nombre_estudiante,
-        nombre_usuario,
-        tipo_usuario,
-        grado_estudiante,
-        curso_estudiante,
-        apellido_estudiante,
-        contrasena,
-        correo_electronico
-      );
-    }
-    Alert.alert(
-      "Sincronización",
-      "La sincronización de los usuarios fue realizada",
-      [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-      { cancelable: false }
-    );
-    this.props.dispatch({
-      type: "SET_LOADING",
-      payload: false,
-    });
+    API.allStudent(this.props.ipconfig)
+      .then(({ data }) => {
+        this.setState({ storage: data });
+        data.map((student) => {
+          this.envioDatosSQL(
+            student.id_estudiante,
+            student.id_colegio,
+            student.nombre_estudiante,
+            student.tipo_usuario,
+            student.grado_estudiante,
+            student.curso_estudiante,
+            student.apellido_estudiante,
+            student.contrasena,
+            student.correo_electronico
+          );
+        });
+        Alert.alert(
+          "Sincronización",
+          "La sincronización de los usuarios fue realizada",
+          [{ text: "OK", onPress: () => {} }],
+          { cancelable: false }
+        );
+      })
+      .catch((e) => {
+        console.log("error", e);
+        Alert.alert(
+          "Error",
+          "Se presentó un error al sincronizar usuarios",
+          [{ text: "OK", onPress: () => {} }],
+          { cancelable: false }
+        );
+      })
+      .finally(() => {
+        this.props.dispatch({
+          type: "SET_LOADING",
+          payload: false,
+        });
+      });
   }
   envioDatosSQL(
     id_estudiante,
@@ -474,6 +449,7 @@ function mapStateToProps(state) {
   return {
     ipconfig: state.videos.selectedIPConfig,
     internetConnection: state.connection.isConnected,
+    loading: state.connection.loading,
   };
 }
 

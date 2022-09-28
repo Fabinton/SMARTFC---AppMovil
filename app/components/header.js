@@ -10,7 +10,9 @@ import {
 import { Ionicons, Octicons } from "@expo/vector-icons";
 import { StatusBar } from "react-native";
 import LoadingModal from "./LoadingModal";
+import { useSelector } from "react-redux";
 function Header(props) {
+  const { loading } = useSelector((state) => state.connection);
   return (
     <>
       <View>
@@ -32,7 +34,7 @@ function Header(props) {
           </View>
         </View>
       </View>
-      <LoadingModal />
+      {loading && <LoadingModal />}
     </>
   );
 }
