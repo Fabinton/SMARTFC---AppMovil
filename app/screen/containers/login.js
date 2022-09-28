@@ -18,11 +18,13 @@ import HeaderLogin from "../../components/headerLogin";
 import API from "../../../utils/api";
 import CustomButton from "../../components/customButton";
 import { Stack, Flex, Spacer } from "@react-native-material/core";
+import CheckConnection from "../../components/CheckConnection";
 
 const db = SQLite.openDatabase("db5.db");
 function goodBye() {
   BackHandler.exitApp();
 }
+
 class Login extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -35,6 +37,7 @@ class Login extends Component {
     storage: null,
     modalVisible: false,
     ipconfig: null,
+    internetConnection: this.props.internetConnection,
   };
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
@@ -110,6 +113,7 @@ class Login extends Component {
     }
     console.log("Filtro Final");
   }
+
   componentDidMount() {
     //Aqui Hay un cambio si se aprueba
     var d = new Date();
@@ -149,29 +153,41 @@ class Login extends Component {
 
   async registrateIP() {
     ipConfigSend = this.state.ipconfig;
-    console.log(ipConfigSend);
-    var answer = 0;
-    answer = await API.getConection(ipConfigSend);
-    console.log(answer);
-    if (answer == 1) {
-      console.log("Hace Ping");
-      this.props.dispatch({
-        type: "SET_IPCONFIG",
-        payload: {
-          ipconfig: ipConfigSend,
-        },
-      });
-      Alert.alert(
-        "Conexión",
-        "La conexión con el servidor fue exitosa.",
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-        { cancelable: false }
-      );
-      this.setModalVisible(!this.state.modalVisible);
+    if (this.props.internetConnection) {
+      API.getConection(ipConfigSend)
+        .then((response) => {
+          this.props.dispatch({
+            type: "SET_IPCONFIG",
+            payload: {
+              ipconfig: ipConfigSend,
+            },
+          });
+          Alert.alert(
+            "Conexión",
+            "La conexión con el servidor fue exitosa.",
+            [
+              {
+                text: "OK",
+                onPress: () => this.setModalVisible(!this.state.modalVisible),
+              },
+            ],
+            { cancelable: false }
+          );
+        })
+        .catch((error) => {
+          console.log("error ip", error);
+          Alert.alert(
+            "ERROR",
+            "La conexión con el servidor es erronea por favor verifica tu IP",
+            [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+            { cancelable: false }
+          );
+        })
+        .finally(() => {});
     } else {
       Alert.alert(
-        "Conexión",
-        "La conexión con el servidor es erronea por favor verifica tu IP",
+        "ERROR",
+        "RECUERDA QUE DEBES ESTAR CONECTADO A INTERNET PARA GUARDAR TU IP.",
         [{ text: "OK", onPress: () => console.log("OK Pressed") }],
         { cancelable: false }
       );
@@ -272,9 +288,11 @@ class Login extends Component {
       console.log("Pailas");
     }
   }
+
   render() {
     return (
       <View style={styles.container}>
+        <CheckConnection />
         <Image
           style={{ width: 300, height: 200 }}
           source={require("../../../assets/images/LogoSinFondo.png")}
@@ -438,6 +456,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     ipconfig: state.videos.selectedIPConfig,
+    internetConnection: state.connection.isConnected,
   };
 }
 

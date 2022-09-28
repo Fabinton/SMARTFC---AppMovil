@@ -1,3 +1,4 @@
+import axios from "axios";
 class Api {
   async getContent(BASE_IP) {
     var BASE_API = "http://" + BASE_IP + ":3000" + "/loadAllcontentsMovil";
@@ -7,19 +8,9 @@ class Api {
     //console.log(predata);
     return data;
   }
-  async getConection(BASE_IP) {
+  getConection(BASE_IP) {
     var BASE_API = "http://" + BASE_IP + ":3000" + "/conectionWithApp";
-    var data = 3;
-    const query = await fetch(`${BASE_API}`)
-      .then((response) => {
-        data = 1;
-      })
-      .catch(function (err) {
-        data = 0;
-      });
-    //const data2 = await query.json();
-    console.log(data);
-    return data;
+    return axios.get(`${BASE_API}`);
   }
 
   async getCourses(BASE_IP, id_grado, id_colegio) {

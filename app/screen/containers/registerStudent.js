@@ -24,6 +24,7 @@ class Register extends Component {
   state = {
     id_student: null,
     grado: null,
+    checked: false,
     password: null,
     school: null,
     schoolSelected: null,
@@ -150,6 +151,18 @@ class Register extends Component {
       })
     );
   }
+  validateForm() {
+    return (
+      this.state?.name?.length > 0 &&
+      this.state?.last_name?.length > 0 &&
+      this.state?.grado?.length > 0 &&
+      this.state?.schoolSelected &&
+      this.state?.email?.length > 0 &&
+      this.state?.password?.length > 0 &&
+      this.state.checked
+    );
+  }
+
   render() {
     var datasSchoolFull = null;
 
@@ -160,7 +173,7 @@ class Register extends Component {
       console.log("Imprimiendo State");
       //console.log(datasSchool);
       datasSchoolFull = this.state.school;
-      console.log(datasSchoolFull);
+
       itemsInPicker = datasSchoolFull.map((data) => {
         return (
           <Picker.Item
@@ -172,7 +185,6 @@ class Register extends Component {
       });
     }
 
-    //console.log(this.props.navigation);
     return (
       <Stack
         style={styles.container}
@@ -255,7 +267,12 @@ class Register extends Component {
           )}
         />
         <Flex inline center style={{ marginLeft: 10 }}>
-          <CheckBox />
+          <CheckBox
+            value={this.state.checked}
+            onValueChange={() =>
+              this.setState({ checked: !this.state.checked })
+            }
+          />
           <Text style={styles.textDocument}>
             Acepto los terminos de uso de datos para futuras investigaciones.
           </Text>
@@ -267,7 +284,11 @@ class Register extends Component {
         </Text>
 
         <Flex center>
-          <CustomButton text="Registrate" onPress={() => this.Registrate()} />
+          <CustomButton
+            text="Registrate"
+            onPress={() => console.log("si entro xd")}
+            disabled={!this.validateForm()}
+          />
           <CustomButton text="Cancelar" onPress={() => this.close()} />
         </Flex>
       </Stack>
