@@ -1,12 +1,19 @@
 import React from "react";
 import { SafeAreaView } from "react-native";
 import { View, StyleSheet, StatusBar } from "react-native";
+import { useSelector } from "react-redux";
+import LoadingModal from "./LoadingModal";
 function Header(props) {
+  const { loading } = useSelector((state) => state.connection);
+  console.log("loading", loading);
   return (
-    <View>
-      <StatusBar backgroundColor="#F5F5F5" barStyle="light-content" />
-      <SafeAreaView style={style.statusBar}></SafeAreaView>
-    </View>
+    <>
+      <View>
+        <StatusBar backgroundColor="#F5F5F5" barStyle="light-content" />
+        <SafeAreaView style={style.statusBar}></SafeAreaView>
+      </View>
+      {loading && <LoadingModal />}
+    </>
   );
 }
 const style = StyleSheet.create({

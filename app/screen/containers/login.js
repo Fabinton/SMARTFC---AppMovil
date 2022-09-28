@@ -154,6 +154,10 @@ class Login extends Component {
   async registrateIP() {
     ipConfigSend = this.state.ipconfig;
     if (this.props.internetConnection) {
+      this.props.dispatch({
+        type: "SET_LOADING",
+        payload: true,
+      });
       API.getConection(ipConfigSend)
         .then((response) => {
           this.props.dispatch({
@@ -183,7 +187,12 @@ class Login extends Component {
             { cancelable: false }
           );
         })
-        .finally(() => {});
+        .finally(() => {
+          this.props.dispatch({
+            type: "SET_LOADING",
+            payload: false,
+          });
+        });
     } else {
       Alert.alert(
         "ERROR",
@@ -195,6 +204,10 @@ class Login extends Component {
   }
 
   async sincronizarDatas() {
+    this.props.dispatch({
+      type: "SET_LOADING",
+      payload: true,
+    });
     const query = await API.allStudent(this.props.ipconfig);
     //console.log(query)
     console.log("Entrando al Sistema de Sincronizacion");
@@ -233,6 +246,10 @@ class Login extends Component {
       [{ text: "OK", onPress: () => console.log("OK Pressed") }],
       { cancelable: false }
     );
+    this.props.dispatch({
+      type: "SET_LOADING",
+      payload: false,
+    });
   }
   envioDatosSQL(
     id_estudiante,
