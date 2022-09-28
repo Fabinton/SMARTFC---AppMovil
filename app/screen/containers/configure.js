@@ -53,8 +53,8 @@ class Configure extends Component {
   }
   async actualizaUser() {
     //update items set done = 1 where id = ?;
-    if (this.state.password != null) {
-      data = {
+    if (this.state.password === this?.props?.student?.contrasena) {
+      const data = {
         id_estudiante: this.props.student.id_estudiante,
         //tipo_usuario: 1,
         nombre_estudiante: this.state.name,
@@ -108,16 +108,26 @@ class Configure extends Component {
       });
     } else {
       Alert.alert(
-        "Actualización Data",
-        "No ha ingresado la contraseña por favor ingresela e intente nuevamente",
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+        "Error",
+        "Contraseña incorrecta, por favor ingrese la contraseña nuevamente",
+        [{ text: "OK", onPress: () => {} }],
         { cancelable: false }
       );
     }
   }
   funcionCargada() {
     this.actualizaUser();
-    this.actualizaUser();
+  }
+
+  validateForm() {
+    return (
+      this.state?.name?.length > 0 &&
+      this.state?.last_name?.length > 0 &&
+      this.state?.grado &&
+      this.state?.schoolSelected &&
+      this.state?.email?.length > 0 &&
+      this.state?.password?.length > 0
+    );
   }
 
   render() {
@@ -257,6 +267,7 @@ class Configure extends Component {
           <CustomButton
             text="Actualizar datos"
             onPress={() => this.funcionCargada()}
+            disabled={!this.validateForm()}
           />
         </Flex>
       </Stack>

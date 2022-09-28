@@ -45,7 +45,7 @@ const style = StyleSheet.create({
     marginTop: 10,
   },
   statusBar: {
-    // paddingTop: 27.5,
+    paddingTop: 27.5,
     backgroundColor: "#272D34",
   },
   container: {

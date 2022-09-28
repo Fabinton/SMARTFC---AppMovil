@@ -89,6 +89,12 @@ class Login extends Component {
           ],
           { cancelable: false }
         );
+        setTimeout(() => {
+          this.props.dispatch({
+            type: "SET_LOADING",
+            payload: false,
+          });
+        }, 2000);
       }
     }
   }
