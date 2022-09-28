@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
-import { StyleSheet, Text, CheckBox, Picker } from "react-native";
+import { StyleSheet, Text, CheckBox, Picker, Alert } from "react-native";
 import HeaderLogin from "../../components/headerLogin";
 import * as SQLite from "expo-sqlite";
 import API from "../../../utils/api";
@@ -55,68 +55,95 @@ class Register extends Component {
   }
 
   async Registrate() {
-    console.log(this.state.grado);
-    console.log(this.state.schoolSelected);
-    var query2 = this.state.students;
-    var query = await API.allStudent(this.props.ipconfig);
-    console.log("Alumnos");
-    console.log(query.length - 1);
-    var id_students_F = 0;
-    if (query.length == 0) {
-      id_students_F = 1;
-      this.setState({ id_student: 1 });
-    } else {
-      id_students_F = query.length + 1;
-      this.setState({ id_student: query.length + 1 });
-    }
-    var id_final = "" + this.state.schoolSelected + id_students_F;
-    id_final = parseInt(id_final);
-
-    console.log("ID ESTUDIANTE");
-    console.log(id_final);
-    data = {
-      id_estudiante: id_final,
-      tipo_usuario: 1,
-      nombre_estudiante: this.state.name,
-      apellido_estudiante: this.state.last_name,
-      grado_estudiante: this.state.grado,
-      curso_estudiante: 1,
-      id_colegio: this.state.schoolSelected,
-      nombre_usuario: this.state.user,
-      contrasena: this.state.password,
-      correo_electronico: this.state.email,
-    };
-    var student = await API.createStudents(this.props.ipconfig, data);
-    console.log(student);
-    db.transaction(
-      (tx) => {
-        tx.executeSql(
-          "insert into students (id_estudiante, tipo_usuario, nombre_estudiante, apellido_estudiante, grado_estudiante, curso_estudiante, id_colegio, nombre_usuario, contrasena, correo_electronico) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-          [
-            id_final,
-            1,
-            this.state.name,
-            this.state.last_name,
-            this.state.grado,
-            1,
-            this.state.schoolSelected,
-            this.state.user,
-            this.state.password,
-            this.state.email,
-          ]
-        );
-        tx.executeSql("select * from students", [], (_, { rows: { _array } }) =>
-          console.log(_array)
-        );
-      },
-      null,
-      null
-    );
-    this.props.dispatch(
-      NavigationActions.navigate({
-        routeName: "Notification",
+    this.props.dispatch({
+      type: "SET_LOADING",
+      payload: true,
+    });
+    let id_students_F;
+    let id_final;
+    API.allStudent(this.props.ipconfig)
+      .then(({ data }) => {
+        if (data?.length == 0) {
+          id_students_F = 1;
+          this.setState({ id_student: 1 });
+        } else {
+          id_students_F = data?.length + 1;
+          this.setState({ id_student: id_students_F });
+        }
+        id_final = "" + this.state.schoolSelected + id_students_F;
+        id_final = parseInt(id_final);
+        const dataToSave = {
+          id_estudiante: id_final,
+          tipo_usuario: 1,
+          nombre_estudiante: this.state.name,
+          apellido_estudiante: this.state.last_name,
+          grado_estudiante: this.state.grado,
+          curso_estudiante: 1,
+          id_colegio: this.state.schoolSelected,
+          nombre_usuario: this.state.user,
+          contrasena: this.state.password,
+          correo_electronico: this.state.email,
+        };
+        API.createStudents(this.props.ipconfig, dataToSave)
+          .then(({ data }) => {
+            db.transaction(
+              (tx) => {
+                tx.executeSql(
+                  "insert into students (id_estudiante, tipo_usuario, nombre_estudiante, apellido_estudiante, grado_estudiante, curso_estudiante, id_colegio, nombre_usuario, contrasena, correo_electronico) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                  [
+                    id_final,
+                    1,
+                    this.state.name,
+                    this.state.last_name,
+                    this.state.grado,
+                    1,
+                    this.state.schoolSelected,
+                    this.state.user,
+                    this.state.password,
+                    this.state.email,
+                  ]
+                );
+                tx.executeSql(
+                  "select * from students",
+                  [],
+                  (_, { rows: { _array } }) => console.log(_array)
+                );
+              },
+              null,
+              null
+            );
+            this.props.dispatch(
+              NavigationActions.navigate({
+                routeName: "Notification",
+              })
+            );
+          })
+          .catch((e) => {
+            console.log("error register", e);
+            Alert.alert(
+              "Error",
+              "Ha ocurrido un error al registrar usuario.",
+              [{ text: "OK", onPress: () => {} }],
+              { cancelable: false }
+            );
+          })
+          .finally(() => {});
       })
-    );
+      .catch((e) => {
+        console.log("error allstudents", e);
+        Alert.alert(
+          "Error",
+          "Ha ocurrido un error al registrar usuario.",
+          [{ text: "OK", onPress: () => {} }],
+          { cancelable: false }
+        );
+      })
+      .finally(() => {
+        this.props.dispatch({
+          type: "SET_LOADING",
+          payload: false,
+        });
+      });
   }
   idEstudiante() {
     console.log(this.state.grado);
@@ -286,7 +313,7 @@ class Register extends Component {
         <Flex center>
           <CustomButton
             text="Registrate"
-            onPress={() => console.log("si entro xd")}
+            onPress={() => this.Registrate()}
             disabled={!this.validateForm()}
           />
           <CustomButton text="Cancelar" onPress={() => this.close()} />
