@@ -43,68 +43,98 @@ class Login extends Component {
     this.setState({ modalVisible: visible });
   }
   async signIn(data) {
-    this.props.dispatch({
-      type: "SET_LOADING",
-      payload: true,
-    });
-    this.consulta();
-    if (this.state.storage) {
-      const studentExist = this?.state?.storage?.find((student) => {
-        return (
-          student.correo_electronico == "estudiante10@fc.com" && // reminder to check email and password from form.
-          student.contrasena == "1234" // this.state.email this.state.password
-        );
+    if (this.props.ipconfig) {
+      this.props.dispatch({
+        type: "SET_LOADING",
+        payload: true,
       });
-      if (studentExist) {
-        this.props.dispatch({
-          type: "SET_STUDENT",
-          payload: {
-            student: studentExist,
-          },
-        });
-        setTimeout(() => {
-          this.props.dispatch({
-            type: "SET_LOADING",
-            payload: false,
-          });
-        }, 2000);
-        setTimeout(() => {
-          this.props.dispatch(
-            NavigationActions.navigate({
-              routeName: "Activities",
-            })
+      this.consulta();
+      if (Object.keys(this.state.storage)?.length > 0) {
+        const studentExist = this?.state?.storage?.find((student) => {
+          return (
+            student.correo_electronico == "estudiante10@fc.com" && // reminder to check email and password from form.
+            student.contrasena == "1234" // this.state.email this.state.password
           );
-        }, 1500);
+        });
+        if (studentExist) {
+          this.props.dispatch({
+            type: "SET_STUDENT",
+            payload: {
+              student: studentExist,
+            },
+          });
+          setTimeout(() => {
+            this.props.dispatch({
+              type: "SET_LOADING",
+              payload: false,
+            });
+          }, 2000);
+          setTimeout(() => {
+            this.props.dispatch(
+              NavigationActions.navigate({
+                routeName: "Activities",
+              })
+            );
+          }, 1500);
+        } else {
+          Alert.alert(
+            "Datos Incorrectos",
+            "La contraseña o email son incorrecto",
+            [
+              {
+                text: "Cancel",
+                onPress: () => {},
+                style: "cancel",
+              },
+              { text: "OK", onPress: () => {} },
+            ],
+            { cancelable: false }
+          );
+          setTimeout(() => {
+            this.props.dispatch({
+              type: "SET_LOADING",
+              payload: false,
+            });
+          }, 2000);
+        }
       } else {
+        this.props.dispatch({
+          type: "SET_LOADING",
+          payload: false,
+        });
         Alert.alert(
-          "Datos Incorrectos",
-          "La contraseña o email son incorrecto",
+          "Error",
+          "Recuerda sincronizar datos de usuario antes de iniciar sesión.",
           [
             {
               text: "Cancel",
               onPress: () => {},
               style: "cancel",
             },
-            { text: "OK", onPress: {} },
+            { text: "OK", onPress: () => {} },
           ],
           { cancelable: false }
         );
-        setTimeout(() => {
-          this.props.dispatch({
-            type: "SET_LOADING",
-            payload: false,
-          });
-        }, 2000);
       }
+    } else {
+      Alert.alert(
+        "Error Conexión",
+        "Recuerda guardar la dirección IP antes de iniciar sesión.",
+        [
+          {
+            text: "Cancel",
+            onPress: () => {},
+            style: "cancel",
+          },
+          { text: "OK", onPress: () => {} },
+        ],
+        { cancelable: false }
+      );
     }
   }
 
   componentDidMount() {
     //Aqui Hay un cambio si se aprueba
-    var d = new Date();
-    console.log(d.getFullYear());
-    var year = d.getFullYear();
-    console.log(typeof year);
     this.props.dispatch({
       type: "SET_STUDENT",
       payload: {
@@ -137,7 +167,7 @@ class Login extends Component {
   }
 
   async registrateIP() {
-    ipConfigSend = this.state.ipconfig;
+    const ipConfigSend = this.state.ipconfig;
     if (this.props.internetConnection) {
       this.props.dispatch({
         type: "SET_LOADING",
@@ -201,6 +231,7 @@ class Login extends Component {
             student.id_estudiante,
             student.id_colegio,
             student.nombre_estudiante,
+            student.correo_electronico,
             student.tipo_usuario,
             student.grado_estudiante,
             student.curso_estudiante,
@@ -264,9 +295,9 @@ class Login extends Component {
   }
   consulta() {
     db.transaction((tx) => {
-      tx.executeSql("select * from students", [], (_, { rows: { _array } }) =>
-        this.setState({ storage: _array })
-      );
+      tx.executeSql("select * from students", [], (_, { rows: { _array } }) => {
+        this.setState({ storage: _array });
+      });
     });
   }
   async loginAdmin() {

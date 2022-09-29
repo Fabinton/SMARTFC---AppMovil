@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import LoadingModal from "./LoadingModal";
 function Header(props) {
   const { loading } = useSelector((state) => state.connection);
-  console.log("loading", loading);
   return (
     <>
       <View>
