@@ -141,20 +141,10 @@ class Api {
     //console.log(data);
     return data;
   }
-  async allDoubtsStudents(BASE_IP, student) {
-    console.log("JSON DUDAS");
+  allDoubtsStudents(BASE_IP, student) {
     var BASE_API_LOAD_DOUBTS_STUDENT =
       "http://" + BASE_IP + ":3000" + "/loadDudaStudents";
-    const query2 = await fetch(`${BASE_API_LOAD_DOUBTS_STUDENT}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(student),
-    });
-    const data2 = await query2.json();
-    console.log(data2);
-    return data2;
+    return axios.post(`${BASE_API_LOAD_DOUBTS_STUDENT}`, student);
   }
   async generateMetrics(BASE_IP, Student) {
     console.log("JSON EVENTOS");
@@ -171,17 +161,9 @@ class Api {
     //console.log(data2);
     return data2;
   }
-  async generateDoubt(BASE_IP, dataDoubt) {
+  generateDoubt(BASE_IP, dataDoubt) {
     var BASE_API_CREATE_DOUBT = "http://" + BASE_IP + ":3000" + "/createDuda";
-    const query2 = await fetch(`${BASE_API_CREATE_DOUBT}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(dataDoubt),
-    });
-    const data2 = await query2.json();
-    return data2;
+    return axios.post(`${BASE_API_CREATE_DOUBT}`, dataDoubt);
   }
   async loadDoubt(BASE_IP) {
     var BASE_API_LOAD_DOUBT = "http://" + BASE_IP + ":3000" + "/createDuda";

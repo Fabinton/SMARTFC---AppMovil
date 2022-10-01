@@ -8,7 +8,6 @@ import { connect } from "react-redux";
 import { NavigationActions } from "react-navigation";
 import * as SQLite from "expo-sqlite";
 import { View } from "react-native";
-import QuestionActiviy from "../components/QuestionActivity";
 import { Dimensions } from "react-native";
 
 function mapStateToProps(state) {
@@ -129,9 +128,6 @@ class SuggestionList extends Component {
             renderItem={this.renderItem}
           />
         </Layout>
-        <QuestionActiviy
-          style={{ position: "absolute", top: "85%", left: "-17%" }}
-        />
       </View>
     );
   }
