@@ -22,18 +22,18 @@ class Home extends Component {
   }
 
   async componentDidMount() {
-    console.log(this.props.ipconfig);
-    console.log(this.props.student);
-    const subject = await API.getCourses(
+    API.getCourses(
       this.props.ipconfig,
       this.props.student.grado_estudiante,
       this.props.student.id_colegio
-    );
-    this.props.dispatch({
-      type: "SET_ACTIVITIES_LIST",
-      payload: {
-        subject,
-      },
+    ).then(({ data }) => {
+      this.props.dispatch({
+        type: "SET_ACTIVITIES_LIST",
+        payload: {
+          data,
+        },
+      });
+      this.setState({ subject: data });
     });
   }
   render() {
@@ -44,15 +44,6 @@ class Home extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  texto: {
-    color: "white",
-    fontSize: 17,
-    fontWeight: "bold",
-    marginLeft: 20,
-  },
-});
 
 function mapStateToProps(state) {
   return {

@@ -13,6 +13,7 @@ function mapStateToProps(state) {
     duda: state.videos.duda,
     ipconfig: state.videos.selectedIPConfig,
     student: state.videos.selectedStudent,
+    internetConnection: state.connection.isConnected,
   };
 }
 class SuggestionList extends Component {
@@ -35,36 +36,45 @@ class SuggestionList extends Component {
   };
   keyExtractor = (item) => item.id_duda.toString();
   getAllDoubts() {
-    this.props.dispatch({
-      type: "SET_LOADING",
-      payload: true,
-    });
-    var data = {
-      id_estudiante: this.props.student.id_estudiante,
-    };
-    API.allDoubtsStudents(this.props.ipconfig, data)
-      .then(({ data }) => {
-        this.props.dispatch({
-          type: "SET_DOUBT_LIST",
-          payload: {
-            data,
-          },
-        });
-      })
-      .catch((e) => {
-        Alert.alert(
-          "Error",
-          "Error al traer las dudas del servidor.",
-          [{ text: "OK", onPress: () => {} }],
-          { cancelable: false }
-        );
-      })
-      .finally(() => {
-        this.props.dispatch({
-          type: "SET_LOADING",
-          payload: false,
-        });
+    if (this.props.internetConnection) {
+      this.props.dispatch({
+        type: "SET_LOADING",
+        payload: true,
       });
+      var data = {
+        id_estudiante: this.props.student.id_estudiante,
+      };
+      API.allDoubtsStudents(this.props.ipconfig, data)
+        .then(({ data }) => {
+          this.props.dispatch({
+            type: "SET_DOUBT_LIST",
+            payload: {
+              data,
+            },
+          });
+        })
+        .catch((e) => {
+          Alert.alert(
+            "Error",
+            "Error al traer las dudas del servidor.",
+            [{ text: "OK", onPress: () => {} }],
+            { cancelable: false }
+          );
+        })
+        .finally(() => {
+          this.props.dispatch({
+            type: "SET_LOADING",
+            payload: false,
+          });
+        });
+    } else {
+      Alert.alert(
+        "Error",
+        "Recuerda que debes tener conexión a internet para sincronizar las preguntas.",
+        [{ text: "OK", onPress: () => {} }],
+        { cancelable: false }
+      );
+    }
   }
   render() {
     var data = [];

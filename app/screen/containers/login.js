@@ -20,12 +20,9 @@ import CustomButton from "../../components/customButton";
 import { Stack, Flex, Spacer } from "@react-native-material/core";
 
 const db = SQLite.openDatabase("db5.db");
-function goodBye() {
-  BackHandler.exitApp();
-}
 
 class Login extends Component {
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = () => {
     return {
       header: <HeaderLogin></HeaderLogin>,
     };
@@ -410,6 +407,10 @@ class Login extends Component {
                 text="Cancelar"
                 onPress={() => {
                   this.setModalVisible(!this.state.modalVisible);
+                  this.props.dispatch({
+                    type: "SET_LOADING",
+                    payload: false,
+                  });
                 }}
               />
             </Flex>

@@ -13,22 +13,13 @@ class Api {
     return axios.get(`${BASE_API}`);
   }
 
-  async getCourses(BASE_IP, id_grado, id_colegio) {
+  getCourses(BASE_IP, id_grado, id_colegio) {
     var BASE_API_COURSES =
       "http://" + BASE_IP + ":3000" + "/loadAllSubjectActivesMovil";
-    var datajson = { id_colegio: id_colegio, id_grado: id_grado };
-    //console.log("Aqui mando datos");
-    //console.log(datajson);
-    const query2 = await fetch(`${BASE_API_COURSES}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(datajson),
+    return axios.post(`${BASE_API_COURSES}`, {
+      id_colegio: id_colegio,
+      id_grado: id_grado,
     });
-    const data2 = await query2.json();
-    console.log(data2);
-    return data2;
   }
   async getActivities(BASE_IP) {
     var BASE_API_ACTIVITIES =
@@ -77,25 +68,27 @@ class Api {
   }
   async createEvents(BASE_IP, eventsStudents) {
     var BASE_API_EVENTS = "http://" + BASE_IP + ":3000" + "/createEventos";
-    console.log("JSON EVENTOS");
-    const query2 = await fetch(`${BASE_API_EVENTS}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(eventsStudents),
-    });
-    const data2 = await query2.json();
-    //console.log(data2);
+    console.log("eventoStudiante", eventsStudents);
+    axios.post(`${BASE_API_EVENTS}`, eventsStudents);
+    // const query2 = await fetch(`${BASE_API_EVENTS}`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(eventsStudents),
+    // });
+    // const data2 = await query2.json();
+    // //console.log(data2);
   }
   async loadEventsLast(BASE_IP) {
     var BASE_API_LOAD_EVENTS = "http://" + BASE_IP + ":3000" + "/loadAllEvento";
-    const query = await fetch(`${BASE_API_LOAD_EVENTS}`);
-    const data = await query.json();
-    console.log("Cargando Todos los Eventos");
-    const datalast = data[data.length - 1];
-    //console.log(datalast);
-    return data.length;
+    return axios.get(`${BASE_API_LOAD_EVENTS}`);
+    // const query = await fetch(`${BASE_API_LOAD_EVENTS}`);
+    // const data = await query.json();
+    // console.log("Cargando Todos los Eventos");
+    // const datalast = data[data.length - 1];
+    // //console.log(datalast);
+    // return data.length;
   }
   async loginStudent(BASE_IP, eventsStudents) {
     // apparently not in use

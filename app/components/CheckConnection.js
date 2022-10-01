@@ -14,7 +14,7 @@ const CheckConnection = () => {
     });
   }, [NetInfo]);
 
-  return <Text>{}</Text>;
+  return <Text style={{ height: 0.01 }}>{}</Text>;
 };
 
 export default CheckConnection;

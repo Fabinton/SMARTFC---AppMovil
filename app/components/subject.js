@@ -3,13 +3,10 @@ import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Video } from "expo-av";
 import { connect } from "react-redux";
 function Subject(props) {
-  console.log("Imprimiendo URLs");
-
   var uristring = props.url_imagen;
   var ip = props.ipconfig;
   var uri = "http://" + ip + ":3000" + uristring.substr(28);
 
-  console.log(uri);
   return (
     <TouchableOpacity onPress={props.onPress}>
       <View style={styles.container}>
