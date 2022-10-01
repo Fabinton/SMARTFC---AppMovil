@@ -18,7 +18,6 @@ import HeaderLogin from "../../components/headerLogin";
 import API from "../../../utils/api";
 import CustomButton from "../../components/customButton";
 import { Stack, Flex, Spacer } from "@react-native-material/core";
-import CheckConnection from "../../components/CheckConnection";
 
 const db = SQLite.openDatabase("db5.db");
 function goodBye() {
@@ -42,7 +41,7 @@ class Login extends Component {
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
   }
-  async signIn(data) {
+  async signIn() {
     if (this.props.ipconfig) {
       this.props.dispatch({
         type: "SET_LOADING",
@@ -198,7 +197,7 @@ class Login extends Component {
           Alert.alert(
             "ERROR",
             "La conexión con el servidor es erronea por favor verifica tu IP",
-            [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+            [{ text: "OK", onPress: () => {} }],
             { cancelable: false }
           );
         })
@@ -212,56 +211,65 @@ class Login extends Component {
       Alert.alert(
         "ERROR",
         "Recuerda que debes estar conectado a internet para guardar tu IP.",
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+        [{ text: "OK", onPress: () => {} }],
         { cancelable: false }
       );
     }
   }
 
   async sincronizarDatas() {
-    this.props.dispatch({
-      type: "SET_LOADING",
-      payload: true,
-    });
-    API.allStudent(this.props.ipconfig)
-      .then(({ data }) => {
-        this.setState({ storage: data });
-        data.map((student) => {
-          this.envioDatosSQL(
-            student.id_estudiante,
-            student.id_colegio,
-            student.nombre_estudiante,
-            student.correo_electronico,
-            student.tipo_usuario,
-            student.grado_estudiante,
-            student.curso_estudiante,
-            student.apellido_estudiante,
-            student.contrasena,
-            student.correo_electronico
-          );
-        });
-        Alert.alert(
-          "Sincronización",
-          "La sincronización de los usuarios fue realizada",
-          [{ text: "OK", onPress: () => {} }],
-          { cancelable: false }
-        );
-      })
-      .catch((e) => {
-        console.log("error", e);
-        Alert.alert(
-          "Error",
-          "Se presentó un error al sincronizar usuarios",
-          [{ text: "OK", onPress: () => {} }],
-          { cancelable: false }
-        );
-      })
-      .finally(() => {
-        this.props.dispatch({
-          type: "SET_LOADING",
-          payload: false,
-        });
+    if (this.props.internetConnection) {
+      this.props.dispatch({
+        type: "SET_LOADING",
+        payload: true,
       });
+      API.allStudent(this.props.ipconfig)
+        .then(({ data }) => {
+          this.setState({ storage: data });
+          data.map((student) => {
+            this.envioDatosSQL(
+              student.id_estudiante,
+              student.id_colegio,
+              student.nombre_estudiante,
+              student.correo_electronico,
+              student.tipo_usuario,
+              student.grado_estudiante,
+              student.curso_estudiante,
+              student.apellido_estudiante,
+              student.contrasena,
+              student.correo_electronico
+            );
+          });
+          Alert.alert(
+            "Sincronización",
+            "La sincronización de los usuarios fue realizada",
+            [{ text: "OK", onPress: () => {} }],
+            { cancelable: false }
+          );
+        })
+        .catch((e) => {
+          console.log("error", e);
+          Alert.alert(
+            "Error",
+            "Se presentó un error al sincronizar usuarios",
+            [{ text: "OK", onPress: () => {} }],
+            { cancelable: false }
+          );
+        })
+        .finally(() => {
+          this.props.dispatch({
+            type: "SET_LOADING",
+            payload: false,
+          });
+        });
+    } else {
+      Alert.alert(
+        "ERROR",
+        "Recuerda que debes estar conectado a Internet para sincronizar datos.",
+        [{ text: "OK", onPress: () => {} }],
+        { cancelable: false }
+      );
+    }
   }
   envioDatosSQL(
     id_estudiante,
@@ -321,7 +329,6 @@ class Login extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <CheckConnection />
         <Image
           style={{ width: 300, height: 200 }}
           source={require("../../../assets/images/LogoSinFondo.png")}

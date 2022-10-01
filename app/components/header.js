@@ -11,6 +11,7 @@ import { Ionicons, Octicons } from "@expo/vector-icons";
 import { StatusBar } from "react-native";
 import LoadingModal from "./LoadingModal";
 import { useSelector } from "react-redux";
+import CheckConnection from "./CheckConnection";
 function Header(props) {
   const { loading } = useSelector((state) => state.connection);
   return (
@@ -33,6 +34,7 @@ function Header(props) {
             </View>
           </View>
         </View>
+        <CheckConnection />
       </View>
       {loading && <LoadingModal />}
     </>
