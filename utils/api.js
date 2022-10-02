@@ -29,26 +29,14 @@ class Api {
     //console.log(data);
     return data;
   }
-  async getActivitiesMovil(BASE_IP, id_colegio, id_grado, id_materia) {
+  getActivitiesMovil(BASE_IP, id_colegio, id_grado, id_materia) {
     var BASE_API_ACTIVITIES_MOVIL =
       "http://" + BASE_IP + ":3000" + "/loadAllActivitiesMovil";
-    var datajson = {
+    return axios.post(`${BASE_API_ACTIVITIES_MOVIL}`, {
       id_colegio: id_colegio,
       id_grado: id_grado,
       id_materia: id_materia,
-    };
-    //console.log("Aqui mando datos");
-    //console.log(datajson);
-    const query2 = await fetch(`${BASE_API_ACTIVITIES_MOVIL}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(datajson),
     });
-    const data2 = await query2.json();
-    //console.log(predata2);
-    return data2;
   }
   async SearchContent(BASE_IP, title) {
     var BASE_API_SEARCH = "http://" + BASE_IP + ":3000" + "/searchContentREA";
@@ -70,26 +58,13 @@ class Api {
     var BASE_API_EVENTS = "http://" + BASE_IP + ":3000" + "/createEventos";
     console.log("eventoStudiante", eventsStudents);
     axios.post(`${BASE_API_EVENTS}`, eventsStudents);
-    // const query2 = await fetch(`${BASE_API_EVENTS}`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(eventsStudents),
-    // });
-    // const data2 = await query2.json();
-    // //console.log(data2);
   }
+
   async loadEventsLast(BASE_IP) {
     var BASE_API_LOAD_EVENTS = "http://" + BASE_IP + ":3000" + "/loadAllEvento";
     return axios.get(`${BASE_API_LOAD_EVENTS}`);
-    // const query = await fetch(`${BASE_API_LOAD_EVENTS}`);
-    // const data = await query.json();
-    // console.log("Cargando Todos los Eventos");
-    // const datalast = data[data.length - 1];
-    // //console.log(datalast);
-    // return data.length;
   }
+
   async loginStudent(BASE_IP, eventsStudents) {
     // apparently not in use
     console.log("JSON LOGIN");
