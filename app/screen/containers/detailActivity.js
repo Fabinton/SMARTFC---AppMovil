@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import ContenidoLayout from "../components/detailActivity";
-import { StyleSheet, Button, TouchableOpacity } from "react-native";
+import { StyleSheet } from "react-native";
 import Details from "../../components/detailActivity";
-import { Animated, View } from "react-native";
+import { Animated } from "react-native";
 import { connect } from "react-redux";
 import HeaderReturn from "../../components/headerReturn";
 import { NavigationActions } from "react-navigation";
@@ -11,8 +11,6 @@ import QuestionActivity from "../../components/QuestionActivity";
 import CustomButton from "../../components/customButton";
 
 const db = SQLite.openDatabase("db5.db");
-//import * as FileSystem from 'expo-file-system';
-//import shorthash from 'shorthash';
 
 class detailActivity extends Component {
   state = {

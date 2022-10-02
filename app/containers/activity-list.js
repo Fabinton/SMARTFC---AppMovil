@@ -27,7 +27,6 @@ class SuggestionList extends Component {
     <Separator text="No hay actividades asociadas a la materia"></Separator>
   );
   viewContenido = (item) => {
-    console.log("esta es la actividad selec:", item);
     this.props.dispatch({
       type: "SET_SELECT_ACTIVITIES_SUBJECT_LIST",
       payload: {
