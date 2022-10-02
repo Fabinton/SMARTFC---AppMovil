@@ -98,12 +98,14 @@ class SuggestionList extends Component {
       })
       .catch((e) => {
         console.log("error", e);
-        Alert.alert(
-          "ERROR",
-          "Error al sincronizar las actividades, intenta nuevamente.",
-          [{ text: "OK", onPress: () => {} }],
-          { cancelable: false }
-        );
+        if (this.props.internetConnection) {
+          Alert.alert(
+            "ERROR",
+            "Error al sincronizar las actividades, intenta nuevamente.",
+            [{ text: "OK", onPress: () => {} }],
+            { cancelable: false }
+          );
+        }
       })
       .finally(() => {
         this.props.dispatch({

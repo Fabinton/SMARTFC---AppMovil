@@ -11,9 +11,10 @@ import API from "../../utils/api";
 const db = SQLite.openDatabase("db5.db");
 function mapStateToProps(state) {
   return {
-    list: state.videos.data,
+    list: state.videos.subject,
     ipconfig: state.videos.selectedIPConfig,
     student: state.videos.selectedStudent,
+    internetConnection: state.connection.isConnected,
   };
 }
 class SuggestionList extends Component {
@@ -68,17 +69,21 @@ class SuggestionList extends Component {
           this.props.dispatch({
             type: "SET_ACTIVITIES_LIST",
             payload: {
-              data,
+              subject: data,
             },
           });
           var data = this.state.storage;
           var Flats = this.state.storageFlats;
-          console.log("storage", data);
-          console.log("flats", Flats);
+          // console.log("storage", data);
+          // console.log("flats", Flats);
           Flats.map((flat) => {
             if (flat.upload === 0) {
-              data.map((event, idx) => {
+              data.map((event) => {
                 if (flat.id_evento === event.id_evento) {
+                  this.props.dispatch({
+                    type: "SET_LOADING",
+                    payload: true,
+                  });
                   API.loadEventsLast(this.props.ipconfig)
                     .then(({ data }) => {
                       let dataLength = data?.length;
@@ -103,10 +108,19 @@ class SuggestionList extends Component {
                           });
                         })
                         .catch((e) => {
-                          console.log("error sync", e);
+                          console.log("error createEvents", e);
+                          Alert.alert(
+                            "ERROR",
+                            "Ha ocurrido un error al momento de guardar los eventos.",
+                            [{ text: "OK", onPress: () => {} }],
+                            { cancelable: false }
+                          );
                         })
                         .finally(() => {
-                          console.log("finally");
+                          this.props.dispatch({
+                            type: "SET_LOADING",
+                            payload: false,
+                          });
                         });
                     })
                     .catch((e) => {

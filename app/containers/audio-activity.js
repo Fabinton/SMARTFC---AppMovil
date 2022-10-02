@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Video } from "expo-av";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { MaterialIcons, Octicons } from "@expo/vector-icons";
-import Layout from "../components/layout";
+import { StyleSheet, View } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 import shorthash from "shorthash";
 import * as FileSystem from "expo-file-system";
 import { connect } from "react-redux";
@@ -22,10 +21,7 @@ class Player extends Component {
     storageFlats: null,
   };
   handlePlayAndPause = async () => {
-    console.log("Entro a Pausar el audio");
-    console.log(this.state.shouldPlay);
     if (this.state.shouldPlay == false) {
-      console.log("Le dio Play al audio");
       this.almacenaMetrica();
     }
     this.setState((prevState) => ({
@@ -59,11 +55,9 @@ class Player extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFilter: _array })
       );
     });
-    console.log(this.props.urlaudio);
     var uristring = this.props.urlaudio;
     var ip = this.props.ipconfig;
     var uri = "http://" + ip + ":3000" + uristring.substr(28);
-    console.log(uri);
     const name = shorthash.unique(uri);
     const path = `${FileSystem.cacheDirectory}${name}`;
     const video = await FileSystem.getInfoAsync(path);
@@ -98,16 +92,9 @@ class Player extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFilter: _array })
       );
     });
-    console.log("Storage Print");
-    console.log(this.state.storageFilter);
     var storageFilterGood = this.state.storageFilter;
     var storageFilter = storageFilterGood.reverse();
-    console.log("Imprimiendo Resultado");
-    //console.log(storageFilter);
-
-    console.log(storageFilterGood);
     if (storageFilter.length == 0) {
-      console.log("Entro a Cero");
       resultado = [
         {
           check_a1: 0,
@@ -196,7 +183,6 @@ class Player extends Component {
         this.setState({ storage: _array })
       );
     });
-    //console.log(this.state.storage [this.state.storage.length-1]);
     this.update();
   }
   updateFlat() {
@@ -207,7 +193,6 @@ class Player extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFlats: _array })
       );
     });
-    console.log(this.state.storageFlats);
   }
   update() {
     db.transaction((tx) => {
@@ -215,7 +200,6 @@ class Player extends Component {
         this.setState({ storage: _array })
       );
     });
-    console.log(this.state.storage[this.state.storage.length - 1]);
     db.transaction(
       (tx) => {
         tx.executeSql(
@@ -250,16 +234,9 @@ class Player extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFilter: _array })
       );
     });
-    console.log("Storage Print");
-    console.log(this.state.storageFilter);
     var storageFilterGood = this.state.storageFilter;
     var storageFilter = storageFilterGood.reverse();
-    console.log("Imprimiendo Resultado");
-    //console.log(storageFilter);
-
-    console.log(storageFilterGood);
     if (storageFilter.length == 0) {
-      console.log("Entro a Cero");
       resultado = [
         {
           check_a1: 0,
@@ -340,7 +317,7 @@ class Player extends Component {
         this.setState({ storage: _array })
       );
     });
-    //console.log(this.state.storage [this.state.storage.length-1]);
+
     this.update();
   }
   updateFlat() {
@@ -351,7 +328,6 @@ class Player extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFlats: _array })
       );
     });
-    console.log(this.state.storageFlats);
   }
   update() {
     db.transaction((tx) => {
@@ -359,7 +335,7 @@ class Player extends Component {
         this.setState({ storage: _array })
       );
     });
-    console.log(this.state.storage[this.state.storage.length - 1]);
+
     db.transaction(
       (tx) => {
         tx.executeSql(
@@ -381,8 +357,6 @@ class Player extends Component {
   }
 
   render() {
-    //const url = this.props.descripcion_CREA;
-    //console.log(this.props.descripcion_CREA);
     return (
       <View>
         <Video

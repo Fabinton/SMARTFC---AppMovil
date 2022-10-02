@@ -1,14 +1,6 @@
 import React, { Component } from "react";
 import { Video } from "expo-av";
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Button,
-  Dimensions,
-} from "react-native";
-import { MaterialIcons, Octicons } from "@expo/vector-icons";
-import Layout from "../components/layout";
+import { StyleSheet, View, Dimensions } from "react-native";
 import shorthash from "shorthash";
 import * as FileSystem from "expo-file-system";
 import { NavigationActions } from "react-navigation";
@@ -38,10 +30,7 @@ class Player extends Component {
     }
   }
   handlePlayAndPause = async () => {
-    //console.log("Entro a Pausar el video");
-    //console.log(this.state.shouldPlay);
     if (this.state.shouldPlay == false) {
-      //console.log("Le dio Play al video")
       this.almacenaMetrica();
     }
     this.setState((prevState) => ({
@@ -75,32 +64,24 @@ class Player extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFilter: _array })
       );
     });
-    console.log(this.props.urlvideo);
     var uristring = this.props.urlvideo;
     var ip = this.props.ipconfig;
     var uri = "http://" + ip + ":3000" + uristring.substr(28);
-    console.log(uri);
     const name = shorthash.unique(uri);
     const path = `${FileSystem.cacheDirectory}${name}`;
     const video = await FileSystem.getInfoAsync(path);
-    console.log("Antes de Entrar al Video");
     if (video.exists) {
       this.setState({
         source: {
           uri: video.uri,
-          //uri: 'file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540steran%252Fmyfc_init/Zu9oFD',
         },
       });
-      console.log("Imprimiendo Source");
-      console.log(this.state.source);
       return;
     }
-    console.log("Descarga Nuevo");
     const newVideo = await FileSystem.downloadAsync(uri, path);
     this.setState({
       source: {
         uri: newVideo.uri,
-        //uri: 'file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540steran%252Fmyfc_init/Zu9oFD',
       },
     });
   };
@@ -120,16 +101,9 @@ class Player extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFilter: _array })
       );
     });
-    //console.log("Storage Print")
-    //console.log(this.state.storageFilter);
     var storageFilterGood = this.state.storageFilter;
     var storageFilter = storageFilterGood.reverse();
-    //console.log("Imprimiendo Resultado")
-    //console.log(storageFilter);
-
-    //console.log(storageFilterGood);
     if (storageFilter.length == 0) {
-      //console.log("Entro a Cero")
       resultado = [
         {
           check_a1: 0,
@@ -218,7 +192,6 @@ class Player extends Component {
         this.setState({ storage: _array })
       );
     });
-    //console.log(this.state.storage [this.state.storage.length-1]);
     this.update();
   }
   updateFlat() {
@@ -229,7 +202,6 @@ class Player extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFlats: _array })
       );
     });
-    //console.log(this.state.storageFlats);
   }
   update() {
     db.transaction((tx) => {
@@ -237,7 +209,6 @@ class Player extends Component {
         this.setState({ storage: _array })
       );
     });
-    //console.log(this.state.storage[this.state.storage.length-1]);
     db.transaction(
       (tx) => {
         tx.executeSql(
@@ -261,13 +232,6 @@ class Player extends Component {
     this.setState((prevState) => ({
       shouldPlay: false,
     }));
-
-    this.props.dispatch({
-      type: "SET_SELECT_ACTIVITIES_SUBJECT_LIST",
-      payload: {
-        activity: this.props.activity,
-      },
-    });
     this.props.dispatch(
       NavigationActions.navigate({
         routeName: "TestActivity",
@@ -276,11 +240,6 @@ class Player extends Component {
   }
   pruebaLandsCape() {}
   render() {
-    //const url = this.props.descripcion_CREA;
-    //console.log(this.props.descripcion_CREA);
-    //console.log(this.state.total);
-    //console.log(this.state.percentage);
-    //console.log(this.state.stateVideo);
     return (
       <View>
         <Video

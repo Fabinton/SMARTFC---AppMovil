@@ -54,13 +54,12 @@ class Api {
     //console.log(predata2);
     return predata2;
   }
-  async createEvents(BASE_IP, eventsStudents) {
+  createEvents(BASE_IP, eventsStudents) {
     var BASE_API_EVENTS = "http://" + BASE_IP + ":3000" + "/createEventos";
-    console.log("eventoStudiante", eventsStudents);
-    axios.post(`${BASE_API_EVENTS}`, eventsStudents);
+    return axios.post(`${BASE_API_EVENTS}`, eventsStudents);
   }
 
-  async loadEventsLast(BASE_IP) {
+  loadEventsLast(BASE_IP) {
     var BASE_API_LOAD_EVENTS = "http://" + BASE_IP + ":3000" + "/loadAllEvento";
     return axios.get(`${BASE_API_LOAD_EVENTS}`);
   }
