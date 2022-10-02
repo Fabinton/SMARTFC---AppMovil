@@ -25,14 +25,18 @@ class Home extends Component {
       this.props.ipconfig,
       this.props.student.grado_estudiante,
       this.props.student.id_colegio
-    ).then(({ data }) => {
-      this.props.dispatch({
-        type: "SET_ACTIVITIES_LIST",
-        payload: {
-          data,
-        },
+    )
+      .then(({ data }) => {
+        this.props.dispatch({
+          type: "SET_ACTIVITIES_LIST",
+          payload: {
+            data,
+          },
+        });
+      })
+      .catch((e) => {
+        console.log("error", e);
       });
-    });
   }
   render() {
     return (

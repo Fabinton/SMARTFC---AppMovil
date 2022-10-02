@@ -57,12 +57,6 @@ class detailActivity extends Component {
     });
   }
   continuarContenido() {
-    this.props.dispatch({
-      type: "SET_SELECT_ACTIVITIES_SUBJECT_LIST",
-      payload: {
-        activity: this.props.activity,
-      },
-    });
     this.almacenaMetrica();
     this.props.dispatch(
       NavigationActions.navigate({
@@ -78,7 +72,6 @@ class detailActivity extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFlats: _array })
       );
     });
-    console.log(this.state.storageFlats);
   }
   update() {
     db.transaction((tx) => {
@@ -86,7 +79,6 @@ class detailActivity extends Component {
         this.setState({ storage: _array })
       );
     });
-    console.log(this.state.storage[this.state.storage.length - 1]);
     db.transaction(
       (tx) => {
         tx.executeSql(
@@ -121,17 +113,10 @@ class detailActivity extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFilter: _array })
       );
     });
-    console.log("Storage Print");
-    console.log(this.state.storageFilter);
     var storageFilterGood = this.state.storageFilter;
 
     var storageFilter = storageFilterGood.reverse();
-    console.log("Imprimiendo Resultado");
-    //console.log(storageFilter);
-
-    console.log(storageFilterGood);
     if (storageFilter.length == 0) {
-      console.log("Entro a Cero");
       resultado = [
         {
           check_a1: 0,
@@ -218,11 +203,10 @@ class detailActivity extends Component {
         this.setState({ storage: _array })
       );
     });
-    //console.log(this.state.storage [this.state.storage.length-1]);
+
     this.update();
   }
   render() {
-    console.log(this.state.source);
     return (
       <Animated.View style={styles.container}>
         <ContenidoLayout>

@@ -41,7 +41,7 @@ class selectMoment extends Component {
             onPress: () => console.log("Cancel Pressed"),
             style: "cancel",
           },
-          { text: "OK", onPress: () => console.log("OK Pressed") },
+          { text: "OK", onPress: () => {} },
         ],
         { cancelable: false }
       );
@@ -62,10 +62,10 @@ class selectMoment extends Component {
         [
           {
             text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
+            onPress: () => {},
             style: "cancel",
           },
-          { text: "OK", onPress: () => console.log("OK Pressed") },
+          { text: "OK", onPress: () => {} },
         ],
         { cancelable: false }
       );

@@ -14,6 +14,7 @@ function mapStateToProps(state) {
     list: state.videos.data,
     ipconfig: state.videos.selectedIPConfig,
     student: state.videos.selectedStudent,
+    internetConnection: state.connection.isConnected,
   };
 }
 class SuggestionList extends Component {
@@ -77,7 +78,7 @@ class SuggestionList extends Component {
           console.log("flats", Flats);
           Flats.map((flat) => {
             if (flat.upload === 0) {
-              data.map((event, idx) => {
+              data.map((event) => {
                 if (flat.id_evento === event.id_evento) {
                   API.loadEventsLast(this.props.ipconfig)
                     .then(({ data }) => {
@@ -103,10 +104,19 @@ class SuggestionList extends Component {
                           });
                         })
                         .catch((e) => {
-                          console.log("error sync", e);
+                          console.log("error createEvents", e);
+                          Alert.alert(
+                            "ERROR",
+                            "Ha ocurrido un error al momento de guardar los eventos.",
+                            [{ text: "OK", onPress: () => {} }],
+                            { cancelable: false }
+                          );
                         })
                         .finally(() => {
-                          console.log("finally");
+                          this.props.dispatch({
+                            type: "SET_LOADING",
+                            payload: false,
+                          });
                         });
                     })
                     .catch((e) => {
@@ -121,12 +131,7 @@ class SuggestionList extends Component {
         .catch((e) => {
           console.log("error", e);
         })
-        .finally(() => {
-          this.props.dispatch({
-            type: "SET_LOADING",
-            payload: false,
-          });
-        });
+        .finally(() => {});
     } else {
       Alert.alert(
         "ERROR",

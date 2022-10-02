@@ -35,12 +35,14 @@ class Home extends Component {
         });
       })
       .catch((e) => {
-        Alert.alert(
-          "Error",
-          "Error al traer las dudas del servidor.",
-          [{ text: "OK", onPress: () => {} }],
-          { cancelable: false }
-        );
+        if (this.props.internetConnection) {
+          Alert.alert(
+            "Error",
+            "Error al traer las dudas del servidor.",
+            [{ text: "OK", onPress: () => {} }],
+            { cancelable: false }
+          );
+        }
       })
       .finally(() => {
         this.props.dispatch({
@@ -62,6 +64,7 @@ function mapStateToProps(state) {
   return {
     student: state.videos.selectedStudent,
     ipconfig: state.videos.selectedIPConfig,
+    internetConnection: state.connection.isConnected,
   };
 }
 

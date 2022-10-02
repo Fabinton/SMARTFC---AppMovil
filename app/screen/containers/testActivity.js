@@ -1,25 +1,12 @@
 import React, { Component } from "react";
 import HeaderReturn from "../../components/headerReturn";
 import { NavigationActions } from "react-navigation";
-import ContenidoLayout from "../components/detailActivity";
-import {
-  StyleSheet,
-  Button,
-  Text,
-  ScrollView,
-  Alert,
-  View,
-} from "react-native";
+import { StyleSheet, Text, ScrollView, Alert, View } from "react-native";
 import { Animated } from "react-native";
 import { connect } from "react-redux";
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel,
-} from "react-native-simple-radio-button";
+import RadioForm from "react-native-simple-radio-button";
 import * as SQLite from "expo-sqlite";
 import API from "../../../utils/api";
-//import Audio from '../../containers/audio-activity';
 import QuestionActivity from "../../components/QuestionActivity";
 import CustomButton from "../../components/customButton";
 
@@ -78,7 +65,6 @@ class testActivity extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFlats: _array })
       );
     });
-    console.log(this.state.storageFlats);
   }
   update() {
     db.transaction((tx) => {
@@ -86,7 +72,7 @@ class testActivity extends Component {
         this.setState({ storage: _array })
       );
     });
-    console.log(this.state.storage[this.state.storage.length - 1]);
+
     db.transaction(
       (tx) => {
         tx.executeSql(
@@ -121,13 +107,10 @@ class testActivity extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFilter: _array })
       );
     });
-    console.log("Aqui Imprimo El Filter 1");
-    console.log(this.state.storageFilter);
 
     var storageFilterGood = this.state.storageFilter;
     var storageFilter = storageFilterGood.reverse();
     if (storageFilter.length == 0) {
-      console.log("Entro a Cero");
       resultado = [
         {
           check_a1: 0,
@@ -142,7 +125,6 @@ class testActivity extends Component {
           check_download: 0,
         },
       ];
-      console.log(resultado[0]);
     }
     if (storageFilter.length != 0) {
       resultado = Array.from(
@@ -213,12 +195,12 @@ class testActivity extends Component {
           this.setState({ storage: _array })
         );
       });
-      //console.log(this.state.storage [this.state.storage.length-1]);
+
       this.update();
       Alert.alert(
         "Almacenamiento Exitoso",
         "Sus respuestas han sido almacenadas recuerde sincronizar con su servidor cuando este en el colegio",
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+        [{ text: "OK", onPress: () => {} }],
         { cancelable: false }
       );
       this.regresaMateria();
@@ -226,79 +208,105 @@ class testActivity extends Component {
       Alert.alert(
         "Información!",
         "Sus respuestas ya fueron guardadas recuerde que solo dispone de un solo intento",
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+        [{ text: "OK", onPress: () => {} }],
         { cancelable: false }
       );
     } else {
-      console.log("No carga nada");
     }
   }
   consulta() {
     db.transaction((tx) => {
       tx.executeSql(`drop table events;`, [26]);
     });
-    console.log(this.state.storage[this.state.storage.length - 1]);
   }
-  async sendServer() {
-    //this.consulta();
-    db.transaction((tx) => {
-      tx.executeSql(`select * from events ;`, [], (_, { rows: { _array } }) =>
-        this.setState({ storage: _array })
-      );
-      tx.executeSql(
-        `select * from flatEvent ;`,
-        [],
-        (_, { rows: { _array } }) => this.setState({ storageFlats: _array })
-      );
-    });
-    //this.updateFlat();
-    var data = this.state.storage;
-    var Flats = this.state.storageFlats;
-
-    console.log("Trayendo Flats");
-    console.log(this.state.storage);
-    for (var i = 0; i < Flats.length; i++) {
-      if (Flats[i].upload == 0) {
-        for (var j = 0; j < data.length; j++) {
-          if (Flats[i].id_evento == data[j].id_evento) {
-            var queryApi = await API.loadEventsLast(this.props.ipconfig);
-            queryApi = queryApi + 1;
-            var id_estudianteF =
-              "" + this.props.student.id_estudiante + queryApi;
-            var id_estudianteF = parseInt(id_estudianteF);
-            data[j].id_evento = id_estudianteF;
-            var id_eventoFs = Flats[j].id_evento;
-            console.log("ID EVENTOS");
-            console.log(id_eventoFs);
-            db.transaction((tx) => {
-              tx.executeSql(
-                `update flatEvent set upload = ? where id_evento = ? ;`,
-                [1, id_eventoFs]
-              );
-              tx.executeSql(
-                "select * from flatEvent",
-                [],
-                (_, { rows: { _array } }) => console.log(_array)
-              );
-            });
-            var dataEvents = data[j];
-            var query2 = await API.createEvents(
-              this.props.ipconfig,
-              dataEvents
-            );
-            //tx.executeSql("update students set nombre_estudiante = ? , apellido_estudiante = ?, grado_estudiante = ?,curso_estudiante = ?, id_colegio = ?, nombre_usuario = ?, contrasena = ?, correo_electronico = ? where id_estudiante = ? ", [this.state.name,this.state.last_name,this.state.grado, 1, this.state.schoolSelected, this.state.user, this.state.password, this.state.email, this.props.student.id_estudiante]);
-          }
+  sendServer() {
+    if (this.props.internetConnection) {
+      this.props.dispatch({
+        type: "SET_LOADING",
+        payload: true,
+      });
+      db.transaction((tx) => {
+        tx.executeSql(`select * from events ;`, [], (_, { rows: { _array } }) =>
+          this.setState({ storage: _array })
+        );
+        tx.executeSql(
+          `select * from flatEvent ;`,
+          [],
+          (_, { rows: { _array } }) => this.setState({ storageFlats: _array })
+        );
+      });
+      var data = this.state.storage;
+      var Flats = this.state.storageFlats;
+      Flats.map((flat) => {
+        if (flat.upload === 0) {
+          data.map((event, idx) => {
+            if (flat.id_evento === event.id_evento) {
+              API.loadEventsLast(this.props.ipconfig)
+                .then(({ data }) => {
+                  let dataLength = data?.length;
+                  dataLength = dataLength + 1;
+                  var id_estudianteF = parseInt(
+                    "" + this.props.student.id_estudiante + dataLength
+                  );
+                  event.id_evento = id_estudianteF;
+                  var id_eventoFs = flat.id_evento;
+                  API.createEvents(this.props.ipconfig, event)
+                    .then(() => {
+                      db.transaction((tx) => {
+                        tx.executeSql(
+                          `update flatEvent set upload = ? where id_evento = ? ;`,
+                          [1, id_eventoFs]
+                        );
+                        tx.executeSql(
+                          "select * from flatEvent",
+                          [],
+                          (_, { rows: { _array } }) => console.log(_array)
+                        );
+                      });
+                      Alert.alert(
+                        "Sincronización exitosa",
+                        "La sincronización de respuestas fue exitosa",
+                        [
+                          {
+                            text: "OK",
+                            onPress: () => {},
+                          },
+                        ],
+                        { cancelable: false }
+                      );
+                    })
+                    .catch((e) => {
+                      console.log("error sync", e);
+                      Alert.alert(
+                        "ERROR",
+                        "Ha ocurrido un error al momento de guardar los eventos.",
+                        [{ text: "OK", onPress: () => {} }],
+                        { cancelable: false }
+                      );
+                    })
+                    .finally(() => {
+                      this.props.dispatch({
+                        type: "SET_LOADING",
+                        payload: false,
+                      });
+                    });
+                })
+                .catch((e) => {
+                  console.log("fallo en load", e);
+                })
+                .finally(() => {});
+            }
+          });
         }
-      }
+      });
+    } else {
+      Alert.alert(
+        "ERROR",
+        "Recuerda que debes estar conectado a internet para sincronizar.",
+        [{ text: "OK", onPress: () => {} }],
+        { cancelable: false }
+      );
     }
-    console.log(data);
-    console.log(query2);
-    Alert.alert(
-      "Sincronización exitosa",
-      "La sincronización de respuestas fue exitosa",
-      [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-      { cancelable: false }
-    );
   }
   regresaMateria() {
     this.props.dispatch(
@@ -308,8 +316,6 @@ class testActivity extends Component {
     );
   }
   render() {
-    console.log("Trayendo al Estudiante");
-    console.log(this.props.student.id_estudiante);
     var Question_One = [
       { label: this.props.activity.A11, value: 1 },
       { label: this.props.activity.A12, value: 2 },
@@ -328,8 +334,6 @@ class testActivity extends Component {
       { label: this.props.activity.A33, value: 3 },
       { label: this.props.activity.A34, value: 4 },
     ];
-    console.log("Abriendo PlayContents");
-    console.log(this.props.activity.video);
     return (
       <ScrollView style={styles.container}>
         <Text style={styles.texto}>{this.props.activity.Q1}</Text>
@@ -379,6 +383,7 @@ function mapStateToProps(state) {
     activity: state.videos.selectedActivity,
     student: state.videos.selectedStudent,
     ipconfig: state.videos.selectedIPConfig,
+    internetConnection: state.connection.isConnected,
   };
 }
 const styles = StyleSheet.create({
