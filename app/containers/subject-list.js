@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FlatList, Text, Alert, TouchableOpacity } from "react-native";
+import { FlatList, Alert } from "react-native";
 import Layout from "../components/suggestion-list-layout";
 import Empty from "../components/empty";
 import Separator from "../components/separator";
@@ -52,80 +52,89 @@ class SuggestionList extends Component {
       );
     });
   }
-  async doubleSend() {
-    this.props.dispatch({
-      type: "SET_LOADING",
-      payload: true,
-    });
-    this.updateFlat();
-    API.getCourses(
-      this.props.ipconfig,
-      this.props.student.grado_estudiante,
-      this.props.student.id_colegio
-    )
-      .then(({ data }) => {
-        this.props.dispatch({
-          type: "SET_ACTIVITIES_LIST",
-          payload: {
-            data,
-          },
-        });
-        var data = this.state.storage;
-        var Flats = this.state.storageFlats;
-        console.log("storage", data);
-        console.log("flats", Flats);
-        Flats.map((flat) => {
-          if (flat.upload === 0) {
-            data.map((event, idx) => {
-              if (flat.id_evento === event.id_evento) {
-                API.loadEventsLast(this.props.ipconfig)
-                  .then(({ data }) => {
-                    let dataLength = data?.length;
-                    dataLength = dataLength + 1;
-                    var id_estudianteF = parseInt(
-                      "" + this.props.student.id_estudiante + dataLength
-                    );
-                    event.id_evento = id_estudianteF;
-                    var id_eventoFs = flat.id_evento;
-                    API.createEvents(this.props.ipconfig, event)
-                      .then(() => {
-                        db.transaction((tx) => {
-                          tx.executeSql(
-                            `update flatEvent set upload = ? where id_evento = ? ;`,
-                            [1, id_eventoFs]
-                          );
-                          tx.executeSql(
-                            "select * from flatEvent",
-                            [],
-                            (_, { rows: { _array } }) => console.log(_array)
-                          );
-                        });
-                      })
-                      .catch((e) => {
-                        console.log("error sync", e);
-                      })
-                      .finally(() => {
-                        console.log("finally");
-                      });
-                  })
-                  .catch((e) => {
-                    console.log("fallo en load", e);
-                  })
-                  .finally(() => {});
-              }
-            });
-          }
-        });
-      })
-      .catch((e) => {
-        console.log("error", e);
-      })
-      .finally(() => {
-        this.props.dispatch({
-          type: "SET_LOADING",
-          payload: false,
-        });
+  doubleSend() {
+    if (this.props.internetConnection) {
+      this.props.dispatch({
+        type: "SET_LOADING",
+        payload: true,
       });
+      this.updateFlat();
+      API.getCourses(
+        this.props.ipconfig,
+        this.props.student.grado_estudiante,
+        this.props.student.id_colegio
+      )
+        .then(({ data }) => {
+          this.props.dispatch({
+            type: "SET_ACTIVITIES_LIST",
+            payload: {
+              data,
+            },
+          });
+          var data = this.state.storage;
+          var Flats = this.state.storageFlats;
+          console.log("storage", data);
+          console.log("flats", Flats);
+          Flats.map((flat) => {
+            if (flat.upload === 0) {
+              data.map((event, idx) => {
+                if (flat.id_evento === event.id_evento) {
+                  API.loadEventsLast(this.props.ipconfig)
+                    .then(({ data }) => {
+                      let dataLength = data?.length;
+                      dataLength = dataLength + 1;
+                      var id_estudianteF = parseInt(
+                        "" + this.props.student.id_estudiante + dataLength
+                      );
+                      event.id_evento = id_estudianteF;
+                      var id_eventoFs = flat.id_evento;
+                      API.createEvents(this.props.ipconfig, event)
+                        .then(() => {
+                          db.transaction((tx) => {
+                            tx.executeSql(
+                              `update flatEvent set upload = ? where id_evento = ? ;`,
+                              [1, id_eventoFs]
+                            );
+                            tx.executeSql(
+                              "select * from flatEvent",
+                              [],
+                              (_, { rows: { _array } }) => console.log(_array)
+                            );
+                          });
+                        })
+                        .catch((e) => {
+                          console.log("error sync", e);
+                        })
+                        .finally(() => {
+                          console.log("finally");
+                        });
+                    })
+                    .catch((e) => {
+                      console.log("fallo en load", e);
+                    })
+                    .finally(() => {});
+                }
+              });
+            }
+          });
+        })
+        .catch((e) => {
+          console.log("error", e);
+        })
+        .finally(() => {
+          this.props.dispatch({
+            type: "SET_LOADING",
+            payload: false,
+          });
+        });
+    } else {
+      Alert.alert(
+        "ERROR",
+        "Recuerda que debes estar conectado a internet para sincronizar.",
+        [{ text: "OK", onPress: () => {} }],
+        { cancelable: false }
+      );
+    }
   }
 
   renderEmpty = () => (

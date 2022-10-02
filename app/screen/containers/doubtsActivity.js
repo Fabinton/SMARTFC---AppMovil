@@ -30,7 +30,7 @@ class Home extends Component {
         this.props.dispatch({
           type: "SET_DOUBT_LIST",
           payload: {
-            data,
+            duda: data,
           },
         });
       })

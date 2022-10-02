@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from "react";
 import Header from "../components/header";
 import SuggestionList from "../containers/subject-list";
-import { StyleSheet } from "react-native";
 import API from "../../utils/api";
 import { connect } from "react-redux";
 
@@ -33,7 +32,6 @@ class Home extends Component {
           data,
         },
       });
-      this.setState({ subject: data });
     });
   }
   render() {

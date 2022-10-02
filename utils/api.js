@@ -10,7 +10,7 @@ class Api {
   }
   getConection(BASE_IP) {
     var BASE_API = "http://" + BASE_IP + ":3000" + "/conectionWithApp";
-    return axios.get(`${BASE_API}`);
+    return axios.get(`${BASE_API}`, { timeout: 3000 });
   }
 
   getCourses(BASE_IP, id_grado, id_colegio) {

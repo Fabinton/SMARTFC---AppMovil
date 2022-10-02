@@ -64,7 +64,7 @@ class Login extends Component {
               type: "SET_LOADING",
               payload: false,
             });
-          }, 2000);
+          }, 1700);
           setTimeout(() => {
             this.props.dispatch(
               NavigationActions.navigate({
@@ -91,7 +91,7 @@ class Login extends Component {
               type: "SET_LOADING",
               payload: false,
             });
-          }, 2000);
+          }, 1700);
         }
       } else {
         this.props.dispatch({
@@ -177,26 +177,30 @@ class Login extends Component {
               ipconfig: ipConfigSend,
             },
           });
-          Alert.alert(
-            "Conexión",
-            "La conexión con el servidor fue exitosa.",
-            [
-              {
-                text: "OK",
-                onPress: () => this.setModalVisible(!this.state.modalVisible),
-              },
-            ],
-            { cancelable: false }
-          );
+          setTimeout(() => {
+            Alert.alert(
+              "Conexión",
+              "La conexión con el servidor fue exitosa.",
+              [
+                {
+                  text: "OK",
+                  onPress: () => this.setModalVisible(!this.state.modalVisible),
+                },
+              ],
+              { cancelable: false }
+            );
+          }, 300);
         })
         .catch((error) => {
           console.log("error ip", error);
-          Alert.alert(
-            "ERROR",
-            "La conexión con el servidor es erronea por favor verifica tu IP",
-            [{ text: "OK", onPress: () => {} }],
-            { cancelable: false }
-          );
+          setTimeout(() => {
+            Alert.alert(
+              "ERROR",
+              "La conexión con el servidor es erronea por favor verifica tu IP",
+              [{ text: "OK", onPress: () => {} }],
+              { cancelable: false }
+            );
+          }, 300);
         })
         .finally(() => {
           this.props.dispatch({
@@ -205,12 +209,14 @@ class Login extends Component {
           });
         });
     } else {
-      Alert.alert(
-        "ERROR",
-        "Recuerda que debes estar conectado a internet para guardar tu IP.",
-        [{ text: "OK", onPress: () => {} }],
-        { cancelable: false }
-      );
+      setTimeout(() => {
+        Alert.alert(
+          "ERROR",
+          "Recuerda que debes estar conectado a internet para guardar tu IP.",
+          [{ text: "OK", onPress: () => {} }],
+          { cancelable: false }
+        );
+      }, 300);
     }
   }
 
@@ -371,7 +377,7 @@ class Login extends Component {
         <Modal
           animationType="slide"
           transparent={false}
-          visible={this.state.modalVisible}
+          visible={this.state.modalVisible && !this.props.loading}
           onRequestClose={() => {
             //Alert.alert("Modal has been closed.");
             this.setModalVisible(false);

@@ -78,7 +78,7 @@ class SuggestionList extends Component {
   }
   render() {
     var data = [];
-    data = this.props.duda.data;
+    data = this.props.duda;
     return (
       <Layout
         title="Tus Dudas"
