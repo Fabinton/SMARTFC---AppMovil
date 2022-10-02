@@ -30,7 +30,7 @@ class Home extends Component {
         this.props.dispatch({
           type: "SET_ACTIVITIES_LIST",
           payload: {
-            data,
+            subject: data,
           },
         });
       })

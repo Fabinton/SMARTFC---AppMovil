@@ -203,7 +203,7 @@ class testActivity extends Component {
         [{ text: "OK", onPress: () => {} }],
         { cancelable: false }
       );
-      this.regresaMateria();
+      //this.regresaMateria();
     } else if (resultado[0].check_answer == 1) {
       Alert.alert(
         "Información!",
@@ -221,10 +221,6 @@ class testActivity extends Component {
   }
   sendServer() {
     if (this.props.internetConnection) {
-      this.props.dispatch({
-        type: "SET_LOADING",
-        payload: true,
-      });
       db.transaction((tx) => {
         tx.executeSql(`select * from events ;`, [], (_, { rows: { _array } }) =>
           this.setState({ storage: _array })
@@ -239,8 +235,12 @@ class testActivity extends Component {
       var Flats = this.state.storageFlats;
       Flats.map((flat) => {
         if (flat.upload === 0) {
-          data.map((event, idx) => {
+          data.map((event) => {
             if (flat.id_evento === event.id_evento) {
+              this.props.dispatch({
+                type: "SET_LOADING",
+                payload: true,
+              });
               API.loadEventsLast(this.props.ipconfig)
                 .then(({ data }) => {
                   let dataLength = data?.length;
