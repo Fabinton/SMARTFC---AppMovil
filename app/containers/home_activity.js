@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from "react";
 import SuggestionList from "../containers/activity-list";
-import { StyleSheet } from "react-native";
 import API from "../../utils/api";
 import { connect } from "react-redux";
 import HeaderReturn from "../components/headerReturn";
@@ -22,19 +21,24 @@ class Home extends Component {
     };
   }
   async componentDidMount() {
-    const activity = await API.getActivitiesMovil(
+    API.getActivitiesMovil(
       this.props.ipconfig,
       this.props.student.id_colegio,
       this.props.student.grado_estudiante,
       this.props.subject.id_materia
-    );
-    console.log(activity);
-    this.props.dispatch({
-      type: "SET_SUBJECT_ACTIVITY_LIST",
-      payload: {
-        activity,
-      },
-    });
+    )
+      .then(({ data }) => {
+        this.props.dispatch({
+          type: "SET_SUBJECT_ACTIVITY_LIST",
+          payload: {
+            activity: data,
+          },
+        });
+      })
+      .catch((e) => {
+        console.log("error", e);
+      })
+      .finally(() => {});
   }
   render() {
     return (
@@ -45,14 +49,6 @@ class Home extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  texto: {
-    color: "white",
-    fontSize: 17,
-    fontWeight: "bold",
-    marginLeft: 20,
-  },
-});
 function mapStateToProps(state) {
   return {
     ipconfig: state.videos.selectedIPConfig,
