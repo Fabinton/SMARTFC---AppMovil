@@ -39,111 +39,116 @@ class Register extends Component {
     var query2 = await API.loadSchool(this.props.ipconfig);
     var query = await API.allStudent(this.props.ipconfig);
     this.setState({ students: query });
-    console.log(query2[0].nombre_colegio);
     this.setState({ school: query2 });
     db.transaction((tx) => {
       tx.executeSql(
         "create table if not exists students (id_estudiante integer not null unique, tipo_usuario integer, nombre_estudiante text, apellido_estudiante text, grado_estudiante int, curso_estudiante int, id_colegio int, nombre_usuario text, contrasena text, correo_electronico text);"
       );
-      tx.executeSql(
-        "select * from students",
-        [],
-        (_, { rows: { _array } }) => this.setState({ storage: _array }),
-        console.log(this.state.storage)
+      tx.executeSql("select * from students", [], (_, { rows: { _array } }) =>
+        this.setState({ storage: _array })
       );
     });
   }
 
   async Registrate() {
-    this.props.dispatch({
-      type: "SET_LOADING",
-      payload: true,
-    });
-    let id_students_F;
-    let id_final;
-    API.allStudent(this.props.ipconfig)
-      .then(({ data }) => {
-        if (data?.length == 0) {
-          id_students_F = 1;
-          this.setState({ id_student: 1 });
-        } else {
-          id_students_F = data?.length + 1;
-          this.setState({ id_student: id_students_F });
-        }
-        id_final = "" + this.state.schoolSelected + id_students_F;
-        id_final = parseInt(id_final);
-        const dataToSave = {
-          id_estudiante: id_final,
-          tipo_usuario: 1,
-          nombre_estudiante: this.state.name,
-          apellido_estudiante: this.state.last_name,
-          grado_estudiante: this.state.grado,
-          curso_estudiante: 1,
-          id_colegio: this.state.schoolSelected,
-          nombre_usuario: this.state.user,
-          contrasena: this.state.password,
-          correo_electronico: this.state.email,
-        };
-        API.createStudents(this.props.ipconfig, dataToSave)
-          .then(({ data }) => {
-            db.transaction(
-              (tx) => {
-                tx.executeSql(
-                  "insert into students (id_estudiante, tipo_usuario, nombre_estudiante, apellido_estudiante, grado_estudiante, curso_estudiante, id_colegio, nombre_usuario, contrasena, correo_electronico) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                  [
-                    id_final,
-                    1,
-                    this.state.name,
-                    this.state.last_name,
-                    this.state.grado,
-                    1,
-                    this.state.schoolSelected,
-                    this.state.user,
-                    this.state.password,
-                    this.state.email,
-                  ]
-                );
-                tx.executeSql(
-                  "select * from students",
-                  [],
-                  (_, { rows: { _array } }) => console.log(_array)
-                );
-              },
-              null,
-              null
-            );
-            this.props.dispatch(
-              NavigationActions.navigate({
-                routeName: "Notification",
-              })
-            );
-          })
-          .catch((e) => {
-            console.log("error register", e);
-            Alert.alert(
-              "Error",
-              "Ha ocurrido un error al registrar usuario.",
-              [{ text: "OK", onPress: () => {} }],
-              { cancelable: false }
-            );
-          })
-          .finally(() => {});
-      })
-      .catch((e) => {
-        console.log("error allstudents", e);
-        Alert.alert(
-          "Error",
-          "Ha ocurrido un error al registrar usuario.",
-          [{ text: "OK", onPress: () => {} }],
-          { cancelable: false }
-        );
-      })
-      .finally(() => {
-        this.props.dispatch({
-          type: "SET_LOADING",
-          payload: false,
-        });
+    if (this.props.internetConnection) {
+      this.props.dispatch({
+        type: "SET_LOADING",
+        payload: true,
       });
+      let id_students_F;
+      let id_final;
+      API.allStudent(this.props.ipconfig)
+        .then(({ data }) => {
+          if (data?.length == 0) {
+            id_students_F = 1;
+            this.setState({ id_student: 1 });
+          } else {
+            id_students_F = data?.length + 1;
+            this.setState({ id_student: id_students_F });
+          }
+          id_final = "" + this.state.schoolSelected + id_students_F;
+          id_final = parseInt(id_final);
+          const dataToSave = {
+            id_estudiante: id_final,
+            tipo_usuario: 1,
+            nombre_estudiante: this.state.name,
+            apellido_estudiante: this.state.last_name,
+            grado_estudiante: this.state.grado,
+            curso_estudiante: 1,
+            id_colegio: this.state.schoolSelected,
+            nombre_usuario: this.state.user,
+            contrasena: this.state.password,
+            correo_electronico: this.state.email,
+          };
+          API.createStudents(this.props.ipconfig, dataToSave)
+            .then(({ data }) => {
+              db.transaction(
+                (tx) => {
+                  tx.executeSql(
+                    "insert into students (id_estudiante, tipo_usuario, nombre_estudiante, apellido_estudiante, grado_estudiante, curso_estudiante, id_colegio, nombre_usuario, contrasena, correo_electronico) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    [
+                      id_final,
+                      1,
+                      this.state.name,
+                      this.state.last_name,
+                      this.state.grado,
+                      1,
+                      this.state.schoolSelected,
+                      this.state.user,
+                      this.state.password,
+                      this.state.email,
+                    ]
+                  );
+                  tx.executeSql(
+                    "select * from students",
+                    [],
+                    (_, { rows: { _array } }) => console.log(_array)
+                  );
+                },
+                null,
+                null
+              );
+              this.props.dispatch(
+                NavigationActions.navigate({
+                  routeName: "Notification",
+                })
+              );
+            })
+            .catch((e) => {
+              console.log("error register", e);
+              Alert.alert(
+                "Error",
+                "Ha ocurrido un error al registrar usuario.",
+                [{ text: "OK", onPress: () => {} }],
+                { cancelable: false }
+              );
+            })
+            .finally(() => {});
+        })
+        .catch((e) => {
+          console.log("error allstudents", e);
+          Alert.alert(
+            "Error",
+            "Ha ocurrido un error al registrar usuario.",
+            [{ text: "OK", onPress: () => {} }],
+            { cancelable: false }
+          );
+        })
+        .finally(() => {
+          this.props.dispatch({
+            type: "SET_LOADING",
+            payload: false,
+          });
+        });
+    } else {
+      Alert.alert(
+        "ERROR",
+        "Recuerda que debes estar conectado para registrarte.",
+        [{ text: "OK", onPress: () => {} }],
+        { cancelable: false }
+      );
+    }
   }
   idEstudiante() {
     console.log(this.state.grado);
@@ -422,6 +427,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     ipconfig: state.videos.selectedIPConfig,
+    internetConnection: state.connection.isConnected,
   };
 }
 export default connect(mapStateToProps)(Register);

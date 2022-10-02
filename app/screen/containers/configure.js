@@ -52,84 +52,92 @@ class Configure extends Component {
     this.setState({ school: query2 });
   }
   async actualizaUser() {
-    //update items set done = 1 where id = ?;
-    if (this.state.password === this?.props?.student?.contrasena) {
-      this.props.dispatch({
-        type: "SET_LOADING",
-        payload: true,
-      });
-      const data = {
-        id_estudiante: this.props.student.id_estudiante,
-        //tipo_usuario: 1,
-        nombre_estudiante: this.state.name,
-        apellido_estudiante: this.state.last_name,
-        grado_estudiante: this.state.grado,
-        curso_estudiante: 1,
-        id_colegio: this.state.schoolSelected,
-        nombre_usuario: this.state.user,
-        contrasena: this.state.password,
-        correo_electronico: this.state.email,
-      };
-      API.updateStudents(this.props.ipconfig, data)
-        .then(() => {
-          Alert.alert(
-            "Actualización Exitosa",
-            "La actualización de sus datos es exitosa",
-            [{ text: "OK", onPress: () => {} }],
-            { cancelable: false }
-          );
-          this.props.dispatch({
-            type: "SET_STUDENT",
-            payload: {
-              student: data,
-            },
-          });
-          db.transaction(
-            (tx) => {
-              //id_estudiante, tipo_usuario, nombre_estudiante, apellido_estudiante, grado_estudiante, curso_estudiante, id_colegio, nombre_usuario, contrasena, correo_electronico
-              tx.executeSql(
-                "update students set nombre_estudiante = ? , apellido_estudiante = ?, grado_estudiante = ?,curso_estudiante = ?, id_colegio = ?, nombre_usuario = ?, contrasena = ?, correo_electronico = ? where id_estudiante = ? ",
-                [
-                  this.state.name,
-                  this.state.last_name,
-                  this.state.grado,
-                  1,
-                  this.state.schoolSelected,
-                  this.state.user,
-                  this.state.password,
-                  this.state.email,
-                  this.props.student.id_estudiante,
-                ]
-              );
-              tx.executeSql(
-                "select * from students", // to verify if data is different
-                [],
-                (_, { rows: { _array } }) => {}
-              );
-            },
-            null,
-            null
-          );
-        })
-        .catch((e) => {
-          console.log("error", e);
-          Alert.alert(
-            "Error",
-            "Ha ocurrido un error al actualizar datos.",
-            [{ text: "OK", onPress: () => {} }],
-            { cancelable: false }
-          );
-        })
-        .finally(() => {
-          this.props.dispatch({
-            type: "SET_LOADING",
-            payload: false,
-          });
+    if (this.props.internetConnection) {
+      if (this.state.password === this?.props?.student?.contrasena) {
+        this.props.dispatch({
+          type: "SET_LOADING",
+          payload: true,
         });
+        const data = {
+          id_estudiante: this.props.student.id_estudiante,
+          //tipo_usuario: 1,
+          nombre_estudiante: this.state.name,
+          apellido_estudiante: this.state.last_name,
+          grado_estudiante: this.state.grado,
+          curso_estudiante: 1,
+          id_colegio: this.state.schoolSelected,
+          nombre_usuario: this.state.user,
+          contrasena: this.state.password,
+          correo_electronico: this.state.email,
+        };
+        API.updateStudents(this.props.ipconfig, data)
+          .then(() => {
+            Alert.alert(
+              "Actualización Exitosa",
+              "La actualización de sus datos es exitosa",
+              [{ text: "OK", onPress: () => {} }],
+              { cancelable: false }
+            );
+            this.props.dispatch({
+              type: "SET_STUDENT",
+              payload: {
+                student: data,
+              },
+            });
+            db.transaction(
+              (tx) => {
+                //id_estudiante, tipo_usuario, nombre_estudiante, apellido_estudiante, grado_estudiante, curso_estudiante, id_colegio, nombre_usuario, contrasena, correo_electronico
+                tx.executeSql(
+                  "update students set nombre_estudiante = ? , apellido_estudiante = ?, grado_estudiante = ?,curso_estudiante = ?, id_colegio = ?, nombre_usuario = ?, contrasena = ?, correo_electronico = ? where id_estudiante = ? ",
+                  [
+                    this.state.name,
+                    this.state.last_name,
+                    this.state.grado,
+                    1,
+                    this.state.schoolSelected,
+                    this.state.user,
+                    this.state.password,
+                    this.state.email,
+                    this.props.student.id_estudiante,
+                  ]
+                );
+                tx.executeSql(
+                  "select * from students", // to verify if data is different
+                  [],
+                  (_, { rows: { _array } }) => {}
+                );
+              },
+              null,
+              null
+            );
+          })
+          .catch((e) => {
+            console.log("error", e);
+            Alert.alert(
+              "Error",
+              "Ha ocurrido un error al actualizar datos.",
+              [{ text: "OK", onPress: () => {} }],
+              { cancelable: false }
+            );
+          })
+          .finally(() => {
+            this.props.dispatch({
+              type: "SET_LOADING",
+              payload: false,
+            });
+          });
+      } else {
+        Alert.alert(
+          "Error",
+          "Contraseña incorrecta, por favor ingrese la contraseña nuevamente",
+          [{ text: "OK", onPress: () => {} }],
+          { cancelable: false }
+        );
+      }
     } else {
       Alert.alert(
-        "Error",
-        "Contraseña incorrecta, por favor ingrese la contraseña nuevamente",
+        "ERROR",
+        "Recuerda que debes estar conectado a internet para actualizar datos.",
         [{ text: "OK", onPress: () => {} }],
         { cancelable: false }
       );
@@ -363,6 +371,7 @@ function mapStateToProps(state) {
   return {
     student: state.videos.selectedStudent,
     ipconfig: state.videos.selectedIPConfig,
+    internetConnection: state.connection.isConnected,
   };
 }
 export default connect(mapStateToProps)(Configure);
