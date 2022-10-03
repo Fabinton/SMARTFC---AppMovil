@@ -21,24 +21,24 @@ class Home extends Component {
     };
   }
   componentDidMount() {
-    API.getActivitiesMovil(
-      this.props.ipconfig,
-      this.props.student.id_colegio,
-      this.props.student.grado_estudiante,
-      this.props.subject.id_materia
-    )
-      .then(({ data }) => {
-        this.props.dispatch({
-          type: "SET_SUBJECT_ACTIVITY_LIST",
-          payload: {
-            activity: data,
-          },
-        });
-      })
-      .catch((e) => {
-        console.log("error", e);
-      })
-      .finally(() => {});
+    // API.getActivitiesMovil(
+    //   this.props.ipconfig,
+    //   this.props.student.id_colegio,
+    //   this.props.student.grado_estudiante,
+    //   this.props.subject.id_materia
+    // )
+    //   .then(({ data }) => {
+    //     this.props.dispatch({
+    //       type: "SET_SUBJECT_ACTIVITY_LIST",
+    //       payload: {
+    //         activity: data,
+    //       },
+    //     });
+    //   })
+    //   .catch((e) => {
+    //     console.log("error", e);
+    //   })
+    //   .finally(() => {});
   }
   render() {
     return (

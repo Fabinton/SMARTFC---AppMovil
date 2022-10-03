@@ -20,7 +20,7 @@ class Home extends Component {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     API.getCourses(
       this.props.ipconfig,
       this.props.student.grado_estudiante,
