@@ -1,17 +1,6 @@
 import React, { Component } from "react";
-import { NavigationActions } from "react-navigation";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  Picker,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import { StyleSheet, Picker, Alert } from "react-native";
 import Header from "../../components/header";
-import { Ionicons, Octicons } from "@expo/vector-icons";
 import * as SQLite from "expo-sqlite";
 import { connect } from "react-redux";
 import API from "../../../utils/api";
@@ -44,14 +33,23 @@ class Configure extends Component {
     storage: null,
     students: null,
   };
-  async componentDidMount() {
-    console.log(this.props.student.grado_estudiante);
-    var query2 = await API.loadSchool(this.props.ipconfig);
-    var query = await API.allStudent(this.props.ipconfig);
-    this.setState({ students: query });
-    this.setState({ school: query2 });
+  componentDidMount() {
+    API.loadSchool(this.props.ipconfig)
+      .then(({ data }) => {
+        this.setState({ school: data });
+      })
+      .catch((e) => {});
+    API.allStudent(this.props.ipconfig).then(({ data }) => {
+      this.setState({ students: data });
+    });
   }
-  async actualizaUser() {
+  componentWillUnmount() {
+    // fix Warning: Can't perform a React state update on an unmounted component
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
+  actualizaUser() {
     if (this.props.internetConnection) {
       if (this.state.password === this?.props?.student?.contrasena) {
         this.props.dispatch({
@@ -162,11 +160,10 @@ class Configure extends Component {
     var datasSchoolFull = null;
 
     let itemsInPicker = null;
-    //let itemsInPicker2= null;
+
     if (this.state.school == null) {
       itemsInPicker = null;
     } else {
-      //console.log(datasSchool);
       datasSchoolFull = this.state.school;
       itemsInPicker = datasSchoolFull.map((data) => {
         return (
@@ -178,7 +175,6 @@ class Configure extends Component {
         );
       });
     }
-    //Agregando ItemPicker For Grados
     var dataGrado = [
       {
         id_grado: 6,
@@ -205,7 +201,7 @@ class Configure extends Component {
         grado: "11",
       },
     ];
-    //console.log(dataGrado);
+
     let itemsInPicker2 = dataGrado.map((data) => {
       return (
         <Picker.Item

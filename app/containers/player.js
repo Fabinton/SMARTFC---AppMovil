@@ -1,15 +1,11 @@
 import React, { Component } from "react";
 import { Video } from "expo-av";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { MaterialIcons, Octicons } from "@expo/vector-icons";
-import Layout from "../components/layout";
+import { StyleSheet, View } from "react-native";
 import shorthash from "shorthash";
 import * as FileSystem from "expo-file-system";
 import { connect } from "react-redux";
 import { Dimensions } from "react-native";
 import { ScreenOrientation } from "expo";
-
-const BASE_API_EVENTS = "http://192.168.190.51:3000/createEventos";
 
 class Player extends Component {
   constructor(props) {
@@ -39,13 +35,10 @@ class Player extends Component {
   }
 
   componentDidMount = async () => {
-    console.log(this.props.urlrepositorio);
-    //const uri = this.props.urlrepositorio;
     var uristring = this.props.urlrepositorio;
     var ip = this.props.ipconfig;
     var uri = "http://" + ip + ":3000" + uristring.substr(28);
 
-    console.log(uri);
     const name = shorthash.unique(uri);
     const path = `${FileSystem.cacheDirectory}${name}`;
     const video = await FileSystem.getInfoAsync(path);
@@ -65,8 +58,6 @@ class Player extends Component {
     });
   };
   render() {
-    //const url = this.props.descripcion_CREA;
-    //console.log(this.props.descripcion_CREA);
     return (
       <View>
         <Video

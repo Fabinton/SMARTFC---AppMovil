@@ -16,7 +16,7 @@ class Register extends Component {
     val: "ed",
     seePass: true,
   };
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = () => {
     return {
       header: <HeaderLogin></HeaderLogin>,
     };
@@ -35,11 +35,15 @@ class Register extends Component {
     storage: null,
     students: null,
   };
-  async componentDidMount() {
-    var query2 = await API.loadSchool(this.props.ipconfig);
-    var query = await API.allStudent(this.props.ipconfig);
-    this.setState({ students: query });
-    this.setState({ school: query2 });
+  componentDidMount() {
+    API.loadSchool(this.props.ipconfig)
+      .then(({ data }) => {
+        this.setState({ school: data });
+      })
+      .catch((e) => {});
+    API.allStudent(this.props.ipconfig).then(({ data }) => {
+      this.setState({ students: data });
+    });
     db.transaction((tx) => {
       tx.executeSql(
         "create table if not exists students (id_estudiante integer not null unique, tipo_usuario integer, nombre_estudiante text, apellido_estudiante text, grado_estudiante int, curso_estudiante int, id_colegio int, nombre_usuario text, contrasena text, correo_electronico text);"
@@ -49,8 +53,13 @@ class Register extends Component {
       );
     });
   }
-
-  async Registrate() {
+  componentWillUnmount() {
+    // fix Warning: Can't perform a React state update on an unmounted component
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
+  Registrate() {
     if (this.props.internetConnection) {
       this.props.dispatch({
         type: "SET_LOADING",
@@ -103,7 +112,7 @@ class Register extends Component {
                   tx.executeSql(
                     "select * from students",
                     [],
-                    (_, { rows: { _array } }) => console.log(_array)
+                    (_, { rows: { _array } }) => {}
                   );
                 },
                 null,
@@ -150,32 +159,7 @@ class Register extends Component {
       );
     }
   }
-  idEstudiante() {
-    console.log(this.state.grado);
-    console.log("EscuelaID");
-    console.log(this.state.schoolSelected);
-    var query = this.state.students;
-    console.log("Alumnos");
-    //console.log(query.length-1);
-    var id_students_F = 0;
-    if (query.length == 0) {
-      id_students_F = 1;
-      this.setState({ id_student: 1 });
-    } else {
-      id_students_F = query.length + 1;
-      this.setState({ id_student: query.length + 1 });
-    }
-    var id_final = "" + this.state.schoolSelected + id_students_F;
-    id_final = parseInt(id_final);
-    console.log(id_final);
-    db.transaction(
-      (tx) => {
-        tx.executeSql(`delete from students where id_estudiante = ?;`, [1]);
-      },
-      null,
-      null
-    );
-  }
+
   close() {
     this.props.dispatch(
       NavigationActions.navigate({
@@ -202,7 +186,6 @@ class Register extends Component {
     if (this.state.school == null) {
       itemsInPicker = null;
     } else {
-      console.log("Imprimiendo State");
       //console.log(datasSchool);
       datasSchoolFull = this.state.school;
 
@@ -257,7 +240,7 @@ class Register extends Component {
             }
           >
             <Picker.Item color="gray" label="Curso" value="" />
-            <Picker.Item label="7" value="7" />
+            <Picker.Item label="6" value="6" />
             <Picker.Item label="7" value="7" />
             <Picker.Item label="8" value="8" />
             <Picker.Item label="9" value="9" />
