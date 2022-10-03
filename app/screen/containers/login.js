@@ -4,7 +4,6 @@ import {
   Modal,
   StyleSheet,
   Text,
-  BackHandler,
   View,
   Image,
   TextInput,
@@ -13,11 +12,10 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import * as SQLite from "expo-sqlite";
-//import Header from '../../components/header';
 import HeaderLogin from "../../components/headerLogin";
 import API from "../../../utils/api";
 import CustomButton from "../../components/customButton";
-import { Stack, Flex, Spacer } from "@react-native-material/core";
+import { Stack, Flex } from "@react-native-material/core";
 
 const db = SQLite.openDatabase("db5.db");
 
@@ -38,7 +36,7 @@ class Login extends Component {
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
   }
-  async signIn() {
+  signIn() {
     if (this.props.ipconfig) {
       this.props.dispatch({
         type: "SET_LOADING",
@@ -131,6 +129,7 @@ class Login extends Component {
 
   componentDidMount() {
     //Aqui Hay un cambio si se aprueba
+
     this.props.dispatch({
       type: "SET_STUDENT",
       payload: {
@@ -157,6 +156,7 @@ class Login extends Component {
 
   componentWillUnmount() {
     // fix Warning: Can't perform a React state update on an unmounted component
+
     this.setState = (state, callback) => {
       return;
     };

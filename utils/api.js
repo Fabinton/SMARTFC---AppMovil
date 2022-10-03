@@ -1,12 +1,8 @@
 import axios from "axios";
 class Api {
-  async getContent(BASE_IP) {
+  getContent(BASE_IP) {
     var BASE_API = "http://" + BASE_IP + ":3000" + "/loadAllcontentsMovil";
-    const query = await fetch(`${BASE_API}`);
-    const data = await query.json();
-    //const predata = await data.contents;
-    //console.log(predata);
-    return data;
+    return axios.get(`${BASE_API}`);
   }
   getConection(BASE_IP) {
     var BASE_API = "http://" + BASE_IP + ":3000" + "/conectionWithApp";
@@ -78,14 +74,9 @@ class Api {
     const data2 = await query2.json();
     //console.log(data2);
   }
-  async loadSchool(BASE_IP) {
+  loadSchool(BASE_IP) {
     var BASE_API_SCHOOL = "http://" + BASE_IP + ":3000" + "/loadAllSchools";
-
-    console.log("JSON SCHOOL");
-    const query = await fetch(`${BASE_API_SCHOOL}`);
-    const data2 = await query.json();
-    //console.log(data2);
-    return data2;
+    return axios.get(`${BASE_API_SCHOOL}`);
   }
   async createStudents(BASE_IP, Student) {
     var BASE_API_STUDENTS = "http://" + BASE_IP + ":3000" + "/createEstudiante";

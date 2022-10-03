@@ -1,12 +1,12 @@
-import React, { Component, useState } from "react";
-import { FlatList, Text, StyleSheet, TextInput, View } from "react-native";
-import Layout from "../components/suggestion-list-layout";
+import React, { Component } from "react";
+import { FlatList, View } from "react-native";
 import Empty from "../components/empty";
 import Separator from "../components/separator";
 import Suggestion from "../components/suggestion";
 import { connect } from "react-redux";
 import { NavigationActions } from "react-navigation";
 import SearchBar from "../components/search";
+import API from "../../utils/api";
 function mapStateToProps(state) {
   return {
     list: state.videos.contenido,
@@ -16,7 +16,21 @@ class SuggestionList extends Component {
   state = {
     stateData: this.props.list,
   };
-
+  fetchContent() {
+    API.getContent(this.props.ipconfig)
+      .then(({ data }) => {
+        this.props.dispatch({
+          type: "SET_CONTENTS_LIST",
+          payload: {
+            contenido: data,
+          },
+        });
+      })
+      .catch((e) => {});
+  }
+  componentDidMount() {
+    this.fetchContent();
+  }
   renderEmpty = () => <Empty text="No hay sugerencias"></Empty>;
   itemSeparatos = () => <Separator text="No hay sugerencias"></Separator>;
   viewContenido = (item) => {
@@ -59,12 +73,13 @@ class SuggestionList extends Component {
     }
   };
   render() {
+    const firstData = this.props.list;
     return (
       <View>
         <SearchBar filterSearch={this.filterSearch} />
         <FlatList
           keyExtractor={this.keyExtractor}
-          data={this.state.stateData}
+          data={this.state.stateData || firstData}
           ListEmptyComponent={this.renderEmpty}
           ItemSeparatorComponent={this.itemSeparatos}
           renderItem={this.renderItem}
@@ -73,19 +88,5 @@ class SuggestionList extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  input: {
-    marginTop: 2,
-    marginLeft: 4,
-    padding: 15,
-    fontSize: 15,
-    borderWidth: 1,
-    height: 50,
-    width: 300,
-    borderRadius: 5,
-    borderColor: "#eaeaea",
-  },
-});
 
 export default connect(mapStateToProps)(SuggestionList);

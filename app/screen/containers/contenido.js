@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import ContenidoLayout from "../components/contenido";
 import Player from "../../containers/player";
 import { StyleSheet } from "react-native";
-import Close from "../../components/close";
 import Details from "../../components/details";
 import { Animated } from "react-native";
 import { connect } from "react-redux";
@@ -35,9 +34,13 @@ class contenido extends Component {
       duration: 1000,
     }).start();
   }
+  componentWillUnmount() {
+    // fix Warning: Can't perform a React state update on an unmounted component
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
   render() {
-    console.log("Prueba");
-    console.log(this.props.contenido);
     return (
       <Animated.View style={styles.container}>
         <ContenidoLayout>

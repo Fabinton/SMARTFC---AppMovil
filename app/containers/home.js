@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Header from "../components/header";
 import SuggestionList from "../containers/suggestion-list";
-import { StyleSheet } from "react-native";
 import API from "../../utils/api";
 import { connect } from "react-redux";
 
@@ -20,28 +19,29 @@ class Home extends Component {
       contenidos: [],
     };
   }
-  async componentDidMount() {
-    const contenido = await API.getContent(this.props.ipconfig);
-    this.props.dispatch({
-      type: "SET_CONTENTS_LIST",
-      payload: {
-        contenido,
-      },
-    });
+  componentDidMount() {
+    API.getContent(this.props.ipconfig)
+      .then(({ data }) => {
+        this.props.dispatch({
+          type: "SET_CONTENTS_LIST",
+          payload: {
+            contenido: data,
+          },
+        });
+      })
+      .catch((e) => {});
+  }
+  componentWillUnmount() {
+    // fix Warning: Can't perform a React state update on an unmounted component
+    this.setState = (state, callback) => {
+      return;
+    };
   }
   render() {
     return <SuggestionList />;
   }
 }
 
-const styles = StyleSheet.create({
-  texto: {
-    color: "white",
-    fontSize: 17,
-    fontWeight: "bold",
-    marginLeft: 20,
-  },
-});
 function mapStateToProps(state) {
   return {
     student: state.videos.selectedStudent,

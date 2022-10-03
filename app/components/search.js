@@ -1,8 +1,7 @@
 // SearchBar.js
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { StyleSheet, TextInput, View, Keyboard, Button } from "react-native";
 import { Feather, Entypo } from "@expo/vector-icons";
-import { connect } from "react-redux";
 import CustomButton from "./customButton";
 
 class SearchBar extends Component {
