@@ -15,7 +15,6 @@ function Subject(props) {
         </View>
         <View style={styles.right}>
           <Text style={styles.title}>{props.nombre_materiaActiva}</Text>
-
           <Text style={styles.curso}>Grado: {props.id_grado}</Text>
         </View>
       </View>
@@ -27,7 +26,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     backgroundColor: "#70C2E5",
-    borderRadius: 5,
+    borderRadius: 20,
     height: 120,
     overflow: "hidden",
   },
@@ -36,7 +35,7 @@ const styles = StyleSheet.create({
     height: 100,
     width: 100,
     resizeMode: "cover",
-    borderRadius: 5,
+    borderRadius: 50,
     overflow: "hidden",
   },
   left: {
@@ -44,19 +43,19 @@ const styles = StyleSheet.create({
   },
   right: {
     paddingLeft: 10,
-    justifyContent: "space-between",
+    justifyContent: "center",
   },
   title: {
-    marginTop: 10,
-    fontSize: 18,
-    color: "#44546b",
+    color: "#424B5B",
+    textAlign: "center",
+    fontSize: 25,
     fontWeight: "bold",
+    fontFamily: "Roboto",
   },
   curso: {
-    fontSize: 11,
-    color: "white",
+    fontSize: 15,
+    color: "#6D6E6E",
     fontWeight: "bold",
-    marginBottom: 10,
   },
   teacher: {
     fontSize: 14,
