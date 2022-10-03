@@ -33,7 +33,12 @@ class Player extends Component {
       ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
     }
   }
-
+  componentWillUnmount() {
+    // fix Warning: Can't perform a React state update on an unmounted component
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
   componentDidMount = async () => {
     var uristring = this.props.urlrepositorio;
     var ip = this.props.ipconfig;
