@@ -3,7 +3,6 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./store";
 import AppNavigator from "./app/app-navigator-with-state";
-import SplashScreen from "./app/components/SplashScreen";
 
 export default class App extends Component {
   state = {
@@ -12,7 +11,7 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <PersistGate loading={<SplashScreen />} persistor={persistor}>
+        <PersistGate loading={null} persistor={persistor}>
           <AppNavigator />
         </PersistGate>
       </Provider>
