@@ -17,7 +17,7 @@ class Home extends Component {
       duda: [],
     };
   }
-  async componentDidMount() {
+  componentDidMount() {
     this.props.dispatch({
       type: "SET_LOADING",
       payload: true,
