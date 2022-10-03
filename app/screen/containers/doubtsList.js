@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FlatList } from "react-native";
+import { FlatList, RefreshControl } from "react-native";
 import Layout from "../../components/suggestion-list-layout";
 import Empty from "../../components/empty";
 import Separator from "../../components/separator";
@@ -14,6 +14,7 @@ function mapStateToProps(state) {
     ipconfig: state.videos.selectedIPConfig,
     student: state.videos.selectedStudent,
     internetConnection: state.connection.isConnected,
+    loading: state.connection.loading,
   };
 }
 class SuggestionList extends Component {
@@ -92,6 +93,14 @@ class SuggestionList extends Component {
           ListEmptyComponent={this.renderEmpty}
           ItemSeparatorComponent={this.itemSeparatos}
           renderItem={this.renderItem}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.props.loading}
+              onRefresh={() => {
+                this.getAllDoubts();
+              }}
+            />
+          }
         />
       </Layout>
     );

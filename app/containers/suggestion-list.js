@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FlatList, View } from "react-native";
+import { FlatList, View, RefreshControl } from "react-native";
 import Empty from "../components/empty";
 import Separator from "../components/separator";
 import Suggestion from "../components/suggestion";
@@ -10,6 +10,8 @@ import API from "../../utils/api";
 function mapStateToProps(state) {
   return {
     list: state.videos.contenido,
+    loading: state.connection.loading,
+    internetConnection: state.connection.isConnected,
   };
 }
 class SuggestionList extends Component {
@@ -83,6 +85,23 @@ class SuggestionList extends Component {
           ListEmptyComponent={this.renderEmpty}
           ItemSeparatorComponent={this.itemSeparatos}
           renderItem={this.renderItem}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.props.loading}
+              onRefresh={() => {
+                if (this.props.internetConnection) {
+                  this.fetchContent();
+                } else {
+                  Alert.alert(
+                    "ERROR",
+                    "Recuerda que debes estar conectado a internet para sincronizar.",
+                    [{ text: "OK", onPress: () => {} }],
+                    { cancelable: false }
+                  );
+                }
+              }}
+            />
+          }
         />
       </View>
     );

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FlatList, Alert } from "react-native";
+import { FlatList, Alert, RefreshControl } from "react-native";
 import Layout from "../components/suggestion-list-layout";
 import Empty from "../components/empty";
 import Separator from "../components/separator";
@@ -15,6 +15,7 @@ function mapStateToProps(state) {
     ipconfig: state.videos.selectedIPConfig,
     student: state.videos.selectedStudent,
     internetConnection: state.connection.isConnected,
+    loading: state.connection.loading,
   };
 }
 class SuggestionList extends Component {
@@ -53,7 +54,7 @@ class SuggestionList extends Component {
       );
     });
   }
-  doubleSend() {
+  doubleSend(onScroll = false) {
     if (this.props.internetConnection) {
       this.props.dispatch({
         type: "SET_LOADING",
@@ -77,7 +78,7 @@ class SuggestionList extends Component {
           // console.log("storage", data);
           // console.log("flats", Flats);
           Flats.map((flat) => {
-            if (flat.upload === 0) {
+            if (flat.upload === 0 && !onScroll) {
               data.map((event) => {
                 if (flat.id_evento === event.id_evento) {
                   this.props.dispatch({
@@ -195,6 +196,12 @@ class SuggestionList extends Component {
           ListEmptyComponent={this.renderEmpty}
           ItemSeparatorComponent={this.itemSeparatos}
           renderItem={this.renderItem}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.props.loading}
+              onRefresh={() => this.doubleSend(true)}
+            />
+          }
         />
       </Layout>
     );
