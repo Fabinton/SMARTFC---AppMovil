@@ -1,17 +1,6 @@
 import React, { Component } from "react";
-import { NavigationActions } from "react-navigation";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  Picker,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import { StyleSheet, Picker, Alert } from "react-native";
 import Header from "../../components/header";
-import { Ionicons, Octicons } from "@expo/vector-icons";
 import * as SQLite from "expo-sqlite";
 import { connect } from "react-redux";
 import API from "../../../utils/api";
@@ -44,92 +33,137 @@ class Configure extends Component {
     storage: null,
     students: null,
   };
-  async componentDidMount() {
-    console.log(this.props.student.grado_estudiante);
-    var query2 = await API.loadSchool(this.props.ipconfig);
-    var query = await API.allStudent(this.props.ipconfig);
-    this.setState({ students: query });
-    this.setState({ school: query2 });
+  componentDidMount() {
+    API.loadSchool(this.props.ipconfig)
+      .then(({ data }) => {
+        this.setState({ school: data });
+      })
+      .catch((e) => {});
+    API.allStudent(this.props.ipconfig).then(({ data }) => {
+      this.setState({ students: data });
+    });
   }
-  async actualizaUser() {
-    //update items set done = 1 where id = ?;
-    if (this.state.password != null) {
-      data = {
-        id_estudiante: this.props.student.id_estudiante,
-        //tipo_usuario: 1,
-        nombre_estudiante: this.state.name,
-        apellido_estudiante: this.state.last_name,
-        grado_estudiante: this.state.grado,
-        curso_estudiante: 1,
-        id_colegio: this.state.schoolSelected,
-        nombre_usuario: this.state.user,
-        contrasena: this.state.password,
-        correo_electronico: this.state.email,
-      };
-      var student = await API.updateStudents(this.props.ipconfig, data);
-      console.log(student);
-      db.transaction(
-        (tx) => {
-          //id_estudiante, tipo_usuario, nombre_estudiante, apellido_estudiante, grado_estudiante, curso_estudiante, id_colegio, nombre_usuario, contrasena, correo_electronico
-          tx.executeSql(
-            "update students set nombre_estudiante = ? , apellido_estudiante = ?, grado_estudiante = ?,curso_estudiante = ?, id_colegio = ?, nombre_usuario = ?, contrasena = ?, correo_electronico = ? where id_estudiante = ? ",
-            [
-              this.state.name,
-              this.state.last_name,
-              this.state.grado,
-              1,
-              this.state.schoolSelected,
-              this.state.user,
-              this.state.password,
-              this.state.email,
-              this.props.student.id_estudiante,
-            ]
-          );
-          tx.executeSql(
-            "select * from students",
-            [],
-            (_, { rows: { _array } }) => console.log(_array)
-          );
-        },
-        null,
-        null
-      );
-      Alert.alert(
-        "Actualización Exitosa",
-        "La actualización de sus datos es exitosa",
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-        { cancelable: false }
-      );
-      this.props.dispatch({
-        type: "SET_STUDENT",
-        payload: {
-          student: data,
-        },
-      });
+  componentWillUnmount() {
+    // fix Warning: Can't perform a React state update on an unmounted component
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
+  actualizaUser() {
+    if (this.props.internetConnection) {
+      if (this.state.password === this?.props?.student?.contrasena) {
+        this.props.dispatch({
+          type: "SET_LOADING",
+          payload: true,
+        });
+        const data = {
+          id_estudiante: this.props.student.id_estudiante,
+          //tipo_usuario: 1,
+          nombre_estudiante: this.state.name,
+          apellido_estudiante: this.state.last_name,
+          grado_estudiante: this.state.grado,
+          curso_estudiante: 1,
+          id_colegio: this.state.schoolSelected,
+          nombre_usuario: this.state.user,
+          contrasena: this.state.password,
+          correo_electronico: this.state.email,
+        };
+        API.updateStudents(this.props.ipconfig, data)
+          .then(() => {
+            Alert.alert(
+              "Actualización Exitosa",
+              "La actualización de sus datos es exitosa",
+              [{ text: "OK", onPress: () => {} }],
+              { cancelable: false }
+            );
+            this.props.dispatch({
+              type: "SET_STUDENT",
+              payload: {
+                student: data,
+              },
+            });
+            db.transaction(
+              (tx) => {
+                //id_estudiante, tipo_usuario, nombre_estudiante, apellido_estudiante, grado_estudiante, curso_estudiante, id_colegio, nombre_usuario, contrasena, correo_electronico
+                tx.executeSql(
+                  "update students set nombre_estudiante = ? , apellido_estudiante = ?, grado_estudiante = ?,curso_estudiante = ?, id_colegio = ?, nombre_usuario = ?, contrasena = ?, correo_electronico = ? where id_estudiante = ? ",
+                  [
+                    this.state.name,
+                    this.state.last_name,
+                    this.state.grado,
+                    1,
+                    this.state.schoolSelected,
+                    this.state.user,
+                    this.state.password,
+                    this.state.email,
+                    this.props.student.id_estudiante,
+                  ]
+                );
+                tx.executeSql(
+                  "select * from students", // to verify if data is different
+                  [],
+                  (_, { rows: { _array } }) => {}
+                );
+              },
+              null,
+              null
+            );
+          })
+          .catch((e) => {
+            console.log("error", e);
+            Alert.alert(
+              "Error",
+              "Ha ocurrido un error al actualizar datos.",
+              [{ text: "OK", onPress: () => {} }],
+              { cancelable: false }
+            );
+          })
+          .finally(() => {
+            this.props.dispatch({
+              type: "SET_LOADING",
+              payload: false,
+            });
+          });
+      } else {
+        Alert.alert(
+          "Error",
+          "Contraseña incorrecta, por favor ingrese la contraseña nuevamente",
+          [{ text: "OK", onPress: () => {} }],
+          { cancelable: false }
+        );
+      }
     } else {
       Alert.alert(
-        "Actualización Data",
-        "No ha ingresado la contraseña por favor ingresela e intente nuevamente",
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+        "ERROR",
+        "Recuerda que debes estar conectado a internet para actualizar datos.",
+        [{ text: "OK", onPress: () => {} }],
         { cancelable: false }
       );
     }
   }
   funcionCargada() {
     this.actualizaUser();
-    this.actualizaUser();
+  }
+
+  validateForm() {
+    return (
+      this.state?.name?.length > 0 &&
+      this.state?.last_name?.length > 0 &&
+      this.state?.grado &&
+      this.state?.schoolSelected &&
+      this.state?.email?.length > 0 &&
+      this.state?.password?.length > 0
+    );
   }
 
   render() {
     var datasSchoolFull = null;
 
     let itemsInPicker = null;
-    //let itemsInPicker2= null;
+
     if (this.state.school == null) {
       itemsInPicker = null;
     } else {
-      console.log("Imprimiendo State");
-      //console.log(datasSchool);
       datasSchoolFull = this.state.school;
       itemsInPicker = datasSchoolFull.map((data) => {
         return (
@@ -141,7 +175,6 @@ class Configure extends Component {
         );
       });
     }
-    //Agregando ItemPicker For Grados
     var dataGrado = [
       {
         id_grado: 6,
@@ -168,7 +201,7 @@ class Configure extends Component {
         grado: "11",
       },
     ];
-    //console.log(dataGrado);
+
     let itemsInPicker2 = dataGrado.map((data) => {
       return (
         <Picker.Item
@@ -257,6 +290,7 @@ class Configure extends Component {
           <CustomButton
             text="Actualizar datos"
             onPress={() => this.funcionCargada()}
+            disabled={!this.validateForm()}
           />
         </Flex>
       </Stack>
@@ -333,6 +367,7 @@ function mapStateToProps(state) {
   return {
     student: state.videos.selectedStudent,
     ipconfig: state.videos.selectedIPConfig,
+    internetConnection: state.connection.isConnected,
   };
 }
 export default connect(mapStateToProps)(Configure);

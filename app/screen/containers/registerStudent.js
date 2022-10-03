@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
-import { StyleSheet, Text, CheckBox, Picker } from "react-native";
+import { StyleSheet, Text, CheckBox, Picker, Alert } from "react-native";
 import HeaderLogin from "../../components/headerLogin";
 import * as SQLite from "expo-sqlite";
 import API from "../../../utils/api";
@@ -16,7 +16,7 @@ class Register extends Component {
     val: "ed",
     seePass: true,
   };
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = () => {
     return {
       header: <HeaderLogin></HeaderLogin>,
     };
@@ -24,6 +24,7 @@ class Register extends Component {
   state = {
     id_student: null,
     grado: null,
+    checked: false,
     password: null,
     school: null,
     schoolSelected: null,
@@ -34,115 +35,131 @@ class Register extends Component {
     storage: null,
     students: null,
   };
-  async componentDidMount() {
-    var query2 = await API.loadSchool(this.props.ipconfig);
-    var query = await API.allStudent(this.props.ipconfig);
-    this.setState({ students: query });
-    console.log(query2[0].nombre_colegio);
-    this.setState({ school: query2 });
+  componentDidMount() {
+    API.loadSchool(this.props.ipconfig)
+      .then(({ data }) => {
+        this.setState({ school: data });
+      })
+      .catch((e) => {});
+    API.allStudent(this.props.ipconfig).then(({ data }) => {
+      this.setState({ students: data });
+    });
     db.transaction((tx) => {
       tx.executeSql(
         "create table if not exists students (id_estudiante integer not null unique, tipo_usuario integer, nombre_estudiante text, apellido_estudiante text, grado_estudiante int, curso_estudiante int, id_colegio int, nombre_usuario text, contrasena text, correo_electronico text);"
       );
-      tx.executeSql(
-        "select * from students",
-        [],
-        (_, { rows: { _array } }) => this.setState({ storage: _array }),
-        console.log(this.state.storage)
+      tx.executeSql("select * from students", [], (_, { rows: { _array } }) =>
+        this.setState({ storage: _array })
       );
     });
   }
-
-  async Registrate() {
-    console.log(this.state.grado);
-    console.log(this.state.schoolSelected);
-    var query2 = this.state.students;
-    var query = await API.allStudent(this.props.ipconfig);
-    console.log("Alumnos");
-    console.log(query.length - 1);
-    var id_students_F = 0;
-    if (query.length == 0) {
-      id_students_F = 1;
-      this.setState({ id_student: 1 });
-    } else {
-      id_students_F = query.length + 1;
-      this.setState({ id_student: query.length + 1 });
-    }
-    var id_final = "" + this.state.schoolSelected + id_students_F;
-    id_final = parseInt(id_final);
-
-    console.log("ID ESTUDIANTE");
-    console.log(id_final);
-    data = {
-      id_estudiante: id_final,
-      tipo_usuario: 1,
-      nombre_estudiante: this.state.name,
-      apellido_estudiante: this.state.last_name,
-      grado_estudiante: this.state.grado,
-      curso_estudiante: 1,
-      id_colegio: this.state.schoolSelected,
-      nombre_usuario: this.state.user,
-      contrasena: this.state.password,
-      correo_electronico: this.state.email,
+  componentWillUnmount() {
+    // fix Warning: Can't perform a React state update on an unmounted component
+    this.setState = (state, callback) => {
+      return;
     };
-    var student = await API.createStudents(this.props.ipconfig, data);
-    console.log(student);
-    db.transaction(
-      (tx) => {
-        tx.executeSql(
-          "insert into students (id_estudiante, tipo_usuario, nombre_estudiante, apellido_estudiante, grado_estudiante, curso_estudiante, id_colegio, nombre_usuario, contrasena, correo_electronico) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-          [
-            id_final,
-            1,
-            this.state.name,
-            this.state.last_name,
-            this.state.grado,
-            1,
-            this.state.schoolSelected,
-            this.state.user,
-            this.state.password,
-            this.state.email,
-          ]
-        );
-        tx.executeSql("select * from students", [], (_, { rows: { _array } }) =>
-          console.log(_array)
-        );
-      },
-      null,
-      null
-    );
-    this.props.dispatch(
-      NavigationActions.navigate({
-        routeName: "Notification",
-      })
-    );
   }
-  idEstudiante() {
-    console.log(this.state.grado);
-    console.log("EscuelaID");
-    console.log(this.state.schoolSelected);
-    var query = this.state.students;
-    console.log("Alumnos");
-    //console.log(query.length-1);
-    var id_students_F = 0;
-    if (query.length == 0) {
-      id_students_F = 1;
-      this.setState({ id_student: 1 });
+  Registrate() {
+    if (this.props.internetConnection) {
+      this.props.dispatch({
+        type: "SET_LOADING",
+        payload: true,
+      });
+      let id_students_F;
+      let id_final;
+      API.allStudent(this.props.ipconfig)
+        .then(({ data }) => {
+          if (data?.length == 0) {
+            id_students_F = 1;
+            this.setState({ id_student: 1 });
+          } else {
+            id_students_F = data?.length + 1;
+            this.setState({ id_student: id_students_F });
+          }
+          id_final = "" + this.state.schoolSelected + id_students_F;
+          id_final = parseInt(id_final);
+          const dataToSave = {
+            id_estudiante: id_final,
+            tipo_usuario: 1,
+            nombre_estudiante: this.state.name,
+            apellido_estudiante: this.state.last_name,
+            grado_estudiante: this.state.grado,
+            curso_estudiante: 1,
+            id_colegio: this.state.schoolSelected,
+            nombre_usuario: this.state.user,
+            contrasena: this.state.password,
+            correo_electronico: this.state.email,
+          };
+          API.createStudents(this.props.ipconfig, dataToSave)
+            .then(({ data }) => {
+              db.transaction(
+                (tx) => {
+                  tx.executeSql(
+                    "insert into students (id_estudiante, tipo_usuario, nombre_estudiante, apellido_estudiante, grado_estudiante, curso_estudiante, id_colegio, nombre_usuario, contrasena, correo_electronico) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    [
+                      id_final,
+                      1,
+                      this.state.name,
+                      this.state.last_name,
+                      this.state.grado,
+                      1,
+                      this.state.schoolSelected,
+                      this.state.user,
+                      this.state.password,
+                      this.state.email,
+                    ]
+                  );
+                  tx.executeSql(
+                    "select * from students",
+                    [],
+                    (_, { rows: { _array } }) => {}
+                  );
+                },
+                null,
+                null
+              );
+              this.props.dispatch(
+                NavigationActions.navigate({
+                  routeName: "Notification",
+                })
+              );
+            })
+            .catch((e) => {
+              console.log("error register", e);
+              Alert.alert(
+                "Error",
+                "Ha ocurrido un error al registrar usuario.",
+                [{ text: "OK", onPress: () => {} }],
+                { cancelable: false }
+              );
+            })
+            .finally(() => {});
+        })
+        .catch((e) => {
+          console.log("error allstudents", e);
+          Alert.alert(
+            "Error",
+            "Ha ocurrido un error al registrar usuario.",
+            [{ text: "OK", onPress: () => {} }],
+            { cancelable: false }
+          );
+        })
+        .finally(() => {
+          this.props.dispatch({
+            type: "SET_LOADING",
+            payload: false,
+          });
+        });
     } else {
-      id_students_F = query.length + 1;
-      this.setState({ id_student: query.length + 1 });
+      Alert.alert(
+        "ERROR",
+        "Recuerda que debes estar conectado para registrarte.",
+        [{ text: "OK", onPress: () => {} }],
+        { cancelable: false }
+      );
     }
-    var id_final = "" + this.state.schoolSelected + id_students_F;
-    id_final = parseInt(id_final);
-    console.log(id_final);
-    db.transaction(
-      (tx) => {
-        tx.executeSql(`delete from students where id_estudiante = ?;`, [1]);
-      },
-      null,
-      null
-    );
   }
+
   close() {
     this.props.dispatch(
       NavigationActions.navigate({
@@ -150,6 +167,18 @@ class Register extends Component {
       })
     );
   }
+  validateForm() {
+    return (
+      this.state?.name?.length > 0 &&
+      this.state?.last_name?.length > 0 &&
+      this.state?.grado?.length > 0 &&
+      this.state?.schoolSelected &&
+      this.state?.email?.length > 0 &&
+      this.state?.password?.length > 0 &&
+      this.state.checked
+    );
+  }
+
   render() {
     var datasSchoolFull = null;
 
@@ -157,10 +186,9 @@ class Register extends Component {
     if (this.state.school == null) {
       itemsInPicker = null;
     } else {
-      console.log("Imprimiendo State");
       //console.log(datasSchool);
       datasSchoolFull = this.state.school;
-      console.log(datasSchoolFull);
+
       itemsInPicker = datasSchoolFull.map((data) => {
         return (
           <Picker.Item
@@ -172,7 +200,6 @@ class Register extends Component {
       });
     }
 
-    //console.log(this.props.navigation);
     return (
       <Stack
         style={styles.container}
@@ -213,7 +240,7 @@ class Register extends Component {
             }
           >
             <Picker.Item color="gray" label="Curso" value="" />
-            <Picker.Item label="7" value="7" />
+            <Picker.Item label="6" value="6" />
             <Picker.Item label="7" value="7" />
             <Picker.Item label="8" value="8" />
             <Picker.Item label="9" value="9" />
@@ -255,7 +282,12 @@ class Register extends Component {
           )}
         />
         <Flex inline center style={{ marginLeft: 10 }}>
-          <CheckBox />
+          <CheckBox
+            value={this.state.checked}
+            onValueChange={() =>
+              this.setState({ checked: !this.state.checked })
+            }
+          />
           <Text style={styles.textDocument}>
             Acepto los terminos de uso de datos para futuras investigaciones.
           </Text>
@@ -267,7 +299,11 @@ class Register extends Component {
         </Text>
 
         <Flex center>
-          <CustomButton text="Registrate" onPress={() => this.Registrate()} />
+          <CustomButton
+            text="Registrate"
+            onPress={() => this.Registrate()}
+            disabled={!this.validateForm()}
+          />
           <CustomButton text="Cancelar" onPress={() => this.close()} />
         </Flex>
       </Stack>
@@ -374,6 +410,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     ipconfig: state.videos.selectedIPConfig,
+    internetConnection: state.connection.isConnected,
   };
 }
 export default connect(mapStateToProps)(Register);

@@ -6,11 +6,30 @@ const customButton = ({
   onPress,
   textStyle = styles.buttonText,
   textTouchable = styles.touchableButtonSignIn,
+  disabled = false,
+  buttonWidth = textTouchable?.width,
+  buttonHeight = textTouchable?.height,
 }) => {
   return (
     <>
-      <TouchableOpacity onPress={onPress} style={textTouchable}>
-        <Text style={textStyle}>{text}</Text>
+      <TouchableOpacity
+        onPress={onPress}
+        style={{
+          ...textTouchable,
+          backgroundColor: disabled ? "#D8D8D8" : textTouchable.backgroundColor,
+          width: buttonWidth,
+          height: buttonHeight,
+        }}
+        disabled={disabled}
+      >
+        <Text
+          style={{
+            ...textStyle,
+            color: disabled ? "#8E8E8E" : textStyle.color,
+          }}
+        >
+          {text}
+        </Text>
       </TouchableOpacity>
     </>
   );
@@ -40,5 +59,4 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
   },
 });
-
 export default customButton;

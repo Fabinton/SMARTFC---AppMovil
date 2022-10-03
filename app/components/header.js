@@ -9,27 +9,35 @@ import {
 } from "react-native";
 import { Ionicons, Octicons } from "@expo/vector-icons";
 import { StatusBar } from "react-native";
+import LoadingModal from "./LoadingModal";
+import { useSelector } from "react-redux";
+import CheckConnection from "./CheckConnection";
 function Header(props) {
+  const { loading } = useSelector((state) => state.connection);
   return (
-    <View>
-      <StatusBar backgroundColor="#272D34" barStyle="light-content" />
-      <SafeAreaView style={style.statusBar}></SafeAreaView>
-      <View style={style.bar}>
-        <View style={style.container}>
-          <TouchableOpacity onPress={props.onPress}>
-            <Ionicons
-              name="md-menu"
-              size={32}
-              color="white"
-              style={style.menu}
-            />
-          </TouchableOpacity>
-          <View style={style.center}>
-            <Text style={style.texto}>{props.children}</Text>
+    <>
+      <View>
+        <StatusBar backgroundColor="#272D34" barStyle="light-content" />
+        <SafeAreaView style={style.statusBar}></SafeAreaView>
+        <View style={style.bar}>
+          <View style={style.container}>
+            <TouchableOpacity onPress={props.onPress}>
+              <Ionicons
+                name="md-menu"
+                size={32}
+                color="white"
+                style={style.menu}
+              />
+            </TouchableOpacity>
+            <View style={style.center}>
+              <Text style={style.texto}>{props.children}</Text>
+            </View>
           </View>
         </View>
+        <CheckConnection />
       </View>
-    </View>
+      {loading && <LoadingModal />}
+    </>
   );
 }
 const style = StyleSheet.create({
@@ -39,7 +47,7 @@ const style = StyleSheet.create({
     marginTop: 10,
   },
   statusBar: {
-    // paddingTop: 27.5,
+    //paddingTop: 27.5,
     backgroundColor: "#272D34",
   },
   container: {

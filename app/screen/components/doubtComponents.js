@@ -1,8 +1,7 @@
 import React from "react";
-import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 function Suggestion(props) {
-  console.log("Imprimiendo URLs");
   var respuesta = "";
   if (props.respuesta == "") {
     respuesta = "El profesor todavia no responde tu duda.";

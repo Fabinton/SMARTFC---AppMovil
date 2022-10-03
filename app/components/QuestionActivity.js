@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { View, Text, Modal, TextInput, StyleSheet, Alert } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import API from "../../utils/api";
 import * as SQLite from "expo-sqlite";
 import { connect } from "react-redux";
@@ -30,21 +29,17 @@ class QuestionActivity extends Component {
       tx.executeSql(
         "create table if not exists doubts (id_duda integer not null, id_actividad integer, id_estudiante integer, pregunta text, respuesta text, estado_duda int);"
       );
-      tx.executeSql(
-        "select * from doubts",
-        [],
-        (_, { rows: { _array } }) => this.setState({ storage: _array }),
-        console.log("storage en Question didmount", this.state.storage)
+      tx.executeSql("select * from doubts", [], (_, { rows: { _array } }) =>
+        this.setState({ storage: _array })
       );
     });
   }
   registrateDoubt() {
+    let id_doubt_cont;
+    let id_duda;
     db.transaction((tx) => {
-      tx.executeSql(
-        "select * from doubts",
-        [],
-        (_, { rows: { _array } }) => this.setState({ storage: _array }),
-        console.log("storage en componente question", this.state.storage)
+      tx.executeSql("select * from doubts", [], (_, { rows: { _array } }) =>
+        this.setState({ storage: _array })
       );
     });
     var storageDoubts = this.state.storage;
@@ -55,14 +50,6 @@ class QuestionActivity extends Component {
     }
     id_duda = "" + this.props.student.id_estudiante + id_doubt_cont;
     id_duda = parseInt(id_duda);
-    dataDoubt = {
-      id_duda: id_duda,
-      id_actividad: this.props.activity.id_actividad,
-      id_estudiante: this.props.student.id_estudiante,
-      pregunta: this.state.pregunta,
-      respuesta: "",
-      estado_duda: 1,
-    };
     db.transaction((tx) => {
       tx.executeSql(
         "insert into doubts (id_duda, id_actividad, id_estudiante, pregunta, respuesta, estado_duda) values (?, ?, ?, ?, ?, ?)",
@@ -75,11 +62,8 @@ class QuestionActivity extends Component {
           0,
         ]
       );
-      tx.executeSql(
-        "select * from doubts",
-        [],
-        (_, { rows: { _array } }) => this.setState({ storage: _array }),
-        console.log(this.state.storage)
+      tx.executeSql("select * from doubts", [], (_, { rows: { _array } }) =>
+        this.setState({ storage: _array })
       );
     });
     Alert.alert(
@@ -91,42 +75,66 @@ class QuestionActivity extends Component {
   }
 
   async sincronizaDoubt() {
-    db.transaction((tx) => {
-      tx.executeSql("select * from doubts", [], (_, { rows: { _array } }) =>
-        this.setState({ storage: _array })
-      );
-    });
-    var storageDoubts = this.state.storage;
-    console.log("Imprimiendo StorageDoubts");
-    console.log(storageDoubts[0].id_duda);
-    for (var i = 0; i < storageDoubts.length; i++) {
-      if (storageDoubts[i].estado_duda == 0) {
-        var dataDoubt = storageDoubts[i];
-        var creacionDuda = await API.generateDoubt(
-          this.props.ipconfig,
-          dataDoubt
+    if (this.props.internetConnection) {
+      this.props.dispatch({
+        type: "SET_LOADING",
+        payload: true,
+      });
+      db.transaction((tx) => {
+        tx.executeSql("select * from doubts", [], (_, { rows: { _array } }) =>
+          this.setState({ storage: _array })
         );
-        var id_dudosa = storageDoubts[i].id_duda;
-        db.transaction((tx) => {
-          tx.executeSql(
-            "update doubts set estado_duda = ? where id_duda = ? ",
-            [1, id_dudosa]
-          );
-          tx.executeSql(
-            "select * from doubts",
-            [],
-            (_, { rows: { _array } }) => this.setState({ storage: _array }),
-            console.log(this.state.storage)
-          );
-        });
-      }
+      });
+      const storageDoubts = this.state.storage;
+      storageDoubts.map((doubt) => {
+        if (doubt.estado_duda === 0) {
+          API.generateDoubt(this.props.ipconfig, doubt)
+            .then(() => {
+              const id_dudosa = doubt.id_duda;
+              db.transaction((tx) => {
+                tx.executeSql(
+                  "update doubts set estado_duda = ? where id_duda = ? ",
+                  [1, id_dudosa]
+                );
+                tx.executeSql(
+                  "select * from doubts",
+                  [],
+                  (_, { rows: { _array } }) =>
+                    this.setState({ storage: _array })
+                );
+              });
+              Alert.alert(
+                "Sincronización Exitosa",
+                "Sus dudas fueron enviadas dentro de poco tendra una respuesta.",
+                [{ text: "OK", onPress: () => {} }],
+                { cancelable: false }
+              );
+            })
+            .catch((e) => {
+              console.log("error", e);
+              Alert.alert(
+                "Error",
+                "Error, sus dudas no han podido ser sincronizadas. Intente nuevamente.",
+                [{ text: "OK", onPress: () => {} }],
+                { cancelable: false }
+              );
+            })
+            .finally(() => {
+              this.props.dispatch({
+                type: "SET_LOADING",
+                payload: false,
+              });
+            });
+        }
+      });
+    } else {
+      Alert.alert(
+        "ERROR",
+        "Recuerda que debes estar conectado para sincronizar las preguntas.",
+        [{ text: "OK", onPress: () => {} }],
+        { cancelable: false }
+      );
     }
-    Alert.alert(
-      "Sincronización Exitosa",
-      "Sus dudas fueron enviadas dentro de poco tendra una respuesta.",
-      [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-      { cancelable: false }
-    );
   }
 
   render() {
@@ -161,6 +169,7 @@ class QuestionActivity extends Component {
               <CustomButton
                 text="Guarda tu pregunta"
                 onPress={() => this.registrateDoubt()}
+                disabled={!(this?.state?.pregunta?.length > 0)}
               />
               <CustomButton
                 text="Sincroniza tu pregunta"
@@ -210,6 +219,7 @@ function mapStateToProps(state) {
     student: state.videos.selectedStudent,
     activity: state.videos.selectedActivity,
     ipconfig: state.videos.selectedIPConfig,
+    internetConnection: state.connection.isConnected,
   };
 }
 

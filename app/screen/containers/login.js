@@ -4,7 +4,6 @@ import {
   Modal,
   StyleSheet,
   Text,
-  BackHandler,
   View,
   Image,
   TextInput,
@@ -13,18 +12,15 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import * as SQLite from "expo-sqlite";
-//import Header from '../../components/header';
 import HeaderLogin from "../../components/headerLogin";
 import API from "../../../utils/api";
 import CustomButton from "../../components/customButton";
-import { Stack, Flex, Spacer } from "@react-native-material/core";
+import { Stack, Flex } from "@react-native-material/core";
 
 const db = SQLite.openDatabase("db5.db");
-function goodBye() {
-  BackHandler.exitApp();
-}
+
 class Login extends Component {
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = () => {
     return {
       header: <HeaderLogin></HeaderLogin>,
     };
@@ -35,87 +31,105 @@ class Login extends Component {
     storage: null,
     modalVisible: false,
     ipconfig: null,
+    internetConnection: this.props.internetConnection,
   };
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
   }
-  async signIn(data) {
-    // db.transaction((tx) => {
-    //   tx.executeSql(
-    //     "select * from students",
-    //     [],
-    //     (_, { rows: { _array } }) => this.setState({ storage: _array })
-    //     //console.log(this.state.storage)
-    //   );
-    // });
-    this.consulta();
-    dataStudents = this.state.storage;
-    console.log("Filtro");
-    var dataCompleted = null;
-    console.log(dataStudents.length);
-    if (dataStudents.length == 0) {
-    } else {
-      for (var i = 0; i <= dataStudents.length - 1; i++) {
-        //if (dataStudents[i].correo_electronico == this.state.email){
-        if (dataStudents[i].correo_electronico == "estudiante10@fc.com") {
-          console.log("Entro");
-          if (dataStudents[i].contrasena == "1234") {
-            //if(dataStudents[i].contrasena == this.state.password){
-            dataCompleted = dataStudents[i];
-          } else {
-            Alert.alert(
-              "Datos Incorrectos",
-              "La contraseña o email son incorrecto",
-              [
-                {
-                  text: "Cancel",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel",
-                },
-                { text: "OK", onPress: () => console.log("OK Pressed") },
-              ],
-              { cancelable: false }
-            );
-          }
-        }
-      }
-    }
-    console.log(dataCompleted);
-    if (dataCompleted != null) {
+  signIn() {
+    if (this.props.ipconfig) {
       this.props.dispatch({
-        type: "SET_STUDENT",
-        payload: {
-          student: dataCompleted,
-        },
+        type: "SET_LOADING",
+        payload: true,
       });
-      this.props.dispatch(
-        NavigationActions.navigate({
-          routeName: "Activities",
-        })
-      );
+      this.consulta();
+      if (Object.keys(this.state.storage)?.length > 0) {
+        const studentExist = this?.state?.storage?.find((student) => {
+          return (
+            student.correo_electronico == "estudiante10@fc.com" && // reminder to check email and password from form.
+            student.contrasena == "1234" // this.state.email this.state.password
+          );
+        });
+        if (studentExist) {
+          this.props.dispatch({
+            type: "SET_STUDENT",
+            payload: {
+              student: studentExist,
+            },
+          });
+          setTimeout(() => {
+            this.props.dispatch({
+              type: "SET_LOADING",
+              payload: false,
+            });
+          }, 1700);
+          setTimeout(() => {
+            this.props.dispatch(
+              NavigationActions.navigate({
+                routeName: "Activities",
+              })
+            );
+          }, 1500);
+        } else {
+          Alert.alert(
+            "Datos Incorrectos",
+            "La contraseña o email son incorrecto",
+            [
+              {
+                text: "Cancel",
+                onPress: () => {},
+                style: "cancel",
+              },
+              { text: "OK", onPress: () => {} },
+            ],
+            { cancelable: false }
+          );
+          setTimeout(() => {
+            this.props.dispatch({
+              type: "SET_LOADING",
+              payload: false,
+            });
+          }, 1700);
+        }
+      } else {
+        this.props.dispatch({
+          type: "SET_LOADING",
+          payload: false,
+        });
+        Alert.alert(
+          "Error",
+          "Recuerda sincronizar datos de usuario antes de iniciar sesión.",
+          [
+            {
+              text: "Cancel",
+              onPress: () => {},
+              style: "cancel",
+            },
+            { text: "OK", onPress: () => {} },
+          ],
+          { cancelable: false }
+        );
+      }
     } else {
       Alert.alert(
-        "Datos Incorrectos",
-        "La contraseña o email son incorrecto",
+        "Error Conexión",
+        "Recuerda guardar la dirección IP antes de iniciar sesión.",
         [
           {
             text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
+            onPress: () => {},
             style: "cancel",
           },
-          { text: "OK", onPress: () => console.log("OK Pressed") },
+          { text: "OK", onPress: () => {} },
         ],
         { cancelable: false }
       );
     }
-    console.log("Filtro Final");
   }
+
   componentDidMount() {
     //Aqui Hay un cambio si se aprueba
-    var d = new Date();
-    console.log(d.getFullYear());
-    var year = d.getFullYear();
-    console.log(typeof year);
+
     this.props.dispatch({
       type: "SET_STUDENT",
       payload: {
@@ -142,81 +156,123 @@ class Login extends Component {
 
   componentWillUnmount() {
     // fix Warning: Can't perform a React state update on an unmounted component
+
     this.setState = (state, callback) => {
       return;
     };
   }
 
   async registrateIP() {
-    ipConfigSend = this.state.ipconfig;
-    console.log(ipConfigSend);
-    var answer = 0;
-    answer = await API.getConection(ipConfigSend);
-    console.log(answer);
-    if (answer == 1) {
-      console.log("Hace Ping");
+    const ipConfigSend = this.state.ipconfig;
+    if (this.props.internetConnection) {
       this.props.dispatch({
-        type: "SET_IPCONFIG",
-        payload: {
-          ipconfig: ipConfigSend,
-        },
+        type: "SET_LOADING",
+        payload: true,
       });
-      Alert.alert(
-        "Conexión",
-        "La conexión con el servidor fue exitosa.",
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-        { cancelable: false }
-      );
-      this.setModalVisible(!this.state.modalVisible);
+      API.getConection(ipConfigSend)
+        .then((response) => {
+          this.props.dispatch({
+            type: "SET_IPCONFIG",
+            payload: {
+              ipconfig: ipConfigSend,
+            },
+          });
+          setTimeout(() => {
+            Alert.alert(
+              "Conexión",
+              "La conexión con el servidor fue exitosa.",
+              [
+                {
+                  text: "OK",
+                  onPress: () => this.setModalVisible(!this.state.modalVisible),
+                },
+              ],
+              { cancelable: false }
+            );
+          }, 300);
+        })
+        .catch((error) => {
+          console.log("error ip", error);
+          setTimeout(() => {
+            Alert.alert(
+              "ERROR",
+              "La conexión con el servidor es erronea por favor verifica tu IP",
+              [{ text: "OK", onPress: () => {} }],
+              { cancelable: false }
+            );
+          }, 300);
+        })
+        .finally(() => {
+          this.props.dispatch({
+            type: "SET_LOADING",
+            payload: false,
+          });
+        });
     } else {
-      Alert.alert(
-        "Conexión",
-        "La conexión con el servidor es erronea por favor verifica tu IP",
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-        { cancelable: false }
-      );
+      setTimeout(() => {
+        Alert.alert(
+          "ERROR",
+          "Recuerda que debes estar conectado a internet para guardar tu IP.",
+          [{ text: "OK", onPress: () => {} }],
+          { cancelable: false }
+        );
+      }, 300);
     }
   }
 
   async sincronizarDatas() {
-    const query = await API.allStudent(this.props.ipconfig);
-    //console.log(query)
-    console.log("Entrando al Sistema de Sincronizacion");
-
-    for (var i = 0; i < query.length; i++) {
-      var id_estudiante = query[i].id_estudiante;
-      var id_colegio = query[i].id_colegio;
-      var nombre_estudiante = query[i].nombre_estudiante;
-      var nombre_usuario = query[i].nombre_usuario;
-      var tipo_usuario = query[i].tipo_usuario;
-      var grado_estudiante = query[i].grado_estudiante;
-      var curso_estudiante = query[i].curso_estudiante;
-      var apellido_estudiante = query[i].apellido_estudiante;
-      var contrasena = query[i].contrasena;
-      var correo_electronico = query[i].correo_electronico;
-      console.log("Datos User");
-      console.log(id_estudiante);
-      console.log(nombre_estudiante);
-      console.log(apellido_estudiante);
-      this.envioDatosSQL(
-        id_estudiante,
-        id_colegio,
-        nombre_estudiante,
-        nombre_usuario,
-        tipo_usuario,
-        grado_estudiante,
-        curso_estudiante,
-        apellido_estudiante,
-        contrasena,
-        correo_electronico
+    if (this.props.internetConnection) {
+      this.props.dispatch({
+        type: "SET_LOADING",
+        payload: true,
+      });
+      API.allStudent(this.props.ipconfig)
+        .then(({ data }) => {
+          this.setState({ storage: data });
+          data.map((student) => {
+            this.envioDatosSQL(
+              student.id_estudiante,
+              student.id_colegio,
+              student.nombre_estudiante,
+              student.correo_electronico,
+              student.tipo_usuario,
+              student.grado_estudiante,
+              student.curso_estudiante,
+              student.apellido_estudiante,
+              student.contrasena,
+              student.correo_electronico
+            );
+          });
+          Alert.alert(
+            "Sincronización",
+            "La sincronización de los usuarios fue realizada",
+            [{ text: "OK", onPress: () => {} }],
+            { cancelable: false }
+          );
+        })
+        .catch((e) => {
+          console.log("error", e);
+          Alert.alert(
+            "Error",
+            "Se presentó un error al sincronizar usuarios",
+            [{ text: "OK", onPress: () => {} }],
+            { cancelable: false }
+          );
+        })
+        .finally(() => {
+          this.props.dispatch({
+            type: "SET_LOADING",
+            payload: false,
+          });
+        });
+    } else {
+      Alert.alert(
+        "ERROR",
+        "Recuerda que debes estar conectado a Internet para sincronizar datos.",
+        [{ text: "OK", onPress: () => {} }],
+        { cancelable: false }
       );
     }
-    Alert.alert(
-      "Sincronización",
-      "La sincronización de los usuarios fue realizada",
-      [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-      { cancelable: false }
-    );
   }
   envioDatosSQL(
     id_estudiante,
@@ -250,9 +306,9 @@ class Login extends Component {
   }
   consulta() {
     db.transaction((tx) => {
-      tx.executeSql("select * from students", [], (_, { rows: { _array } }) =>
-        this.setState({ storage: _array })
-      );
+      tx.executeSql("select * from students", [], (_, { rows: { _array } }) => {
+        this.setState({ storage: _array });
+      });
     });
   }
   async loginAdmin() {
@@ -272,6 +328,7 @@ class Login extends Component {
       console.log("Pailas");
     }
   }
+
   render() {
     return (
       <View style={styles.container}>
@@ -320,7 +377,7 @@ class Login extends Component {
         <Modal
           animationType="slide"
           transparent={false}
-          visible={this.state.modalVisible}
+          visible={this.state.modalVisible && !this.props.loading}
           onRequestClose={() => {
             //Alert.alert("Modal has been closed.");
             this.setModalVisible(false);
@@ -356,6 +413,10 @@ class Login extends Component {
                 text="Cancelar"
                 onPress={() => {
                   this.setModalVisible(!this.state.modalVisible);
+                  this.props.dispatch({
+                    type: "SET_LOADING",
+                    payload: false,
+                  });
                 }}
               />
             </Flex>
@@ -438,6 +499,8 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     ipconfig: state.videos.selectedIPConfig,
+    internetConnection: state.connection.isConnected,
+    loading: state.connection.loading,
   };
 }
 

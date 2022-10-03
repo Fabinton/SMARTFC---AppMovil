@@ -1,15 +1,7 @@
 import React from "react";
-import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Video } from "expo-av";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 function Suggestion(props) {
-  console.log("Imprimiendo URLs");
-
-  var uristring = props.urlrepositorio;
-  var ip = props.ipconfig;
-  var uri = "http://" + ip + ":3000" + uristring.substr(28);
-  console.log(uri);
-
   return (
     <TouchableOpacity onPress={props.onPress}>
       <View style={styles.container}>

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { StyleSheet, View, Image, Text, Alert } from "react-native";
 import { connect } from "react-redux";
 import HeaderReturn from "../../components/headerReturn";
-import { LinearGradient } from "expo-linear-gradient";
 import { NavigationActions } from "react-navigation";
 import QuestionActiviy from "../../components/QuestionActivity";
 import CustomButton from "../../components/customButton";
@@ -18,17 +17,8 @@ class selectMoment extends Component {
       ),
     };
   };
-  state = {
-    storage: null,
-  };
 
   detailActivity() {
-    this.props.dispatch({
-      type: "SET_SELECT_ACTIVITIES_SUBJECT_LIST",
-      payload: {
-        activity: this.props.activity,
-      },
-    });
     this.props.dispatch(
       NavigationActions.navigate({
         routeName: "DetailActivitySubj",
@@ -37,12 +27,6 @@ class selectMoment extends Component {
   }
   excersiceActivity() {
     if (this.props.activity.taller == 1) {
-      this.props.dispatch({
-        type: "SET_SELECT_ACTIVITIES_SUBJECT_LIST",
-        payload: {
-          activity: this.props.activity,
-        },
-      });
       this.props.dispatch(
         NavigationActions.navigate({
           routeName: "PlayExcersise",
@@ -58,7 +42,7 @@ class selectMoment extends Component {
             onPress: () => console.log("Cancel Pressed"),
             style: "cancel",
           },
-          { text: "OK", onPress: () => console.log("OK Pressed") },
+          { text: "OK", onPress: () => {} },
         ],
         { cancelable: false }
       );
@@ -67,12 +51,6 @@ class selectMoment extends Component {
 
   evaluationActivity() {
     if (this.props.activity.evaluacion == 1) {
-      this.props.dispatch({
-        type: "SET_SELECT_ACTIVITIES_SUBJECT_LIST",
-        payload: {
-          activity: this.props.activity,
-        },
-      });
       this.props.dispatch(
         NavigationActions.navigate({
           routeName: "EvaluationActivity",
@@ -85,10 +63,10 @@ class selectMoment extends Component {
         [
           {
             text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
+            onPress: () => {},
             style: "cancel",
           },
-          { text: "OK", onPress: () => console.log("OK Pressed") },
+          { text: "OK", onPress: () => {} },
         ],
         { cancelable: false }
       );
@@ -96,7 +74,6 @@ class selectMoment extends Component {
   }
 
   render() {
-    console.log(this.props.activity);
     return (
       <Stack
         style={styles.container}

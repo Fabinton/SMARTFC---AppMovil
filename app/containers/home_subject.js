@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from "react";
 import Header from "../components/header";
 import SuggestionList from "../containers/subject-list";
-import { StyleSheet } from "react-native";
 import API from "../../utils/api";
 import { connect } from "react-redux";
 
@@ -22,19 +21,22 @@ class Home extends Component {
   }
 
   async componentDidMount() {
-    console.log(this.props.ipconfig);
-    console.log(this.props.student);
-    const subject = await API.getCourses(
+    API.getCourses(
       this.props.ipconfig,
       this.props.student.grado_estudiante,
       this.props.student.id_colegio
-    );
-    this.props.dispatch({
-      type: "SET_ACTIVITIES_LIST",
-      payload: {
-        subject,
-      },
-    });
+    )
+      .then(({ data }) => {
+        this.props.dispatch({
+          type: "SET_ACTIVITIES_LIST",
+          payload: {
+            subject: data,
+          },
+        });
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
   }
   render() {
     return (
@@ -44,15 +46,6 @@ class Home extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  texto: {
-    color: "white",
-    fontSize: 17,
-    fontWeight: "bold",
-    marginLeft: 20,
-  },
-});
 
 function mapStateToProps(state) {
   return {
