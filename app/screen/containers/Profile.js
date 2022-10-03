@@ -65,11 +65,17 @@ class Profile extends Component {
         (_, { rows: { _array } }) => this.setState({ storage: _array })
       );
     });
-    console.log("Este es el Storage");
-    console.log(this.state.storage);
     this.loadActivities();
   }
-
+  consulta() {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select * from events where id_estudiante = ?;`,
+        [this.props.student.id_estudiante],
+        (_, { rows: { _array } }) => this.setState({ storage: _array })
+      );
+    });
+  }
   async filtro(activeSub) {
     const data = [];
     async function esActividad(elemento) {
@@ -83,25 +89,9 @@ class Profile extends Component {
 
   async loadActivities() {
     active = "ESTOS SON SU PROGRESO EN LA ACTIVIDAD";
-    console.log("ID Estudiante");
-    console.log(this.props.student.id_estudiante);
-    //tx.executeSql(`select * from events where id_estudiante = ?;`, [this.props.student.id_estudiante], (_, { rows: { _array } }) =>
-    //tx.executeSql(`select * from events;`, null, (_, { rows: { _array } }) =>
     this.consulta();
-    db.transaction((tx) => {
-      tx.executeSql(
-        `select * from events where id_estudiante = ?;`,
-        [this.props.student.id_estudiante],
-        (_, { rows: { _array } }) => this.setState({ storage: _array })
-      );
-    });
     storagesEvents = this.state.storage;
-    console.log("Cargando Datos Eventos");
-    console.log(storagesEvents);
     var activity = await API.getActivities(this.props.ipconfig);
-    //console.log("Trayendo todas las actividades");
-    //console.log(activity);
-    console.log("Capturando Eventos Por Actividad");
     var notaF = 0;
     var notaFEvaluation = 0;
     var progressoActivity = 0;
@@ -271,20 +261,8 @@ class Profile extends Component {
         }
       }
     }
-    var elementoEliminado = resultado.splice(0, 1);
-    console.log("elemento eliminado", elementoEliminado);
   }
-  consulta() {
-    db.transaction((tx) => {
-      tx.executeSql(
-        `select * from events where id_estudiante = ?;`,
-        [this.props.student.id_estudiante],
-        (_, { rows: { _array } }) => this.setState({ storage: _array })
-        //console.log(this.state.storage)
-      );
-    });
-    console.log(this.state.storage);
-  }
+
   keyExtractor = (item) => item.id_actividad.toString();
 
   viewContenido = (item) => {
@@ -315,7 +293,18 @@ class Profile extends Component {
       );
     }
   };
-
+  loadData() {
+    if (Object.keys(this.state.storage)?.length === 0) {
+      Alert.alert(
+        "Error",
+        "Aún no tienes avances en las actividades.",
+        [{ text: "OK", onPress: () => {} }],
+        { cancelable: false }
+      );
+    } else {
+      this.loadActivities();
+    }
+  }
   renderItem = ({ item }) => {
     return (
       <ActivityEvents
@@ -327,7 +316,6 @@ class Profile extends Component {
     );
   };
   render() {
-    console.log(this.props.student.id_estudiante);
     return (
       <View style={styles.container}>
         <View style={styles.containerText}>
@@ -343,10 +331,7 @@ class Profile extends Component {
             {" "}
             Grado: {this.props.student.grado_estudiante}
           </Text>
-          <CustomButton
-            text="Cargar Datos"
-            onPress={() => this.loadActivities()}
-          />
+          <CustomButton text="Cargar Datos" onPress={() => this.loadData()} />
 
           <Text style={styles.TextoDatos}>{active}</Text>
         </View>

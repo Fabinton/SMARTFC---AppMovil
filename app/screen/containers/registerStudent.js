@@ -118,10 +118,22 @@ class Register extends Component {
                 null,
                 null
               );
-              this.props.dispatch(
-                NavigationActions.navigate({
-                  routeName: "Notification",
-                })
+              Alert.alert(
+                "Éxito",
+                "Usuario registrado correctamente.",
+                [
+                  {
+                    text: "OK",
+                    onPress: () => {
+                      this.props.dispatch(
+                        NavigationActions.navigate({
+                          routeName: "Notification",
+                        })
+                      );
+                    },
+                  },
+                ],
+                { cancelable: false }
               );
             })
             .catch((e) => {

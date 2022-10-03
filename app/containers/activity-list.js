@@ -56,6 +56,13 @@ class SuggestionList extends Component {
     );
   };
   componentDidMount() {
+    let activityData = [];
+    this.props?.list?.filter((activity) => {
+      if (activity.id_materiaActiva === this.props.subject.id_materiaActiva) {
+        activityData.push(activity);
+      }
+    });
+    this.setState({ activity_List: activityData });
     this.filtro();
   }
   doubleSend() {
@@ -120,6 +127,7 @@ class SuggestionList extends Component {
   render() {
     var data = [];
     data = this.state.activity_List;
+
     return (
       <View
         style={{
