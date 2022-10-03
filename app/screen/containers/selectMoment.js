@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, View, TouchableOpacity, Text, Alert } from "react-native";
+import { StyleSheet, View, Image, Text, Alert } from "react-native";
 import { connect } from "react-redux";
 import HeaderReturn from "../../components/headerReturn";
 import { LinearGradient } from "expo-linear-gradient";
 import { NavigationActions } from "react-navigation";
 import QuestionActiviy from "../../components/QuestionActivity";
 import CustomButton from "../../components/customButton";
+import { Stack, TextInput, Flex, Spacer } from "@react-native-material/core";
 
 class selectMoment extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -97,15 +98,28 @@ class selectMoment extends Component {
   render() {
     console.log(this.props.activity);
     return (
-      <View style={styles.container}>
+      <Stack
+        style={styles.container}
+        direction="column"
+        alignItems="stretch"
+        spacing={6}
+      >
         <View style={styles.box0}>
           <Text style={styles.textActivity}>
             {this.props.activity.titulo_actividad}
           </Text>
-          <Text style={styles.textSelected}>
-            Selecciona una etapa para continuar:{" "}
-          </Text>
-          <View style={{ marginTop: 20 }}></View>
+          <Flex inline center>
+            <Text style={styles.textSelected}>
+              Selecciona {"\n"} una etapa {"\n"}para {"\n"}continuar
+            </Text>
+            <Image
+              style={{
+                width: 250,
+                height: 300,
+              }}
+              source={require("../../../assets/images/saludo.png")}
+            />
+          </Flex>
           <CustomButton
             text="PRACTICA EN CASA"
             onPress={() => this.detailActivity()}
@@ -124,35 +138,44 @@ class selectMoment extends Component {
         <QuestionActiviy
           style={{ position: "absolute", top: "90%", left: "-17%" }}
         />
-      </View>
+      </Stack>
     );
   }
 }
 const styles = StyleSheet.create({
+  dialogo: {
+    position: "absolute",
+    width: 270,
+    height: 270,
+    top: "20%",
+    left: "0%",
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#2C2C2C",
+    borderColor: "black",
+  },
   box0: {
     flex: 11,
     alignItems: "center",
   },
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative",
   },
   textSelected: {
-    marginTop: 20,
-    marginBottom: 25,
-    marginLeft: 10,
-    fontSize: 18,
+    marginLeft: 50,
+    fontSize: 24,
     fontWeight: "bold",
     color: "#2C2C2C",
+    textAlign: "center",
   },
   textActivity: {
     marginTop: 35,
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: "bold",
     alignItems: "center",
     justifyContent: "center",
+    textShadowColor: "#36EBC3",
+    textShadowRadius: 30,
   },
 });
 
