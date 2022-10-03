@@ -1,18 +1,11 @@
 import React, { Component } from "react";
 import HeaderReturn from "../../components/headerReturn";
-import { NavigationActions } from "react-navigation";
-import ContenidoLayout from "../components/detailActivity";
-import { StyleSheet, Button, Text, ScrollView, Alert } from "react-native";
+import { StyleSheet, Text, ScrollView, Alert } from "react-native";
 import { Animated } from "react-native";
 import { connect } from "react-redux";
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel,
-} from "react-native-simple-radio-button";
+import RadioForm from "react-native-simple-radio-button";
 import * as SQLite from "expo-sqlite";
 import API from "../../../utils/api";
-//import Audio from '../../containers/audio-activity';
 import QuestionActivity from "../../components/QuestionActivity";
 import { View } from "react-native";
 import CustomButton from "../../components/customButton";
@@ -73,7 +66,6 @@ class evaluationActivity extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFlats: _array })
       );
     });
-    console.log(this.state.storageFlats);
   }
   update() {
     db.transaction((tx) => {
@@ -81,7 +73,7 @@ class evaluationActivity extends Component {
         this.setState({ storage: _array })
       );
     });
-    console.log(this.state.storage[this.state.storage.length - 1]);
+
     db.transaction(
       (tx) => {
         tx.executeSql(
@@ -116,12 +108,10 @@ class evaluationActivity extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFilter: _array })
       );
     });
-    console.log(this.state.storageFilter);
 
     var storageFilterGood = this.state.storageFilter;
     var storageFilter = storageFilterGood.reverse();
     if (storageFilter.length == 0) {
-      console.log("Entro a Cero");
       resultado = [
         {
           check_a1: 0,
@@ -134,8 +124,6 @@ class evaluationActivity extends Component {
           check_download: 0,
         },
       ];
-
-      console.log(resultado[0]);
     }
     if (storageFilter.length != 0) {
       resultado = Array.from(
@@ -208,7 +196,7 @@ class evaluationActivity extends Component {
         this.setState({ storage: _array })
       );
     });
-    //console.log(this.state.storage [this.state.storage.length-1]);
+
     this.update();
     Alert.alert(
       "Almacenamiento Exitoso",
@@ -228,74 +216,97 @@ class evaluationActivity extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFlats: _array })
       );
     });
-    console.log(this.state.storageFlats);
   }
-  async sendServer() {
-    //this.consulta();
-    db.transaction((tx) => {
-      tx.executeSql(`select * from events ;`, [], (_, { rows: { _array } }) =>
-        this.setState({ storage: _array })
-      );
-      tx.executeSql(
-        `select * from flatEvent ;`,
-        [],
-        (_, { rows: { _array } }) => this.setState({ storageFlats: _array })
-      );
-    });
-    //this.updateFlat();
-    var data = this.state.storage;
-    var Flats = this.state.storageFlats;
-
-    console.log("Trayendo Flats");
-    console.log(this.state.storage);
-    for (var i = 0; i < Flats.length; i++) {
-      if (Flats[i].upload == 0) {
-        for (var j = 0; j < data.length; j++) {
-          if (Flats[i].id_evento == data[j].id_evento) {
-            var queryApi = await API.loadEventsLast(this.props.ipconfig);
-            queryApi = queryApi + 1;
-            //var idEvens = queryApi.length;
-            console.log("Existe un error");
-            console.log(queryApi.length);
-            var id_estudianteF =
-              "" + this.props.student.id_estudiante + queryApi;
-            var id_estudianteF = parseInt(id_estudianteF);
-            data[j].id_evento = id_estudianteF;
-            var id_eventoFs = Flats[j].id_evento;
-            //console.log("ID EVENTOS");
-            //console.log(id_eventoFs);
-            db.transaction((tx) => {
-              tx.executeSql(
-                `update flatEvent set upload = ? where id_evento = ? ;`,
-                [1, id_eventoFs]
-              );
-              tx.executeSql(
-                "select * from flatEvent",
-                [],
-                (_, { rows: { _array } }) => console.log(_array)
-              );
-            });
-            var dataEvents = data[j];
-            var query2 = await API.createEvents(
-              this.props.ipconfig,
-              dataEvents
-            );
-          }
+  sendServer() {
+    if (this.props.internetConnection) {
+      db.transaction((tx) => {
+        tx.executeSql(`select * from events ;`, [], (_, { rows: { _array } }) =>
+          this.setState({ storage: _array })
+        );
+        tx.executeSql(
+          `select * from flatEvent ;`,
+          [],
+          (_, { rows: { _array } }) => this.setState({ storageFlats: _array })
+        );
+      });
+      var data = this.state.storage;
+      var Flats = this.state.storageFlats;
+      Flats.map((flat) => {
+        if (flat.upload === 0) {
+          data.map((event) => {
+            if (flat.id_evento === event.id_evento) {
+              this.props.dispatch({
+                type: "SET_LOADING",
+                payload: true,
+              });
+              API.loadEventsLast(this.props.ipconfig)
+                .then(({ data }) => {
+                  let dataLength = data?.length;
+                  dataLength = dataLength + 1;
+                  var id_estudianteF = parseInt(
+                    "" + this.props.student.id_estudiante + dataLength
+                  );
+                  event.id_evento = id_estudianteF;
+                  var id_eventoFs = flat.id_evento;
+                  API.createEvents(this.props.ipconfig, event)
+                    .then(() => {
+                      db.transaction((tx) => {
+                        tx.executeSql(
+                          `update flatEvent set upload = ? where id_evento = ? ;`,
+                          [1, id_eventoFs]
+                        );
+                        tx.executeSql(
+                          "select * from flatEvent",
+                          [],
+                          (_, { rows: { _array } }) => console.log(_array)
+                        );
+                      });
+                      Alert.alert(
+                        "Sincronización exitosa",
+                        "La sincronización de respuestas fue exitosa",
+                        [
+                          {
+                            text: "OK",
+                            onPress: () => {},
+                          },
+                        ],
+                        { cancelable: false }
+                      );
+                    })
+                    .catch((e) => {
+                      console.log("error sync", e);
+                      Alert.alert(
+                        "ERROR",
+                        "Ha ocurrido un error al momento de guardar los eventos.",
+                        [{ text: "OK", onPress: () => {} }],
+                        { cancelable: false }
+                      );
+                    })
+                    .finally(() => {
+                      this.props.dispatch({
+                        type: "SET_LOADING",
+                        payload: false,
+                      });
+                    });
+                })
+                .catch((e) => {
+                  console.log("fallo en load", e);
+                })
+                .finally(() => {});
+            }
+          });
         }
-      }
+      });
+    } else {
+      Alert.alert(
+        "ERROR",
+        "Recuerda que debes estar conectado a internet para sincronizar.",
+        [{ text: "OK", onPress: () => {} }],
+        { cancelable: false }
+      );
     }
-    console.log(data);
-    console.log(query2);
-    Alert.alert(
-      "Sincronización exitosa",
-      "La sincronización de respuestas fue exitosa",
-      [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-      { cancelable: false }
-    );
   }
   render() {
-    console.log("Trayendo al Estudiante");
-    console.log(this.props.student.id_estudiante);
     var Question_One = [
       { label: this.props.activity.EA11, value: 1 },
       { label: this.props.activity.EA12, value: 2 },
@@ -314,8 +325,7 @@ class evaluationActivity extends Component {
       { label: this.props.activity.EA33, value: 3 },
       { label: this.props.activity.EA34, value: 4 },
     ];
-    console.log("Abriendo PlayContents");
-    console.log(this.props.activity.video);
+
     return (
       <ScrollView style={styles.container}>
         <Text style={styles.texto}>{this.props.activity.EQ1}</Text>
@@ -362,6 +372,7 @@ function mapStateToProps(state) {
     activity: state.videos.selectedActivity,
     student: state.videos.selectedStudent,
     ipconfig: state.videos.selectedIPConfig,
+    internetConnection: state.connection.isConnected,
   };
 }
 const styles = StyleSheet.create({
