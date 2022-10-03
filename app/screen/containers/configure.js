@@ -7,6 +7,7 @@ import API from "../../../utils/api";
 import CustomButton from "../../components/customButton";
 import { Feather, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Stack, TextInput, Flex, Spacer } from "@react-native-material/core";
+import { NavigationEvents } from "react-navigation";
 
 const db = SQLite.openDatabase("db5.db");
 
@@ -49,6 +50,7 @@ class Configure extends Component {
       return;
     };
   }
+
   actualizaUser() {
     if (this.props.internetConnection) {
       if (this.state.password === this?.props?.student?.contrasena) {
@@ -219,6 +221,9 @@ class Configure extends Component {
         alignItems="stretch"
         spacing={6}
       >
+        <NavigationEvents
+          onDidFocus={() => this.setState({ ...this.state, password: null })} //to clear password when leaving
+        />
         <TextInput
           color="#70C2E5"
           variant="standard"
@@ -280,6 +285,7 @@ class Configure extends Component {
           secureTextEntry={true}
           color="#70C2E5"
           variant="standard"
+          value={this.state.password}
           placeholder="Digita tu contraseña"
           onChangeText={(text) => this.setState({ password: text })}
           leading={() => (

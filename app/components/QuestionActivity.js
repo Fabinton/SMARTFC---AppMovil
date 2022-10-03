@@ -74,7 +74,7 @@ class QuestionActivity extends Component {
     );
   }
 
-  async sincronizaDoubt() {
+  sincronizaDoubt() {
     if (this.props.internetConnection) {
       this.props.dispatch({
         type: "SET_LOADING",

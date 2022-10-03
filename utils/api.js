@@ -51,6 +51,7 @@ class Api {
     return predata2;
   }
   createEvents(BASE_IP, eventsStudents) {
+    console.log("metricas", eventsStudents);
     var BASE_API_EVENTS = "http://" + BASE_IP + ":3000" + "/createEventos";
     return axios.post(`${BASE_API_EVENTS}`, eventsStudents);
   }
@@ -120,6 +121,7 @@ class Api {
     return data2;
   }
   generateDoubt(BASE_IP, dataDoubt) {
+    console.log("duda en app nueva", dataDoubt);
     var BASE_API_CREATE_DOUBT = "http://" + BASE_IP + ":3000" + "/createDuda";
     return axios.post(`${BASE_API_CREATE_DOUBT}`, dataDoubt);
   }
