@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FlatList, RefreshControl } from "react-native";
+import { FlatList, RefreshControl, Alert } from "react-native";
 import Layout from "../../components/suggestion-list-layout";
 import Empty from "../../components/empty";
 import Separator from "../../components/separator";

@@ -20,7 +20,7 @@ class Home extends Component {
       activity: [],
     };
   }
-  async componentDidMount() {
+  componentDidMount() {
     API.getActivitiesMovil(
       this.props.ipconfig,
       this.props.student.id_colegio,
