@@ -1,9 +1,18 @@
 import React, { Component } from "react";
-import { View, Text, Modal, TextInput, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  Modal,
+  TextInput,
+  StyleSheet,
+  Alert,
+  Image,
+} from "react-native";
 import API from "../../utils/api";
 import * as SQLite from "expo-sqlite";
 import { connect } from "react-redux";
 import CustomButton from "./customButton";
+import { Stack, Flex, Spacer } from "@react-native-material/core";
 
 const db = SQLite.openDatabase("db5.db");
 
@@ -154,35 +163,53 @@ class QuestionActivity extends Component {
             this.setModalVisible(!this.state.modalVisible);
           }}
         >
-          <View style={styles.container}>
-            <View style={styles.container}>
-              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                Realiza tu pregunta
-              </Text>
-              <TextInput
-                style={styles.pregunta}
-                multiline
-                numberOfLines={4}
-                placeholder="Escribe aquí tu pregunta"
-                onChangeText={(text) => this.setState({ pregunta: text })}
-              ></TextInput>
-              <CustomButton
-                text="Guarda tu pregunta"
-                onPress={() => this.registrateDoubt()}
-                disabled={!(this?.state?.pregunta?.length > 0)}
-              />
-              <CustomButton
-                text="Sincroniza tu pregunta"
-                onPress={() => this.sincronizaDoubt()}
-              />
-              <CustomButton
-                text="Cancelar"
-                onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);
+          <Stack
+            style={styles.container}
+            direction="column"
+            alignItems="center"
+            spacing={6}
+          >
+            <Spacer />
+            <Flex inline>
+              <Image
+                style={{
+                  width: 210,
+                  height: 284,
                 }}
+                source={require("../../assets/images/robotPregunta.png")}
               />
-            </View>
-          </View>
+              <Text style={{ fontSize: 30, fontWeight: "bold", marginTop: 20 }}>
+                Realiza tu {"\n"} pregunta {"\n"}
+              </Text>
+            </Flex>
+            <Spacer />
+            <TextInput
+              style={styles.pregunta}
+              multiline
+              numberOfLines={4}
+              placeholder="Escribe aquí tu pregunta"
+              onChangeText={(text) => this.setState({ pregunta: text })}
+            ></TextInput>
+            <Spacer />
+            <CustomButton
+              text="Guarda tu pregunta"
+              onPress={() => this.registrateDoubt()}
+              disabled={!(this?.state?.pregunta?.length > 0)}
+            />
+            <Spacer />
+            <CustomButton
+              text="Sincroniza tu pregunta"
+              onPress={() => this.sincronizaDoubt()}
+            />
+            <Spacer />
+            <CustomButton
+              text="Cancelar"
+              onPress={() => {
+                this.setModalVisible(!this.state.modalVisible);
+              }}
+            />
+            <Spacer />
+          </Stack>
         </Modal>
       </View>
     );
@@ -190,7 +217,6 @@ class QuestionActivity extends Component {
 }
 const styles = StyleSheet.create({
   pregunta: {
-    marginTop: 25,
     borderRadius: 15,
     color: "#000000",
     borderColor: "#6E6060",

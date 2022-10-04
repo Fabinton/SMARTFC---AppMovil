@@ -85,6 +85,7 @@ class selectMoment extends Component {
           <Text style={styles.textActivity}>
             {this.props.activity.titulo_actividad}
           </Text>
+          <Spacer />
           <Flex inline center>
             <Text style={styles.textSelected}>
               Selecciona {"\n"} una etapa {"\n"}para {"\n"}continuar
@@ -97,24 +98,23 @@ class selectMoment extends Component {
               source={require("../../../assets/images/saludo.png")}
             />
           </Flex>
+          <Spacer />
           <CustomButton
             text="PRACTICA EN CASA"
             onPress={() => this.detailActivity()}
           />
-          <View style={{ marginTop: 20 }}></View>
+          <Spacer />
           <CustomButton
             text="PRACTICA EN CLASE"
             onPress={() => this.excersiceActivity()}
           />
-          <View style={{ marginTop: 20 }}></View>
+          <Spacer />
           <CustomButton
             text="REALIZA TU EXAMEN"
             onPress={() => this.evaluationActivity()}
           />
+          <Spacer />
         </View>
-        <QuestionActiviy
-          style={{ position: "absolute", top: "90%", left: "-17%" }}
-        />
       </Stack>
     );
   }

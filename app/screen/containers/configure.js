@@ -249,6 +249,7 @@ class Configure extends Component {
           />
           <Spacer />
           <Picker
+            mode="dropdown"
             style={[styles.picker]}
             itemStyle={styles.pickerItem}
             selectedValue={this.state.grado}
@@ -263,6 +264,7 @@ class Configure extends Component {
           <MaterialCommunityIcons name="warehouse" size={24} color="black" />
           <Spacer />
           <Picker
+            mode="dropdown"
             style={[styles.picker]}
             itemStyle={styles.pickerItem}
             selectedValue={this.state.schoolSelected}
