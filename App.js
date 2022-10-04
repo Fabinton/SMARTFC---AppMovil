@@ -11,7 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const App = () => {
   const [appIsReady, setAppIsReady] = useState(false);
-  const [firstLaunch, setFirstLaunch] = React.useState(null);
+  const [firstLaunch, setFirstLaunch] = useState(null);
   useEffect(() => {
     async function prepare() {
       try {
