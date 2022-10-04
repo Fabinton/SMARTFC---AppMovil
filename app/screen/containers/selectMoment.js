@@ -91,8 +91,8 @@ class selectMoment extends Component {
             </Text>
             <Image
               style={{
-                width: 250,
-                height: 300,
+                width: 200,
+                height: 250,
               }}
               source={require("../../../assets/images/saludo.png")}
             />
@@ -151,8 +151,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignItems: "center",
     justifyContent: "center",
-    textShadowColor: "#36EBC3",
-    textShadowRadius: 30,
   },
 });
 
