@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 const ConnectIp = ({ modalVisible, setModalVisible }) => {
   const { loading, isConnected } = useSelector((state) => state.connection);
   const dispatch = useDispatch();
-  const [IpValue, setIpValue] = useState();
+  const [IpValue, setIpValue] = useState("");
   const registrateIP = () => {
     if (isConnected) {
       dispatch({
@@ -99,6 +99,7 @@ const ConnectIp = ({ modalVisible, setModalVisible }) => {
           <CustomButton
             textTouchable={styles.touchableButtonSignIn}
             text="Guardar"
+            disabled={IpValue?.length === 0}
             onPress={() => registrateIP()}
           />
           <CustomButton
