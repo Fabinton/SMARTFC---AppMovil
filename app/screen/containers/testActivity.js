@@ -371,7 +371,7 @@ class testActivity extends Component {
             onPress={() => this.regresaMateria()}
           />
           <QuestionActivity
-            style={{ position: "absolute", top: "-50%", left: "-25%" }}
+            style={{ position: "absolute", top: "-50%", left: "10%" }}
           />
         </View>
       </ScrollView>
