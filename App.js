@@ -41,7 +41,7 @@ const App = () => {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          {firstLaunch && <OnBoardScreens setFirstLaunch={setFirstLaunch} />}
+          {!firstLaunch && <OnBoardScreens setFirstLaunch={setFirstLaunch} />}
           <AppNavigator />
         </PersistGate>
       </Provider>

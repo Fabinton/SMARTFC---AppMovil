@@ -330,6 +330,7 @@ class Login extends Component {
   }
 
   render() {
+    console.log("ip", this.props.ipconfig);
     return (
       <View style={styles.container}>
         <Image
