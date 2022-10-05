@@ -1,18 +1,36 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
+import { Stack, Flex, Spacer } from "@react-native-material/core";
+
 function Empty(props) {
   return (
-    <View style={styles.container}>
+    <Stack
+      style={styles.container}
+      direction="column"
+      alignItems="center"
+      spacing={6}
+    >
       <Text style={styles.text}>{props.text}</Text>
-    </View>
+      <Spacer />
+      <Image
+        style={{
+          width: 270,
+          height: 270,
+        }}
+        source={require("../../assets/images/sad.png")}
+      />
+    </Stack>
   );
 }
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    padding: 20,
   },
   text: {
-    fontSize: 16,
+    marginTop: 35,
+    fontSize: 25,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 export default Empty;

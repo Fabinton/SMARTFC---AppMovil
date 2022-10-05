@@ -2,6 +2,7 @@ import { View, Image } from "react-native";
 import React from "react";
 import Onboarding from "react-native-onboarding-swiper";
 import saludo from "../../assets/images/saludo.png";
+import uno from "../../assets/images/uno.png";
 import robotPregunta from "../../assets/images/robotPregunta.png";
 import { Dimensions } from "react-native";
 
@@ -17,10 +18,8 @@ const OnBoardScreens = ({ setFirstLaunch }) => {
         pages={[
           {
             backgroundColor: "#F5F5F5",
-            image: (
-              <Image source={saludo} style={{ width: 300, height: 390 }} />
-            ),
-            title: "Bienvenido",
+            image: <Image source={uno} style={{ width: 196, height: 333 }} />,
+            title: "Bienvenid@!",
             subtitle:
               "Este es un pequeño tutorial que te enseñará a usar SmartFC.",
           },
@@ -53,7 +52,7 @@ const OnBoardScreens = ({ setFirstLaunch }) => {
         }}
         showSkip={false}
         bottomBarColor={"#F5F5F5"}
-        titleStyles={{ color: "#70C2E5", fontSize: 33 }}
+        titleStyles={{ color: "#70C2E5", fontSize: 33, fontWeight: "bold" }}
         subTitleStyles={{ color: "#424B5B", fontSize: 20 }}
       />
     </View>
