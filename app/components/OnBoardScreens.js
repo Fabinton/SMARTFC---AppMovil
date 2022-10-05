@@ -1,16 +1,19 @@
-import { View, Image } from "react-native";
-import React from "react";
+import { View, Image, Dimensions, Text } from "react-native";
+import React, { useState } from "react";
 import Onboarding from "react-native-onboarding-swiper";
 import saludo from "../../assets/images/saludo.png";
 import uno from "../../assets/images/uno.png";
 import robotPregunta from "../../assets/images/robotPregunta.png";
-import { Dimensions } from "react-native";
+import CustomButton from "./customButton";
+import ConnectIp from "./ConnectIp";
 
 const OnBoardScreens = ({ setFirstLaunch }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <View
       style={{
-        height: Dimensions.get("screen").height - 50,
+        height: Dimensions.get("screen").height - 40,
         width: Dimensions.get("screen").width,
       }}
     >
@@ -25,10 +28,32 @@ const OnBoardScreens = ({ setFirstLaunch }) => {
           },
           {
             backgroundColor: "#F5F5F5",
-            image: <Image source={robotPregunta} />,
+            image: <Image source={robotPregunta} style={{ height: 320 }} />,
             title: "Primer Paso",
-            subtitle:
-              "Debes primero hacer la conexión de la Ip en conectar tu IP. ",
+            subtitle: (
+              <>
+                <CustomButton
+                  text={"Conectar IP"}
+                  onPress={() => setModalVisible(!modalVisible)}
+                />
+                <Text
+                  style={{
+                    color: "#424B5B",
+                    textAlign: "justify",
+                    marginRight: 15,
+                    marginLeft: 15,
+                    marginTop: 20,
+                  }}
+                >
+                  Si deseas puedes conectar tu Ip, de lo contrario puedes
+                  hacerlo más adelante en conectar tu Ip
+                </Text>
+                <ConnectIp
+                  modalVisible={modalVisible}
+                  setModalVisible={setModalVisible}
+                />
+              </>
+            ),
           },
           {
             backgroundColor: "#F5F5F5",

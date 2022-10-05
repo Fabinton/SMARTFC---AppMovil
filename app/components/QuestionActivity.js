@@ -7,12 +7,14 @@ import {
   StyleSheet,
   Alert,
   Image,
+  TouchableHighlight,
 } from "react-native";
 import API from "../../utils/api";
 import * as SQLite from "expo-sqlite";
 import { connect } from "react-redux";
 import CustomButton from "./customButton";
 import { Stack, Flex, Spacer } from "@react-native-material/core";
+import pregunta from "../../assets/images/pregunta.png";
 
 const db = SQLite.openDatabase("db5.db");
 
@@ -150,10 +152,16 @@ class QuestionActivity extends Component {
     return (
       <View style={this.props.style}>
         <View style={styles.box}>
-          <CustomButton
+          <TouchableHighlight
+            onPress={() => this.doubtActivity()}
+            underlayColor={"#FFFFFF"}
+          >
+            <Image source={pregunta} style={{ width: 150, height: 150 }} />
+          </TouchableHighlight>
+          {/* <CustomButton
             text="Realiza una Pregunta"
             onPress={() => this.doubtActivity()}
-          />
+          /> */}
         </View>
         <Modal
           animationType="slide"

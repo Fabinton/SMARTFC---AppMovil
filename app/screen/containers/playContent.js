@@ -49,7 +49,7 @@ class playContent extends Component {
             />
 
             <QuestionActivity
-              style={{ position: "absolute", top: "90%", left: "-17%" }}
+              style={{ position: "absolute", top: "72%", left: "12%" }}
             />
           </ContenidoLayout>
         </Animated.View>
@@ -64,7 +64,7 @@ class playContent extends Component {
               onPress={() => this.continuarContenido()}
             />
             <QuestionActivity
-              style={{ position: "absolute", top: "90%", left: "-17%" }}
+              style={{ position: "absolute", top: "72%", left: "12%" }}
             />
           </ContenidoLayout>
         </Animated.View>
@@ -79,7 +79,7 @@ class playContent extends Component {
               onPress={() => this.continuarContenido()}
             />
             <QuestionActivity
-              style={{ position: "absolute", top: "90%", left: "-17%" }}
+              style={{ position: "absolute", top: "72%", left: "12%" }}
             />
           </ContenidoLayout>
         </Animated.View>

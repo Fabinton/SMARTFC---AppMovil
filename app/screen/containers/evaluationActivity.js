@@ -360,7 +360,7 @@ class evaluationActivity extends Component {
           <CustomButton text="Guardar" onPress={() => this.storageTest()} />
           <CustomButton text="Sincronizar" onPress={() => this.sendServer()} />
           <QuestionActivity
-            style={{ position: "absolute", top: "-50%", left: "-27%" }}
+            style={{ position: "absolute", top: "-90%", left: "12%" }}
           />
         </View>
       </ScrollView>
