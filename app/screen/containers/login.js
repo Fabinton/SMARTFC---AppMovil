@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
 import {
-  Modal,
   StyleSheet,
   Text,
   View,
@@ -15,7 +14,7 @@ import * as SQLite from "expo-sqlite";
 import HeaderLogin from "../../components/headerLogin";
 import API from "../../../utils/api";
 import CustomButton from "../../components/customButton";
-import { Stack, Flex } from "@react-native-material/core";
+import ConnectIp from "../../components/ConnectIp";
 
 const db = SQLite.openDatabase("db5.db");
 
@@ -162,65 +161,7 @@ class Login extends Component {
     };
   }
 
-  async registrateIP() {
-    const ipConfigSend = this.state.ipconfig;
-    if (this.props.internetConnection) {
-      this.props.dispatch({
-        type: "SET_LOADING",
-        payload: true,
-      });
-      API.getConection(ipConfigSend)
-        .then((response) => {
-          this.props.dispatch({
-            type: "SET_IPCONFIG",
-            payload: {
-              ipconfig: ipConfigSend,
-            },
-          });
-          setTimeout(() => {
-            Alert.alert(
-              "Conexión",
-              "La conexión con el servidor fue exitosa.",
-              [
-                {
-                  text: "OK",
-                  onPress: () => this.setModalVisible(!this.state.modalVisible),
-                },
-              ],
-              { cancelable: false }
-            );
-          }, 300);
-        })
-        .catch((error) => {
-          console.log("error ip", error);
-          setTimeout(() => {
-            Alert.alert(
-              "ERROR",
-              "La conexión con el servidor es erronea por favor verifica tu IP",
-              [{ text: "OK", onPress: () => {} }],
-              { cancelable: false }
-            );
-          }, 300);
-        })
-        .finally(() => {
-          this.props.dispatch({
-            type: "SET_LOADING",
-            payload: false,
-          });
-        });
-    } else {
-      setTimeout(() => {
-        Alert.alert(
-          "ERROR",
-          "Recuerda que debes estar conectado a internet para guardar tu IP.",
-          [{ text: "OK", onPress: () => {} }],
-          { cancelable: false }
-        );
-      }, 300);
-    }
-  }
-
-  async sincronizarDatas() {
+  sincronizarDatas() {
     if (this.props.internetConnection) {
       this.props.dispatch({
         type: "SET_LOADING",
@@ -330,7 +271,6 @@ class Login extends Component {
   }
 
   render() {
-    console.log("ip", this.props.ipconfig);
     return (
       <View style={styles.container}>
         <Image
@@ -374,55 +314,10 @@ class Login extends Component {
             onPress={() => this.registrateForm()}
           />
         </View>
-
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.state.modalVisible && !this.props.loading}
-          onRequestClose={() => {
-            //Alert.alert("Modal has been closed.");
-            this.setModalVisible(false);
-          }}
-        >
-          <Stack
-            style={styles.container}
-            direction="column"
-            alignItems="center"
-            justifyContent="center"
-            spacing={6}
-          >
-            <Text style={styles.textInit}>Conectar IP</Text>
-            <TextInput
-              style={styles.IP}
-              placeholder="Introduce tu IP"
-              autoCapitalize="none"
-              onChangeText={(text) => this.setState({ ipconfig: text })}
-            ></TextInput>
-            <Text style={styles.textDocument}>
-              Para guardar el IP necesita conexión, en caso de no estar
-              conectado dirijase a su director o docente para que se le
-              proporcione la conexión
-            </Text>
-            <Flex inline center self="baseline">
-              <CustomButton
-                textTouchable={styles.touchableButtonSignIn}
-                text="Guardar"
-                onPress={() => this.registrateIP()}
-              />
-              <CustomButton
-                textTouchable={styles.touchableButtonSignIn}
-                text="Cancelar"
-                onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);
-                  this.props.dispatch({
-                    type: "SET_LOADING",
-                    payload: false,
-                  });
-                }}
-              />
-            </Flex>
-          </Stack>
-        </Modal>
+        <ConnectIp
+          modalVisible={this.state.modalVisible}
+          setModalVisible={() => this.setModalVisible(!this.state.modalVisible)}
+        />
         <TouchableOpacity
           onPress={() => {
             this.setModalVisible(true);
@@ -435,38 +330,6 @@ class Login extends Component {
   }
 }
 const styles = StyleSheet.create({
-  textDocument: {
-    color: "#424B5B",
-    textAlign: "justify",
-    marginRight: 15,
-    marginLeft: 15,
-    marginTop: 20,
-  },
-  touchableButtonSignIn: {
-    justifyContent: "center",
-    marginTop: 15,
-    marginLeft: 10,
-    marginRight: 10,
-    backgroundColor: "#70C2E5",
-    height: 50,
-    width: 170,
-    borderRadius: 15,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  textInit: {
-    marginTop: 20,
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "#70C2E3",
-    margin: "auto",
-  },
   container: {
     flex: 1,
     backgroundColor: "#fff",

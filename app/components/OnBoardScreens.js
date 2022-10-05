@@ -8,6 +8,7 @@ import ConnectIp from "./ConnectIp";
 
 const OnBoardScreens = ({ setFirstLaunch }) => {
   const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <View
       style={{
@@ -28,7 +29,7 @@ const OnBoardScreens = ({ setFirstLaunch }) => {
           },
           {
             backgroundColor: "#F5F5F5",
-            image: <Image source={robotPregunta} style={{ height: 300 }} />,
+            image: <Image source={robotPregunta} style={{ height: 320 }} />,
             title: "Primer Paso",
             subtitle: (
               <>
