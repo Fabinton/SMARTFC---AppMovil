@@ -4,11 +4,13 @@ import { StyleSheet } from "react-native";
 import LogoSinFondo from "../../assets/images/LogoSinFondo.png";
 import SmartTitle from "../../assets/images/SmartFC.png";
 import { SafeAreaView } from "react-native";
+import { useDispatch } from "react-redux";
 
 const SplashScreen = () => {
   const startAnimation = useRef(new Animated.Value(160)).current;
   const imagesScale = useRef(new Animated.Value(0)).current;
   const fadeAnimation = useRef(new Animated.Value(0)).current;
+  const dispatch = useDispatch();
   useEffect(() => {
     setTimeout(() => {
       Animated.sequence([
@@ -34,6 +36,10 @@ const SplashScreen = () => {
         useNativeDriver: true,
       }).start();
     }, 1800);
+    dispatch({
+      type: "SET_LOADING",
+      payload: false,
+    });
   }, []);
 
   return (
