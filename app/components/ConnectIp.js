@@ -7,65 +7,54 @@ import api from "../../utils/api";
 import { useDispatch, useSelector } from "react-redux";
 
 const ConnectIp = ({ modalVisible, setModalVisible }) => {
-  const { loading, isConnected } = useSelector((state) => state.connection);
+  const { loading } = useSelector((state) => state.connection);
   const dispatch = useDispatch();
   const [IpValue, setIpValue] = useState("");
   const registrateIP = () => {
-    if (isConnected) {
-      dispatch({
-        type: "SET_LOADING",
-        payload: true,
-      });
-      api
-        .getConection(IpValue)
-        .then(() => {
-          dispatch({
-            type: "SET_IPCONFIG",
-            payload: {
-              ipconfig: IpValue,
-            },
-          });
-          setTimeout(() => {
-            Alert.alert(
-              "Conexión",
-              "La conexión con el servidor fue exitosa.",
-              [
-                {
-                  text: "OK",
-                  onPress: () => setModalVisible(!modalVisible),
-                },
-              ],
-              { cancelable: false }
-            );
-          }, 300);
-        })
-        .catch((error) => {
-          console.log("error ip", error);
-          setTimeout(() => {
-            Alert.alert(
-              "ERROR",
-              "La conexión con el servidor es erronea por favor verifica tu IP",
-              [{ text: "OK", onPress: () => {} }],
-              { cancelable: false }
-            );
-          }, 300);
-        })
-        .finally(() => {
-          dispatch({
-            type: "SET_LOADING",
-            payload: false,
-          });
+    dispatch({
+      type: "SET_LOADING",
+      payload: true,
+    });
+    api
+      .getConection(IpValue)
+      .then(() => {
+        dispatch({
+          type: "SET_IPCONFIG",
+          payload: {
+            ipconfig: IpValue,
+          },
         });
-    } else {
-      setTimeout(() => {
-        Alert.alert(
-          "ERROR",
-          "Recuerda que debes estar conectado a internet para guardar tu IP.",
-          [{ text: "OK", onPress: () => {} }],
-          { cancelable: false }
-        );
-      }, 300);
-    }
+        setTimeout(() => {
+          Alert.alert(
+            "Conexión",
+            "La conexión con el servidor fue exitosa.",
+            [
+              {
+                text: "OK",
+                onPress: () => setModalVisible(!modalVisible),
+              },
+            ],
+            { cancelable: false }
+          );
+        }, 300);
+      })
+      .catch((error) => {
+        console.log("error ip", error);
+        setTimeout(() => {
+          Alert.alert(
+            "ERROR",
+            "La conexión con el servidor es erronea por favor verifica tu IP",
+            [{ text: "OK", onPress: () => {} }],
+            { cancelable: false }
+          );
+        }, 300);
+      })
+      .finally(() => {
+        dispatch({
+          type: "SET_LOADING",
+          payload: false,
+        });
+      });
   };
   return (
     <Modal

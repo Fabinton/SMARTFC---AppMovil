@@ -1,18 +1,15 @@
 import React, { useEffect } from "react";
 import NetInfo from "@react-native-community/netinfo";
 import { Text } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import api from "../../utils/api";
 
 const CheckConnection = () => {
   const dispatch = useDispatch();
+  const { selectedIPConfig } = useSelector((state) => state.videos);
   useEffect(() => {
-    NetInfo.addEventListener((networkState) => {
-      dispatch({
-        type: "SET_CONNECTION_STATUS",
-        payload: networkState.isConnected,
-      });
-    });
-  }, [NetInfo]);
+    response = api.checkIp(selectedIPConfig, dispatch);
+  }, [NetInfo, selectedIPConfig]);
 
   return <Text style={{ height: 0.01 }}>{}</Text>;
 };

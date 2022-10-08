@@ -42,12 +42,6 @@ class playContent extends Component {
         <Animated.View style={styles.container}>
           <ContenidoLayout>
             <Player {...this.props.activity} />
-
-            <CustomButton
-              text="Realiza el TEST"
-              onPress={() => this.continuarContenido()}
-            />
-
             <QuestionActivity
               style={{ position: "absolute", top: "72%", left: "12%" }}
             />

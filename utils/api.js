@@ -144,5 +144,26 @@ class Api {
     const data2 = await query2.json();
     return data2;
   }
+  async checkIp(ip, dispatch) {
+    const timeout = new Promise((resolve, reject) => {
+      setTimeout(reject, 5000, "Request timed out");
+    });
+    const request = fetch(`http://${ip}:3000`);
+    try {
+      const response = await Promise.race([timeout, request]);
+      dispatch({
+        type: "SET_CONNECTION_STATUS",
+        payload: true,
+      });
+      return true;
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: "SET_CONNECTION_STATUS",
+        payload: false,
+      });
+      return false;
+    }
+  }
 }
 export default new Api();

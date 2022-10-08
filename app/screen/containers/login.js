@@ -128,14 +128,6 @@ class Login extends Component {
 
   componentDidMount() {
     //Aqui Hay un cambio si se aprueba
-
-    this.props.dispatch({
-      type: "SET_STUDENT",
-      payload: {
-        student: null,
-      },
-    });
-
     db.transaction((tx) => {
       tx.executeSql(
         "create table if not exists students (id_estudiante integer not null unique, tipo_usuario integer, nombre_estudiante text, apellido_estudiante text, grado_estudiante int, curso_estudiante int, id_colegio int, nombre_usuario text, contrasena text, correo_electronico text);"
