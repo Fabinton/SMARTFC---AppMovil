@@ -187,7 +187,7 @@ class QuestionActivity extends Component {
                 source={require("../../assets/images/robotPregunta.png")}
               />
               <Text style={{ fontSize: 30, fontWeight: "bold", marginTop: 20 }}>
-                Realiza tu {"\n"} pregunta {"\n"}
+                Realiza una {"\n"} pregunta a {"\n"} tu profesor/a {"\n"}
               </Text>
             </Flex>
             <Spacer />
