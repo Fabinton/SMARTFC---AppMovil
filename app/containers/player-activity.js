@@ -1,17 +1,19 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import { Video } from "expo-av";
-import { StyleSheet, View, Dimensions } from "react-native";
+import { StyleSheet, View, Dimensions, Alert } from "react-native";
 import shorthash from "shorthash";
 import * as FileSystem from "expo-file-system";
 import { NavigationActions } from "react-navigation";
 import { connect } from "react-redux";
 import { ScreenOrientation } from "expo";
+import CustomButton from "../components/customButton";
 import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("db5.db");
 
 class Player extends Component {
   constructor(props) {
     super(props);
+    this.video = createRef(null);
   }
   state = {
     mute: false,
@@ -21,6 +23,7 @@ class Player extends Component {
     storageFlats: null,
     controls: false,
     source: null,
+    videoStatus: {},
   };
   setOrientation() {
     if (Dimensions.get("window").height > Dimensions.get("window").width) {
@@ -45,7 +48,7 @@ class Player extends Component {
   componentWillUnmount() {
     // fix Warning: Can't perform a React state update on an unmounted component
     this.setState = (state, callback) => {
-      return;
+      return { ...state };
     };
   }
   componentDidMount = async () => {
@@ -76,6 +79,7 @@ class Player extends Component {
     const name = shorthash.unique(uri);
     const path = `${FileSystem.cacheDirectory}${name}`;
     const video = await FileSystem.getInfoAsync(path);
+    console.log("video", video);
     if (video.exists) {
       this.setState({
         source: {
@@ -83,6 +87,13 @@ class Player extends Component {
         },
       });
       return;
+    } else {
+      Alert.alert(
+        "Alerta",
+        "Su video está siendo cargado",
+        [{ text: "OK", onPress: () => {} }],
+        { cancelable: false }
+      );
     }
     const newVideo = await FileSystem.downloadAsync(uri, path);
     this.setState({
@@ -235,9 +246,7 @@ class Player extends Component {
     this.updateFlat();
   }
   continuarContenido() {
-    this.setState((prevState) => ({
-      shouldPlay: false,
-    }));
+    this.state.videoStatus?.isPlaying && this.video.current.pauseAsync();
     this.props.dispatch(
       NavigationActions.navigate({
         routeName: "TestActivity",
@@ -249,6 +258,7 @@ class Player extends Component {
     return (
       <View>
         <Video
+          ref={this.video}
           source={this.state.source}
           posterSource={this.state.source}
           shouldPlay={this.state.shouldPlay}
@@ -257,7 +267,18 @@ class Player extends Component {
           isMuted={this.state.mute}
           useNativeControls
           onFullscreenUpdate={this.setOrientation}
+          onPlaybackStatusUpdate={(state) =>
+            this.setState({ videoStatus: state })
+          }
         />
+        <View style={{ alignSelf: "center" }}>
+          <CustomButton
+            text="Realiza el TEST"
+            onPress={() => {
+              this.continuarContenido();
+            }}
+          />
+        </View>
       </View>
     );
   }

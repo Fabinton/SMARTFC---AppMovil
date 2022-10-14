@@ -36,12 +36,18 @@ const App = () => {
     setData();
   }, []);
   if (!appIsReady) {
-    return <SplashScreen />;
+    return (
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <SplashScreen />
+        </PersistGate>
+      </Provider>
+    );
   } else {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          {<OnBoardScreens setFirstLaunch={setFirstLaunch} />}
+          {firstLaunch && <OnBoardScreens setFirstLaunch={setFirstLaunch} />}
           <AppNavigator />
         </PersistGate>
       </Provider>

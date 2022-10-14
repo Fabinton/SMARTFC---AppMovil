@@ -24,11 +24,13 @@ const OnBoardScreens = ({ setFirstLaunch }) => {
             image: <Image source={uno} style={{ width: 196, height: 333 }} />,
             title: "Bienvenid@!",
             subtitle:
-              "Este es un pequeño tutorial que te enseñará a usar SmartFC.",
+              "Este es un pequeño tutorial que te enseñará a usar Smart FC.",
           },
           {
             backgroundColor: "#F5F5F5",
-            image: <Image source={robotPregunta} style={{ height: 320 }} />,
+            image: (
+              <Image source={robotPregunta} style={{ height: 410, top: 45 }} />
+            ),
             title: "Primer Paso",
             subtitle: (
               <>
@@ -39,14 +41,15 @@ const OnBoardScreens = ({ setFirstLaunch }) => {
                 <Text
                   style={{
                     color: "#424B5B",
-                    textAlign: "justify",
+                    textAlign: "center",
+                    fontSize: 18,
                     marginRight: 15,
                     marginLeft: 15,
                     marginTop: 20,
                   }}
                 >
                   Si deseas puedes conectar tu Ip, de lo contrario puedes
-                  hacerlo más adelante en conectar tu Ip
+                  hacerlo más adelante en "Conectar tu Ip".
                 </Text>
                 <ConnectIp
                   modalVisible={modalVisible}
