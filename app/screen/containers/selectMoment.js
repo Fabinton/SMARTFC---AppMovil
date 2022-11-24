@@ -53,7 +53,17 @@ class selectMoment extends Component {
     if (this.props.activity.evaluacion == 1) {
       this.props.dispatch(
         NavigationActions.navigate({
-          routeName: "EvaluationActivity",
+          // routeName: "EvaluationActivity",
+          routeName: "GamificationTest",
+          params: {
+            question: "Who has not won multiple Oscars for best actor ? ",
+            answers: [
+              { res: "Leonardo DiCaprio", id: 1 },
+              { res: "Tom Hanks", id: 2 },
+              { res: "Jack Nicholson", id: 3 },
+              { res: "Dustin Hoffman", id: 4 },
+            ],
+          },
         })
       );
     } else {

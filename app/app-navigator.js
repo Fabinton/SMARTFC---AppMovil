@@ -16,6 +16,7 @@ import Doubts from "./screen/containers/doubtsActivity";
 import updateData from "./screen/containers/configureUserAdmin";
 import adminUserData from "./screen/containers/adminUser";
 import EvaluationActivity from "./screen/containers/evaluationActivity";
+import GamificationTest from "./screen/containers/GamificationTest";
 import CloseSession from "./screen/containers/closeSession";
 import Profile from "./screen/containers/Profile";
 import { createDrawerNavigator } from "react-navigation-drawer";
@@ -63,6 +64,7 @@ const Activities = createStackNavigator(
     SelectMoment: SelectMoment,
     PlayExcersise: PlayExcersise,
     EvaluationActivity: EvaluationActivity,
+    GamificationTest: GamificationTest,
   },
   {
     initialRouteName: "Activity",
