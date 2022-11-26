@@ -62,16 +62,16 @@ const Progress = ({ step, steps, height }) => {
   );
 };
 
-const ProgressBar = () => {
-  const [index, setIndex] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((index + 1) % (35 + 1));
-    }, 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [index]);
+const ProgressBar = ({ index }) => {
+  // const [index, setIndex] = useState(0);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setIndex((index + 1) % (35 + 1));
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, [index]);
 
   return (
     <View>

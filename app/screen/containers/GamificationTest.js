@@ -1,11 +1,19 @@
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import CustomButton from "../../components/customButton";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ProgressBar from "../../components/ProgressBar";
 
-const GamificationTest = ({ navigation }) => {
+const GamificationTest = ({
+  navigation,
+  //setEvaluationStep,
+  //evaluationStep,
+}) => {
   const question = navigation?.state?.params?.question;
   const answers = navigation?.state?.params?.answers;
+  setEvaluationStep = navigation?.state?.params?.setEvaluationStep;
+  evaluationStep = navigation?.state?.params?.evaluationStep;
+  const { setIndex } = navigation?.state?.params;
+
   return (
     <View style={styles.viewContainer}>
       <View style={styles.questionAnswer}>
@@ -15,7 +23,13 @@ const GamificationTest = ({ navigation }) => {
         <View style={styles.answersContainer}>
           {answers?.map((ans) => (
             <View style={{ marginBottom: 5 }} key={ans.id}>
-              <CustomButton text={ans.res} />
+              <CustomButton
+                text={ans.res}
+                onPress={() => {
+                  setEvaluationStep(evaluationStep + 1);
+                  setIndex(0);
+                }}
+              />
             </View>
           ))}
         </View>
@@ -24,9 +38,10 @@ const GamificationTest = ({ navigation }) => {
   );
 };
 
-GamificationTest.navigationOptions = (navigation) => {
+GamificationTest.navigationOptions = ({ navigation }) => {
+  const { index } = navigation?.state?.params;
   return {
-    header: <ProgressBar />,
+    header: <ProgressBar index={index ? index : 0} />,
   };
 };
 
