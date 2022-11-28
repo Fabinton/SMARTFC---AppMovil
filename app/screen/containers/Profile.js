@@ -16,6 +16,8 @@ import * as SQLite from "expo-sqlite";
 import API from "../../../utils/api";
 import ActivityEvents from "../../components/profileActivity";
 import CustomButton from "../../components/customButton";
+import { Stack, Spacer } from "@react-native-material/core";
+import { FontAwesome5 } from "@expo/vector-icons";
 const db = SQLite.openDatabase("db5.db");
 const actividades = [1];
 
@@ -38,6 +40,7 @@ var storageActividad = [
   },
 ];
 var active = "";
+var place = 10;
 class Profile extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -305,6 +308,20 @@ class Profile extends Component {
       this.loadActivities();
     }
   }
+
+  changeColor(val) {
+    var color = "#70C2E5";
+
+    if (val == 1) {
+      color = "#FFD700";
+    } else if (val == 2) {
+      color = "#C0C0C0";
+    } else if (val == 3) {
+      color = "#CD7F32";
+    }
+    return color;
+  }
+
   renderItem = ({ item }) => {
     return (
       <ActivityEvents
@@ -319,20 +336,55 @@ class Profile extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.containerText}>
-          <Text style={styles.nombre}>
-            {this.props.student.nombre_estudiante}{" "}
-            {this.props.student.apellido_estudiante}
-          </Text>
-          <Text style={styles.correo}>
-            {" "}
-            Correo: {this.props.student.correo_electronico}
-          </Text>
-          <Text style={styles.grado}>
-            {" "}
-            Grado: {this.props.student.grado_estudiante}
-          </Text>
-          <CustomButton text="Cargar Datos" onPress={() => this.loadData()} />
+          <Stack direction="row" alignItems="center">
+            <Spacer />
+            <FontAwesome5
+              name="award"
+              size={65}
+              color={this.changeColor(place)}
+            />
+            <Text
+              style={{
+                fontSize: 65,
+                fontWeight: "bold",
+                color: this.changeColor(place),
+              }}
+            >
+              {place}
+            </Text>
 
+            <Spacer />
+            <Stack direction="column" alignItems="center">
+              <Text style={styles.nombre}>
+                {this.props.student.nombre_estudiante}{" "}
+                {this.props.student.apellido_estudiante}
+              </Text>
+              <Text style={styles.grado}>
+                Grado: {this.props.student.grado_estudiante}
+              </Text>
+            </Stack>
+            <Spacer />
+          </Stack>
+          <Stack direction="row" alignItems="center">
+            <Spacer />
+            <TouchableOpacity
+              onPress={() =>
+                Alert.alert(
+                  "¿Qué signfica este número?",
+                  "Actualmente ocupas el puesto " +
+                    place +
+                    " entre tus compañer@s de curso. \n\nPara mejorar tu puesto puedes ver el material de tus cursos y sacar buenos resultados en los test y evaluaciones",
+                  [{ text: "OK" }],
+                  { cancelable: false }
+                )
+              }
+            >
+              <FontAwesome5 name="question-circle" size={35} color="#70C2E5" />
+            </TouchableOpacity>
+            <Spacer />
+            <CustomButton text="Cargar Datos" onPress={() => this.loadData()} />
+            <Spacer />
+          </Stack>
           <Text style={styles.TextoDatos}>{active}</Text>
         </View>
         <FlatList
@@ -359,18 +411,13 @@ const styles = StyleSheet.create({
   },
   nombre: {
     marginTop: 10,
-    fontSize: 22,
+    fontSize: 20,
     color: "#44546b",
     fontWeight: "bold",
   },
   containerText: {
     alignItems: "center",
     justifyContent: "center",
-  },
-  correo: {
-    fontSize: 14,
-    color: "#6b6b6b",
-    fontWeight: "bold",
   },
   grado: {
     fontSize: 16,

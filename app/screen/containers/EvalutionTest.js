@@ -1,16 +1,19 @@
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import React, { useState, useEffect } from "react";
 import GamificationTest from "./GamificationTest";
 import { NavigationActions } from "react-navigation";
+import { Stack, Flex, Spacer } from "@react-native-material/core";
+import CustomButton from "../../components/customButton";
 
 const EvalutionTest = ({ navigation }) => {
-  const [evaluationStep, setEvaluationStep] = useState(1);
+  const [evaluationStep, setEvaluationStep] = useState(0);
   const [index, setIndex] = useState(0);
+  const [StartCounting, setStartCounting] = useState(false);
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((index + 1) % (35 + 1));
     }, 1000);
-    if (index === 35) {
+    if (StartCounting && index === 35) {
       setTimeout(() => {
         setEvaluationStep(evaluationStep + 1);
       }, 1000);
@@ -56,6 +59,34 @@ const EvalutionTest = ({ navigation }) => {
   ];
   return (
     <View>
+      <Stack style={styles.container} direction="column" alignItems="center">
+        <Text style={styles.text}>Instrucciones:</Text>
+        <Text style={styles.text2}>
+          1. Podrás realizar la evaluación solo una vez {"\n"}
+          {"\n"}
+          2. Selecciona una única respuesta {"\n"}
+          {"\n"}
+          3. El resultado estará basado en si la respuesta es correcta o no y en
+          el tiempo que tomes en responder {"\n"}
+        </Text>
+        <CustomButton
+          text="Jugar"
+          onPress={() => {
+            setEvaluationStep(1);
+            setStartCounting(true);
+            setIndex(0);
+          }}
+        />
+        <Image
+          style={{
+            width: 320,
+            height: 350,
+            position: "absolute",
+            top: "110%",
+          }}
+          source={require("../../../assets/images/expTest.jpg")}
+        />
+      </Stack>
       {evaluation?.map((eva) => {
         if (evaluationStep === eva.step) {
           navigation.dispatch(
@@ -76,5 +107,22 @@ const EvalutionTest = ({ navigation }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+  text: {
+    fontSize: 30,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  text2: {
+    paddingTop: 20,
+    fontSize: 20,
+    textAlign: "center",
+    color: "#6D6E6E",
+  },
+});
 
 export default EvalutionTest;
