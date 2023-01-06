@@ -32,7 +32,8 @@ class playContent extends Component {
   continuarContenido() {
     this.props.dispatch(
       NavigationActions.navigate({
-        routeName: "TestActivity",
+        //routeName: "TestActivity",
+        routeName: "EvalutionTest",
       })
     );
   }

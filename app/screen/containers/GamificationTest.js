@@ -10,8 +10,8 @@ const GamificationTest = ({
 }) => {
   const question = navigation?.state?.params?.question;
   const answers = navigation?.state?.params?.answers;
-  setEvaluationStep = navigation?.state?.params?.setEvaluationStep;
-  evaluationStep = navigation?.state?.params?.evaluationStep;
+  const setEvaluationStep = navigation?.state?.params?.setEvaluationStep;
+  const evaluationStep = navigation?.state?.params?.evaluationStep;
   const { setIndex } = navigation?.state?.params;
 
   return (

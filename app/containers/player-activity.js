@@ -249,7 +249,8 @@ class Player extends Component {
     this.state.videoStatus?.isPlaying && this.video.current.pauseAsync();
     this.props.dispatch(
       NavigationActions.navigate({
-        routeName: "TestActivity",
+        //routeName: "TestActivity",
+        routeName: "EvalutionTest",
       })
     );
   }

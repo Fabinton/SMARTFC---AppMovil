@@ -1,15 +1,18 @@
 import { View, Text, StyleSheet, Image } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import GamificationTest from "./GamificationTest";
 import { NavigationActions } from "react-navigation";
-import { Stack, Flex, Spacer } from "@react-native-material/core";
+import { Stack } from "@react-native-material/core";
 import CustomButton from "../../components/customButton";
+import { useSelector } from "react-redux";
 
 const EvalutionTest = ({ navigation }) => {
   const [evaluationStep, setEvaluationStep] = useState(0);
   const [index, setIndex] = useState(0);
   const [StartCounting, setStartCounting] = useState(false);
-  alredyTested = true;
+  const { selectedActivity } = useSelector((state) => state.videos);
+  const test = useMemo(() => selectedActivity, [selectedActivity]);
+  const alredyTested = false;
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((index + 1) % (35 + 1));
@@ -23,36 +26,47 @@ const EvalutionTest = ({ navigation }) => {
       clearInterval(interval);
     };
   }, [index]);
+
+  function evaluationSelector(evaluationTest, questionActivity) {
+    if (navigation?.state?.params?.toRender === 0) {
+      return evaluationTest;
+    } else {
+      return questionActivity;
+    }
+  }
   const evaluation = [
     {
-      question: "¿ Por qué la novia es tan linda ? ",
+      question: evaluationSelector(test?.EQ1, test?.Q1),
       answers: [
-        { res: "Su hermosa sonrisa", id: 1 },
-        { res: "Su perfectas piernas", id: 2 },
-        { res: "Su preciosa espalda", id: 3 },
-        { res: "Su buen poto", id: 4 },
+        { res: evaluationSelector(test?.EA11, test?.A11), id: 1 },
+        { res: evaluationSelector(test?.EA12, test?.A12), id: 2 },
+        { res: evaluationSelector(test?.EA13, test?.A13), id: 3 },
+        { res: evaluationSelector(test?.EA14, test?.A14), id: 4 },
       ],
       questionID: 1,
       step: 1,
     },
     {
-      question: "¿ Por qué la novia es la mejor ? ",
+      question: evaluationSelector(test?.EQ2, test?.Q2),
       answers: [
-        { res: "Porque es brillante", id: 1 },
-        { res: "Demasiado inteligente", id: 2 },
-        { res: "Porque quiere mucho a Santiago", id: 3 },
-        { res: "Su buen poto :3", id: 4 },
+        { res: evaluationSelector(test?.EA21, test?.A21), id: 1 },
+        { res: evaluationSelector(test?.EA22, test?.A22), id: 2 },
+        {
+          res: evaluationSelector(test?.EA23, test?.A23),
+          id: 3,
+        },
+        { res: evaluationSelector(test?.EA24, test?.A24), id: 4 },
       ],
       questionID: 2,
       step: 2,
     },
     {
-      question: "Who has not won multiple Oscars for best actor ? ",
+      question: evaluationSelector(test?.EQ3, test?.Q3),
       answers: [
-        { res: "Leonardo DiCaprio", id: 1 },
-        { res: "Tom Hanks", id: 2 },
-        { res: "Jack Nicholson", id: 3 },
-        { res: "Dustin Hoffman", id: 4 },
+        { res: evaluationSelector(test?.EA31, test?.A31), id: 1 },
+        { res: evaluationSelector(test?.EA32, test?.A32), id: 2 },
+        { res: evaluationSelector(test?.EA33, test?.A33), id: 3 },
+        { res: evaluationSelector(test?.EA34, test?.A34), id: 4 },
       ],
       questionID: 3,
       step: 3,

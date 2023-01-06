@@ -55,6 +55,7 @@ class selectMoment extends Component {
         NavigationActions.navigate({
           // routeName: "EvaluationActivity",
           routeName: "EvalutionTest",
+          params: { toRender: 0 },
         })
       );
     } else {
