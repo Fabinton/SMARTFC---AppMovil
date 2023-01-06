@@ -86,7 +86,7 @@ class Register extends Component {
             grado_estudiante: this.state.grado,
             curso_estudiante: 1,
             id_colegio: this.state.schoolSelected,
-            nombre_usuario: this.state.user,
+            nombre_usuario: 0,
             contrasena: this.state.password,
             correo_electronico: this.state.email,
           };
@@ -104,7 +104,7 @@ class Register extends Component {
                       this.state.grado,
                       1,
                       this.state.schoolSelected,
-                      this.state.user,
+                      0,
                       this.state.password,
                       this.state.email,
                     ]
