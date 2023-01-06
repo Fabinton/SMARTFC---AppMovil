@@ -1,18 +1,24 @@
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Dimensions, BackHandler } from "react-native";
 import CustomButton from "../../components/customButton";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import ProgressBar from "../../components/ProgressBar";
 
-const GamificationTest = ({
-  navigation,
-  //setEvaluationStep,
-  //evaluationStep,
-}) => {
+const GamificationTest = ({ navigation }) => {
   const question = navigation?.state?.params?.question;
   const answers = navigation?.state?.params?.answers;
   const setEvaluationStep = navigation?.state?.params?.setEvaluationStep;
   const evaluationStep = navigation?.state?.params?.evaluationStep;
   const { setIndex } = navigation?.state?.params;
+  useEffect(() => {
+    const backAction = () => {
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <View style={styles.viewContainer}>
