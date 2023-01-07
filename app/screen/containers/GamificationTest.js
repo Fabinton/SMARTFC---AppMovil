@@ -1,14 +1,25 @@
-import { View, Text, StyleSheet, Dimensions, BackHandler } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Dimensions,
+  BackHandler,
+  Alert,
+} from "react-native";
 import CustomButton from "../../components/customButton";
 import React, { useEffect } from "react";
 import ProgressBar from "../../components/ProgressBar";
+import { NavigationActions } from "react-navigation";
 
 const GamificationTest = ({ navigation }) => {
-  const question = navigation?.state?.params?.question;
-  const answers = navigation?.state?.params?.answers;
-  const setEvaluationStep = navigation?.state?.params?.setEvaluationStep;
-  const evaluationStep = navigation?.state?.params?.evaluationStep;
-  const { setIndex } = navigation?.state?.params;
+  const {
+    setIndex,
+    question,
+    answers,
+    setEvaluationStep,
+    evaluationStep,
+    index,
+  } = navigation?.state?.params;
   useEffect(() => {
     const backAction = () => {
       return true;
@@ -19,7 +30,36 @@ const GamificationTest = ({ navigation }) => {
     );
     return () => backHandler.remove();
   }, []);
+  const alertMessage = () => {
+    return Alert.alert(
+      "Felicitaciones.",
+      "La evaluación ha sido completada.",
+      [
+        {
+          text: "Ir a Mis materias.",
+          onPress: () => {
+            navigation.dispatch(
+              NavigationActions.navigate({
+                routeName: "Activity",
+              })
+            );
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+  useEffect(() => {
+    if (index === 35 && evaluationStep > 2) {
+      alertMessage();
+    }
+  }, [index]);
 
+  const completedTest = () => {
+    if (evaluationStep > 2) {
+      alertMessage();
+    }
+  };
   return (
     <View style={styles.viewContainer}>
       <View style={styles.questionAnswer}>
@@ -34,6 +74,7 @@ const GamificationTest = ({ navigation }) => {
                 onPress={() => {
                   setEvaluationStep(evaluationStep + 1);
                   setIndex(0);
+                  completedTest();
                 }}
               />
             </View>
