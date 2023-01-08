@@ -7,9 +7,11 @@ import {
   Alert,
 } from "react-native";
 import CustomButton from "../../components/customButton";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ProgressBar from "../../components/ProgressBar";
 import { NavigationActions } from "react-navigation";
+import { _DEFAULT_PROGRESS_UPDATE_INTERVAL_MILLIS } from "expo-av/build/AV";
+import { calculateTestGrade, reduxAnswe } from "../../../utils/parsers";
 
 const GamificationTest = ({ navigation }) => {
   const {
@@ -50,6 +52,7 @@ const GamificationTest = ({ navigation }) => {
     );
   };
   useEffect(() => {
+    index === 35 && console.log("total", calculateTestGrade(0, 4, index));
     if (index === 35 && evaluationStep > 2) {
       alertMessage();
     }
@@ -75,6 +78,11 @@ const GamificationTest = ({ navigation }) => {
                   setEvaluationStep(evaluationStep + 1);
                   setIndex(0);
                   completedTest();
+                  const totalValue = calculateTestGrade(
+                    ans.id,
+                    ans.correctAns,
+                    index
+                  );
                 }}
               />
             </View>
