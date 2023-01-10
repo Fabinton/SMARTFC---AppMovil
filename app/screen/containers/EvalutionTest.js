@@ -13,6 +13,8 @@ const EvalutionTest = ({ navigation }) => {
   const { selectedActivity } = useSelector((state) => state.videos);
   const test = useMemo(() => selectedActivity, [selectedActivity]);
   const alredyTested = false;
+  const evaluationType =
+    navigation?.state?.params?.toRender === 0 ? true : false;
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((index + 1) % (35 + 1));
@@ -28,7 +30,7 @@ const EvalutionTest = ({ navigation }) => {
   }, [index]);
 
   function evaluationSelector(evaluationTest, questionActivity) {
-    if (navigation?.state?.params?.toRender === 0) {
+    if (evaluationType) {
       return evaluationTest;
     } else {
       return questionActivity;
@@ -118,7 +120,6 @@ const EvalutionTest = ({ navigation }) => {
     },
   ];
 
-  console.log("redx", selectedActivity);
   return (
     <>
       {alredyTested ? (
@@ -189,6 +190,7 @@ const EvalutionTest = ({ navigation }) => {
                     evaluationStep: evaluationStep,
                     index: index,
                     setIndex: setIndex,
+                    evaluationType: evaluationType,
                   },
                 })
               );

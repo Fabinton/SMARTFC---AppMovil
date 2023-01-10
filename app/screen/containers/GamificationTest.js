@@ -21,6 +21,7 @@ const GamificationTest = ({ navigation }) => {
     setEvaluationStep,
     evaluationStep,
     index,
+    evaluationType,
   } = navigation?.state?.params;
   useEffect(() => {
     const backAction = () => {
@@ -52,7 +53,8 @@ const GamificationTest = ({ navigation }) => {
     );
   };
   useEffect(() => {
-    index === 35 && console.log("total", calculateTestGrade(0, 4, index));
+    index === 35 &&
+      console.log("total", calculateTestGrade(0, 4, index, evaluationType));
     if (index === 35 && evaluationStep > 2) {
       alertMessage();
     }
@@ -81,8 +83,10 @@ const GamificationTest = ({ navigation }) => {
                   const totalValue = calculateTestGrade(
                     ans.id,
                     ans.correctAns,
-                    index
+                    index,
+                    evaluationType
                   );
+                  console.log("total", totalValue);
                 }}
               />
             </View>
