@@ -24,6 +24,7 @@ class Player extends Component {
     controls: false,
     source: null,
     videoStatus: {},
+    updatedEvent: false,
   };
   setOrientation() {
     if (Dimensions.get("window").height > Dimensions.get("window").width) {
@@ -32,13 +33,13 @@ class Player extends Component {
       ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
     }
   }
-  handlePlayAndPause = async () => {
-    if (this.state.shouldPlay == false) {
+  handlePlayAndPause = () => {
+    if (this.state.videoStatus.shouldPlay && !this.state.updatedEvent) {
+      this.setState((prevState) => ({
+        updatedEvent: !prevState.updatedEvent,
+      }));
       this.almacenaMetrica();
     }
-    this.setState((prevState) => ({
-      shouldPlay: !prevState.shouldPlay,
-    }));
   };
   handleVolume = async () => {
     this.setState((prevState) => ({
@@ -274,9 +275,10 @@ class Player extends Component {
           isMuted={this.state.mute}
           useNativeControls
           onFullscreenUpdate={this.setOrientation}
-          onPlaybackStatusUpdate={(state) =>
-            this.setState({ videoStatus: state })
-          }
+          onPlaybackStatusUpdate={(state) => {
+            this.handlePlayAndPause();
+            this.setState({ videoStatus: state });
+          }}
         />
         <View style={{ alignSelf: "center" }}>
           <CustomButton
