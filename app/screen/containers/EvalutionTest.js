@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React, { useState, useEffect, useMemo } from "react";
-import GamificationTest from "./GamificationTest";
 import { NavigationActions } from "react-navigation";
 import { Stack } from "@react-native-material/core";
 import CustomButton from "../../components/customButton";
 import { useSelector } from "react-redux";
+import { createEvaluation } from "../../../utils/parsers";
 
 const EvalutionTest = ({ navigation }) => {
   const [evaluationStep, setEvaluationStep] = useState(0);
@@ -31,98 +31,7 @@ const EvalutionTest = ({ navigation }) => {
       clearInterval(interval);
     };
   }, [index]);
-
-  function evaluationSelector(evaluationTest, questionActivity) {
-    if (evaluationType) {
-      return evaluationTest;
-    } else {
-      return questionActivity;
-    }
-  }
-  const evaluation = [
-    {
-      question: evaluationSelector(test?.EQ1, test?.Q1),
-      answers: [
-        {
-          res: evaluationSelector(test?.EA11, test?.A11),
-          id: 1,
-          correctAns: evaluationSelector(test?.ECA1, test?.CA1),
-        },
-        {
-          res: evaluationSelector(test?.EA12, test?.A12),
-          id: 2,
-          correctAns: evaluationSelector(test?.ECA1, test?.CA1),
-        },
-        {
-          res: evaluationSelector(test?.EA13, test?.A13),
-          id: 3,
-          correctAns: evaluationSelector(test?.ECA1, test?.CA1),
-        },
-        {
-          res: evaluationSelector(test?.EA14, test?.A14),
-          id: 4,
-          correctAns: evaluationSelector(test?.ECA1, test?.CA1),
-        },
-      ],
-      questionID: 1,
-      step: 1,
-    },
-    {
-      question: evaluationSelector(test?.EQ2, test?.Q2),
-      answers: [
-        {
-          res: evaluationSelector(test?.EA21, test?.A21),
-          id: 1,
-          correctAns: evaluationSelector(test?.ECA2, test?.CA2),
-        },
-        {
-          res: evaluationSelector(test?.EA22, test?.A22),
-          id: 2,
-          correctAns: evaluationSelector(test?.ECA2, test?.CA2),
-        },
-        {
-          res: evaluationSelector(test?.EA23, test?.A23),
-          id: 3,
-          correctAns: evaluationSelector(test?.ECA2, test?.CA2),
-        },
-        {
-          res: evaluationSelector(test?.EA24, test?.A24),
-          id: 4,
-          correctAns: evaluationSelector(test?.ECA2, test?.CA2),
-        },
-      ],
-      questionID: 2,
-      step: 2,
-    },
-    {
-      question: evaluationSelector(test?.EQ3, test?.Q3),
-      answers: [
-        {
-          res: evaluationSelector(test?.EA31, test?.A31),
-          id: 1,
-          correctAns: evaluationSelector(test?.ECA3, test?.CA3),
-        },
-        {
-          res: evaluationSelector(test?.EA32, test?.A32),
-          id: 2,
-          correctAns: evaluationSelector(test?.ECA3, test?.CA3),
-        },
-        {
-          res: evaluationSelector(test?.EA33, test?.A33),
-          id: 3,
-          correctAns: evaluationSelector(test?.ECA3, test?.CA3),
-        },
-        {
-          res: evaluationSelector(test?.EA34, test?.A34),
-          id: 4,
-          correctAns: evaluationSelector(test?.ECA3, test?.CA3),
-        },
-      ],
-      questionID: 3,
-      step: 3,
-    },
-  ];
-
+  const { evaluation } = createEvaluation(test, evaluationType);
   return (
     <>
       {alredyTested ? (

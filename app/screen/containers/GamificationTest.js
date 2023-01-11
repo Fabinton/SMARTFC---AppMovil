@@ -10,7 +10,6 @@ import CustomButton from "../../components/customButton";
 import React, { useEffect, useState } from "react";
 import ProgressBar from "../../components/ProgressBar";
 import { NavigationActions } from "react-navigation";
-import { _DEFAULT_PROGRESS_UPDATE_INTERVAL_MILLIS } from "expo-av/build/AV";
 import { calculateTestGrade, saveEventsDB } from "../../../utils/parsers";
 
 const GamificationTest = ({ navigation }) => {
@@ -46,7 +45,6 @@ const GamificationTest = ({ navigation }) => {
           text: "Ir a Mis materias.",
           onPress: () => {
             saveEventsDB(
-              //TODO: CHECK WHAT HAPPENS WHEN IT'S TEST (CALLING TWICE THIS FUNCTION)
               IDstudent,
               IDactivity,
               allAnswers,
