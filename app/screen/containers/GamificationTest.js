@@ -11,9 +11,11 @@ import React, { useEffect, useState } from "react";
 import ProgressBar from "../../components/ProgressBar";
 import { NavigationActions } from "react-navigation";
 import { _DEFAULT_PROGRESS_UPDATE_INTERVAL_MILLIS } from "expo-av/build/AV";
-import { calculateTestGrade, reduxAnswe } from "../../../utils/parsers";
+import { calculateTestGrade, saveEventsDB } from "../../../utils/parsers";
 
 const GamificationTest = ({ navigation }) => {
+  const [allAnswers, setAllAnswers] = useState({});
+  const [evaScore, setEvaScore] = useState(0);
   const {
     setIndex,
     question,
@@ -22,6 +24,8 @@ const GamificationTest = ({ navigation }) => {
     evaluationStep,
     index,
     evaluationType,
+    IDstudent,
+    IDactivity,
   } = navigation?.state?.params;
   useEffect(() => {
     const backAction = () => {
@@ -41,6 +45,14 @@ const GamificationTest = ({ navigation }) => {
         {
           text: "Ir a Mis materias.",
           onPress: () => {
+            saveEventsDB(
+              //TODO: CHECK WHAT HAPPENS WHEN IT'S TEST (CALLING TWICE THIS FUNCTION)
+              IDstudent,
+              IDactivity,
+              allAnswers,
+              evaScore,
+              evaluationType
+            );
             navigation.dispatch(
               NavigationActions.navigate({
                 routeName: "Activity",
@@ -54,17 +66,25 @@ const GamificationTest = ({ navigation }) => {
   };
   useEffect(() => {
     index === 35 &&
-      console.log("total", calculateTestGrade(0, 4, index, evaluationType));
-    if (index === 35 && evaluationStep > 2) {
+      (() => {
+        answers?.map((ans) => setAllAnswers({ ...allAnswers, [ans.res]: 0 }));
+        setEvaScore(evaScore + calculateTestGrade(0, 4, index, evaluationType));
+      })();
+    if (index === 35 && evaluationStep >= 3) {
       alertMessage();
     }
   }, [index]);
 
   const completedTest = () => {
-    if (evaluationStep > 2) {
+    if (evaluationStep >= 3) {
       alertMessage();
     }
   };
+
+  useEffect(() => {
+    completedTest();
+  }, [allAnswers]);
+
   return (
     <View style={styles.viewContainer}>
       <View style={styles.questionAnswer}>
@@ -77,16 +97,19 @@ const GamificationTest = ({ navigation }) => {
               <CustomButton
                 text={ans.res}
                 onPress={() => {
-                  setEvaluationStep(evaluationStep + 1);
-                  setIndex(0);
-                  completedTest();
+                  setAllAnswers({
+                    ...allAnswers,
+                    [ans.res]: ans.id,
+                  });
                   const totalValue = calculateTestGrade(
                     ans.id,
                     ans.correctAns,
                     index,
                     evaluationType
                   );
-                  console.log("total", totalValue);
+                  setEvaScore(evaScore + totalValue);
+                  setEvaluationStep(evaluationStep + 1);
+                  setIndex(0);
                 }}
               />
             </View>

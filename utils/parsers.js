@@ -1,4 +1,5 @@
 import * as SQLite from "expo-sqlite";
+import { createResult, evaluationQuery, testQuery } from "./dbQueries";
 
 export const calculateTestGrade = (
   selectedAns = 0,
@@ -16,9 +17,23 @@ export const calculateTestGrade = (
   }
   return 0;
 };
-export const saveEventsDB = (id_estudiante, id_actividad) => {
+
+export const saveEventsDB = async (
+  id_estudiante,
+  id_actividad,
+  answers,
+  score,
+  evaluationType
+) => {
+  console.log(
+    "score",
+    score,
+    Object.values(answers)[0],
+    Object.values(answers)[1],
+    Object.values(answers)[2]
+  );
   const db = SQLite.openDatabase("db5.db");
-  let store = null;
+  let resultado = [];
   const date = new Date().getDate();
   const month = new Date().getMonth() + 1;
   const year = new Date().getFullYear();
@@ -26,97 +41,70 @@ export const saveEventsDB = (id_estudiante, id_actividad) => {
   const hours = new Date().getHours();
   const min = new Date().getMinutes();
   const hoursComplete = hours + ":" + min;
+  const store = await new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select * from events where id_estudiante=? and id_actividad=?;`,
+        [id_estudiante, id_actividad],
+        (query, { rows: { _array } }) => {
+          if (!query._error) {
+            resolve(_array);
+          } else {
+            reject(query._error);
+          }
+        }
+      );
+    });
+  });
+  const storageFilter = store.reverse();
+
+  if (storageFilter.length === 0) {
+    resultado = [
+      {
+        check_a1: 0,
+        check_a2: 0,
+        check_a3: 0,
+        check_inicio: 0,
+        check_video: 0,
+        count_video: 0,
+        check_answer: 0,
+        check_download: 0,
+      },
+    ];
+  }
+
+  if (storageFilter.length != 0) {
+    resultado = createResult(storageFilter, evaluationType);
+  }
+  const { text, query } = evaluationType
+    ? evaluationQuery(
+        dataComplete,
+        hoursComplete,
+        id_actividad,
+        id_estudiante,
+        resultado,
+        answers
+      )
+    : testQuery(
+        dataComplete,
+        hoursComplete,
+        id_actividad,
+        id_estudiante,
+        resultado,
+        answers
+      );
+  db.transaction(
+    (tx) => {
+      tx.executeSql(text, query);
+    },
+    null,
+    null
+  );
   db.transaction((tx) => {
-    tx.executeSql(
-      `select * from events where id_estudiante=? and id_actividad=?;`,
-      [id_estudiante, id_actividad],
-      (_, { rows: { _array } }) => (store = _array)
+    tx.executeSql(`select * from events ;`, [], (_, { rows: { _array } }) =>
+      console.log("eventos", _array)
     );
   });
-  console.log("store", store);
-  // const storageFilterGood = store;
-  // const storageFilter = storageFilterGood.reverse();
-  // if (storageFilter.length == 0) {
-  //   resultado = [
-  //     {
-  //       check_a1: 0,
-  //       check_a2: 0,
-  //       check_a3: 0,
-  //       check_inicio: 0,
-  //       check_video: 0,
-  //       count_video: 0,
-  //       check_answer: 0,
-  //       check_download: 0,
-  //     },
-  //   ];
-  // }
-  // if (storageFilter.length != 0) {
-  //   resultado = Array.from(
-  //     new Set(storageFilter.map((s) => s.id_actividad))
-  //   ).map((id_actividad) => {
-  //     return {
-  //       id_actividad: id_actividad,
-  //       data_start: storageFilter.find((s) => s.id_actividad === id_actividad)
-  //         .data_start,
-  //       check_video: storageFilter.find((s) => s.id_actividad === id_actividad)
-  //         .check_video,
-  //       count_video: storageFilter.find((s) => s.id_actividad === id_actividad)
-  //         .count_video,
-  //       check_a1: storageFilter.find((s) => s.id_actividad === id_actividad)
-  //         .check_a1,
-  //       check_a2: storageFilter.find((s) => s.id_actividad === id_actividad)
-  //         .check_a2,
-  //       check_a3: storageFilter.find((s) => s.id_actividad === id_actividad)
-  //         .check_a3,
-  //       check_answer: storageFilter.find((s) => s.id_actividad === id_actividad)
-  //         .check_answer,
-  //       check_download: storageFilter.find(
-  //         (s) => s.id_actividad === id_actividad
-  //       ).check_download,
-  //       check_inicio: storageFilter.find((s) => s.id_actividad === id_actividad)
-  //         .check_inicio,
-  //       id_evento: storageFilter.find((s) => s.id_actividad === id_actividad)
-  //         .id_evento,
-  //     };
-  //   });
-  // }
-
-  // db.transaction(
-  //   (tx) => {
-  //     tx.executeSql(
-  //       "insert into events (data_start, hour_start, data_end, hour_end, id_actividad, id_estudiante, check_download, check_inicio, check_fin, check_answer, count_video, check_video, check_document, check_a1, check_a2, check_a3, check_profile, check_Ea1, check_Ea2, check_Ea3) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)",
-  //       [
-  //         dataComplete,
-  //         hoursComplete,
-  //         dataComplete,
-  //         hoursComplete,
-  //         this.props.activity.id_actividad,
-  //         this.props.student.id_estudiante,
-  //         resultado[0].check_download,
-  //         resultado[0].check_inicio,
-  //         0,
-  //         resultado[0].check_answer,
-  //         resultado[0].count_video,
-  //         resultado[0].check_video,
-  //         0,
-  //         resultado[0].check_a1,
-  //         resultado[0].check_a2,
-  //         resultado[0].check_a3,
-  //         0,
-  //         this.state.value1,
-  //         this.state.value2,
-  //         this.state.value3,
-  //       ]
-  //     );
-  //   },
-  //   null,
-  //   null
-  // );
-  // db.transaction((tx) => {
-  //   tx.executeSql(`select * from events ;`, [], (_, { rows: { _array } }) =>
-  //     this.setState({ storage: _array })
-  //   );
-  // });
 
   // this.update();
   // Alert.alert(

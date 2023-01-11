@@ -10,8 +10,11 @@ const EvalutionTest = ({ navigation }) => {
   const [evaluationStep, setEvaluationStep] = useState(0);
   const [index, setIndex] = useState(0);
   const [StartCounting, setStartCounting] = useState(false);
-  const { selectedActivity } = useSelector((state) => state.videos);
+  const { selectedActivity, selectedStudent } = useSelector(
+    (state) => state.videos
+  );
   const test = useMemo(() => selectedActivity, [selectedActivity]);
+  const student = useMemo(() => selectedStudent, [selectedStudent]);
   const alredyTested = false;
   const evaluationType =
     navigation?.state?.params?.toRender === 0 ? true : false;
@@ -191,6 +194,8 @@ const EvalutionTest = ({ navigation }) => {
                     index: index,
                     setIndex: setIndex,
                     evaluationType: evaluationType,
+                    IDstudent: student.id_estudiante,
+                    IDactivity: test.id_actividad,
                   },
                 })
               );
