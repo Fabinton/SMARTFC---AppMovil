@@ -4,7 +4,8 @@ export const evaluationQuery = (
   id_actividad,
   id_estudiante,
   resultado = [],
-  answers
+  answers,
+  evaScore
 ) => {
   const text =
     "insert into events (data_start, hour_start, data_end, hour_end, id_actividad, id_estudiante, check_download, check_inicio, check_fin, check_answer, count_video, check_video, check_document, check_a1, check_a2, check_a3, check_profile, check_Ea1, check_Ea2, check_Ea3) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)";
@@ -17,11 +18,11 @@ export const evaluationQuery = (
     id_estudiante,
     resultado[0].check_download,
     resultado[0].check_inicio,
-    0,
+    evaScore,
     resultado[0].check_answer,
     resultado[0].count_video,
     resultado[0].check_video,
-    0,
+    resultado[0].check_document,
     resultado[0].check_a1,
     resultado[0].check_a2,
     resultado[0].check_a3,
@@ -38,9 +39,9 @@ export const testQuery = (
   id_actividad,
   id_estudiante,
   resultado = [],
-  answers
+  answers,
+  evaScore
 ) => {
-  console.log("resultado", resultado);
   const text =
     "insert into events (data_start, hour_start, data_end, hour_end, id_actividad, id_estudiante, check_download, check_inicio, check_fin, check_answer, count_video, check_video, check_document, check_a1, check_a2, check_a3, check_profile, check_Ea1, check_Ea2, check_Ea3) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)";
   const query = [
@@ -52,11 +53,11 @@ export const testQuery = (
     id_estudiante,
     resultado[0].check_download,
     resultado[0].check_inicio,
-    0,
+    resultado[0].check_fin,
     1,
     resultado[0].count_video,
     resultado[0].check_video,
-    0,
+    evaScore,
     Object.values(answers)[0],
     Object.values(answers)[1],
     Object.values(answers)[2],
@@ -99,6 +100,9 @@ export const createResult = (storageFilter, evaluationType) => {
           ).check_inicio,
           id_evento: storageFilter.find((s) => s.id_actividad === id_actividad)
             .id_evento,
+          check_document: storageFilter.find(
+            (s) => s.id_actividad === id_actividad
+          ).check_document,
         };
       }
     );
@@ -130,6 +134,8 @@ export const createResult = (storageFilter, evaluationType) => {
           check_answer: storageFilter.find(
             (s) => s.id_actividad === id_actividad
           ).check_answer,
+          check_fin: storageFilter.find((s) => s.id_actividad === id_actividad)
+            .check_fin,
         };
       }
     );

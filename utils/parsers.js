@@ -22,12 +22,12 @@ export const saveEventsDB = async (
   id_estudiante,
   id_actividad,
   answers,
-  score,
+  evaScore,
   evaluationType
 ) => {
   console.log(
-    "score",
-    score,
+    "evaScore",
+    evaScore,
     Object.values(answers)[0],
     Object.values(answers)[1],
     Object.values(answers)[2]
@@ -83,7 +83,8 @@ export const saveEventsDB = async (
         id_actividad,
         id_estudiante,
         resultado,
-        answers
+        answers,
+        evaScore
       )
     : testQuery(
         dataComplete,
@@ -91,7 +92,8 @@ export const saveEventsDB = async (
         id_actividad,
         id_estudiante,
         resultado,
-        answers
+        answers,
+        evaScore
       );
   db.transaction(
     (tx) => {
@@ -101,11 +103,9 @@ export const saveEventsDB = async (
     null
   );
   db.transaction((tx) => {
-    tx.executeSql(
-      `select * from events ;`,
-      [],
-      (_, { rows: { _array } }) => {}
-    );
+    tx.executeSql(`select * from events ;`, [], (_, { rows: { _array } }) => {
+      console.log("eventos", _array);
+    });
   });
 
   // this.update();
@@ -119,6 +119,7 @@ export const saveEventsDB = async (
 
 export const createEvaluation = (test, evaluationType) => {
   function evaluationSelector(evaluationTest, questionActivity) {
+    // evaluationTest = "realiza tu examen", questionActivity = "realiza el test"
     if (evaluationType) {
       return evaluationTest;
     } else {

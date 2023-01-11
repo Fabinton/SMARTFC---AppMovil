@@ -116,6 +116,11 @@ class Player extends Component {
           ).check_inicio,
           id_evento: storageFilter.find((s) => s.id_actividad === id_actividad)
             .id_evento,
+          check_fin: storageFilter.find((s) => s.id_actividad === id_actividad)
+            .check_fin,
+          check_document: storageFilter.find(
+            (s) => s.id_actividad === id_actividad
+          ).check_document,
         };
       });
     }
@@ -132,11 +137,11 @@ class Player extends Component {
             this.props.student.id_estudiante,
             1,
             resultado[0].check_inicio,
-            0,
+            resultado[0].check_fin,
             resultado[0].check_answer,
             resultado[0].count_video,
             resultado[0].check_video,
-            0,
+            resultado[0].check_document,
             resultado[0].check_a1,
             resultado[0].check_a2,
             resultado[0].check_a3,
