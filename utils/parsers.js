@@ -101,26 +101,25 @@ export const saveEventsDB = async (
         answers,
         evaScore
       );
-  db.transaction(
-    (tx) => {
-      tx.executeSql(text, query);
-    },
-    null,
-    null
-  );
-  db.transaction((tx) => {
-    tx.executeSql(`select * from events ;`, [], (_, { rows: { _array } }) => {
-      console.log("eventos", _array);
-    });
-  });
 
-  // this.update();
-  // Alert.alert(
-  //   "Almacenamiento Exitoso",
-  //   "Sus respuestas han sido almacenadas recuerde sincronizar con su servidor cuando este en el colegio",
-  //   [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-  //   { cancelable: false }
-  // );
+  await new Promise((resolve, reject) => {
+    //save event into db.
+    db.transaction(
+      (tx) => {
+        tx.executeSql(text, query, (query, { rows: { _array } }) => {
+          if (!query._error) {
+            resolve(_array);
+          } else {
+            reject(query._error);
+          }
+        });
+      },
+      null,
+      null
+    );
+  });
+  const allEvents = await selectAllEventsBd();
+  await inserFlatEventsBd(allEvents[allEvents.length - 1].id_evento);
 };
 
 export const createEvaluation = (test, evaluationType) => {
@@ -289,4 +288,43 @@ export const updateStudentdb = async (
     API.updateStudents(ip, currentStudent[0])
       .then()
       .catch((e) => console.log("error saving score", e));
+};
+
+export const selectAllEventsBd = async () => {
+  const db = SQLite.openDatabase("db5.db");
+  const store = await new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select * from events ;`,
+        [],
+        (query, { rows: { _array } }) => {
+          if (!query._error) {
+            resolve(_array);
+          } else {
+            reject(query._error);
+          }
+        }
+      );
+    });
+  });
+  return store;
+};
+
+export const inserFlatEventsBd = async (id) => {
+  const db = SQLite.openDatabase("db5.db");
+  await new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `insert into flatEvent (id_evento, upload) values (?, ?)`,
+        [id, 0],
+        (query, { rows: { _array } }) => {
+          if (!query._error) {
+            resolve(_array);
+          } else {
+            reject(query._error);
+          }
+        }
+      );
+    });
+  });
 };

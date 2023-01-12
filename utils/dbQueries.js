@@ -64,7 +64,7 @@ export const testQuery = (
     0,
     resultado[0].check_Ea1,
     resultado[0].check_Ea2,
-    resultado[0].check_Ea2,
+    resultado[0].check_Ea3,
   ];
   return { text, query };
 };
