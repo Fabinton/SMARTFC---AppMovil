@@ -1,5 +1,11 @@
 import * as SQLite from "expo-sqlite";
-import { createResult, evaluationQuery, testQuery } from "./dbQueries";
+import API from "./api";
+import {
+  createResult,
+  evaluationQuery,
+  testQuery,
+  updateStudentQuery,
+} from "./dbQueries";
 
 export const calculateTestGrade = (
   selectedAns = 0,
@@ -238,4 +244,49 @@ export const calculateAllScore = (event) => {
   if (event.check_download === 1) score = score + 800;
   if (event.check_inicio === 1) score = score + 150;
   return (score = score + (event.check_fin + event.check_document));
+};
+
+export const getStudentdb = async (id_estudiante) => {
+  const db = SQLite.openDatabase("db5.db");
+  const student = await new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select * from students where id_estudiante = ?;`,
+        [id_estudiante],
+        (query, { rows: { _array } }) => {
+          if (!query._error) {
+            resolve(_array);
+          } else {
+            reject(query._error);
+          }
+        }
+      );
+    });
+  });
+  return student;
+};
+
+export const updateStudentdb = async (
+  studentToUpdate,
+  ip,
+  internetConnection
+) => {
+  const db = SQLite.openDatabase("db5.db");
+  const { text, studentValues } = updateStudentQuery(studentToUpdate);
+  await new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(text, studentValues, (query, { rows: { _array } }) => {
+        if (!query._error) {
+          resolve(_array);
+        } else {
+          reject(query._error);
+        }
+      });
+    });
+  });
+  const currentStudent = await getStudentdb(studentToUpdate.id_estudiante); //this just in case saving in db fails.
+  internetConnection &&
+    API.updateStudents(ip, currentStudent[0])
+      .then()
+      .catch((e) => console.log("error saving score", e));
 };

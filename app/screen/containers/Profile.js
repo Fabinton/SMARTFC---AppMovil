@@ -16,7 +16,12 @@ import ActivityEvents from "../../components/profileActivity";
 import CustomButton from "../../components/customButton";
 import { Stack, Spacer } from "@react-native-material/core";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { calculateAllScore, getEventsLocalDB } from "../../../utils/parsers";
+import {
+  calculateAllScore,
+  getEventsLocalDB,
+  getStudentdb,
+  updateStudentdb,
+} from "../../../utils/parsers";
 
 const db = SQLite.openDatabase("db5.db");
 class Profile extends Component {
@@ -266,6 +271,17 @@ class Profile extends Component {
         totalScore: prevState.totalScore + (obj.totalScore || 0),
       }))
     );
+    this.getStudentInfo();
+  }
+
+  async getStudentInfo() {
+    let student = await getStudentdb(this.props.student.id_estudiante);
+    student[0].nombre_usuario = String(this.state.totalScore); //total score into nombre_usuario key.
+    await updateStudentdb(
+      student[0],
+      this.props.ipconfig,
+      this.props.internetConnection
+    );
   }
 
   keyExtractor = (item) => item.id_actividad.toString();
@@ -437,6 +453,7 @@ function mapStateToProps(state) {
     ipconfig: state.videos.selectedIPConfig,
     subject: state.videos.selectedSubjects,
     list: state.videos.activity,
+    internetConnection: state.connection.isConnected,
   };
 }
 

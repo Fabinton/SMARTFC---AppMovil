@@ -142,3 +142,21 @@ export const createResult = (storageFilter, evaluationType) => {
   }
   return result;
 };
+
+export const updateStudentQuery = (student) => {
+  const text =
+    "update students set nombre_estudiante = ? , apellido_estudiante = ?, grado_estudiante = ?,curso_estudiante = ?, id_colegio = ?, nombre_usuario = ?, contrasena = ?, correo_electronico = ? where id_estudiante = ? ";
+
+  const studentValues = [
+    student.nombre_estudiante,
+    student.apellido_estudiante,
+    student.grado_estudiante,
+    student.curso_estudiante,
+    student.id_colegio,
+    student.nombre_usuario,
+    student.contrasena,
+    student.correo_electronico,
+    student.id_estudiante,
+  ];
+  return { text, studentValues };
+};
