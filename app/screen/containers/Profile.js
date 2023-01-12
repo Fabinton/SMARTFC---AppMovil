@@ -4,8 +4,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
-  Image,
   TouchableOpacity,
   FlatList,
   Alert,
@@ -18,29 +16,9 @@ import ActivityEvents from "../../components/profileActivity";
 import CustomButton from "../../components/customButton";
 import { Stack, Spacer } from "@react-native-material/core";
 import { FontAwesome5 } from "@expo/vector-icons";
-const db = SQLite.openDatabase("db5.db");
-const actividades = [1];
+import { calculateAllScore, getEventsLocalDB } from "../../../utils/parsers";
 
-var resultado = [
-  {
-    id_actividad: 0,
-    nombre_actividad: "",
-    nota: 0,
-    count_videos: 0,
-    progresso: 0,
-  },
-];
-var storageActividad = [
-  {
-    id_actividad: 0,
-    nombre_actividad: "",
-    nota: 0,
-    count_videos: 0,
-    progresso: 0,
-  },
-];
-var active = "";
-var place = 10;
+const db = SQLite.openDatabase("db5.db");
 class Profile extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -49,6 +27,19 @@ class Profile extends Component {
   };
   state = {
     storage: [],
+    result: [
+      {
+        id_actividad: 0,
+        nombre_actividad: "",
+        nota: 0,
+        count_videos: 0,
+        progresso: 0,
+      },
+    ],
+    place: 10,
+    active: "",
+    uniqueEvents: [],
+    totalScore: 0,
   };
 
   componentDidMount() {
@@ -59,25 +50,14 @@ class Profile extends Component {
       tx.executeSql(
         "create table if not exists flatEvent (id_evento integer not null, upload int);"
       );
-      tx.executeSql("select * from events", [], (_, { rows: { _array } }) =>
-        this.setState({ storage: _array })
-      );
-      tx.executeSql(
-        `select * from events where id_estudiante = ?;`,
-        [this.props.student.id_estudiante],
-        (_, { rows: { _array } }) => this.setState({ storage: _array })
-      );
     });
     this.loadActivities();
   }
-  consulta() {
-    db.transaction((tx) => {
-      tx.executeSql(
-        `select * from events where id_estudiante = ?;`,
-        [this.props.student.id_estudiante],
-        (_, { rows: { _array } }) => this.setState({ storage: _array })
-      );
-    });
+  async consulta() {
+    const studentEvents = await getEventsLocalDB(
+      this.props.student.id_estudiante
+    );
+    this.setState({ storage: studentEvents });
   }
   async filtro(activeSub) {
     const data = [];
@@ -91,9 +71,18 @@ class Profile extends Component {
   }
 
   async loadActivities() {
-    active = "ESTOS SON SU PROGRESO EN LA ACTIVIDAD";
-    this.consulta();
-    storagesEvents = this.state.storage;
+    await this.consulta();
+    let storageActividad = [
+      {
+        id_actividad: 0,
+        nombre_actividad: "",
+        nota: 0,
+        count_videos: 0,
+        progresso: 0,
+        totalScore: 0,
+      },
+    ];
+    this.setState({ active: "ESTOS SON SU PROGRESO EN LA ACTIVIDAD" });
     var activity = await API.getActivities(this.props.ipconfig);
     var notaF = 0;
     var notaFEvaluation = 0;
@@ -220,8 +209,8 @@ class Profile extends Component {
           if (this.state.storage[i].check_Ea1 != "0") {
             progressoActivity = 1;
           }
-          var totalActivity = (notaF + notaFEvaluation) / 2;
-          dataActividadEvent = {
+          const totalActivity = (notaF + notaFEvaluation) / 2;
+          const dataActividadEvent = {
             id_evento: this.state.storage[i].id_evento,
             id_actividad: activity[j].id_actividad,
             nombre_actividad: activity[j].titulo_actividad,
@@ -230,9 +219,10 @@ class Profile extends Component {
             totalNota: totalActivity,
             count_videos: this.state.storage[i].count_video,
             progresso: progressoActivity,
+            totalScore: calculateAllScore(this.state.storage[i]),
           };
           storageActividad.push(dataActividadEvent);
-          resultado = Array.from(
+          const resultado = Array.from(
             new Set(storageActividad.map((s) => s.id_actividad))
           ).map((id_actividad) => {
             return {
@@ -258,12 +248,24 @@ class Profile extends Component {
               id_evento: storageActividad.find(
                 (s) => s.id_actividad === id_actividad
               ).id_evento,
+              totalScore: storageActividad.find(
+                (s) => s.id_actividad === id_actividad
+              ).totalScore,
               subject: this.filtro(id_actividad),
             };
           });
+          this.setState({ result: resultado });
         }
       }
     }
+    const arr = this.state.result.filter((value, index, self) => {
+      return self.indexOf(value) === index;
+    });
+    arr.map((obj) =>
+      this.setState((prevState) => ({
+        totalScore: prevState.totalScore + (obj.totalScore || 0),
+      }))
+    );
   }
 
   keyExtractor = (item) => item.id_actividad.toString();
@@ -341,16 +343,16 @@ class Profile extends Component {
             <FontAwesome5
               name="award"
               size={65}
-              color={this.changeColor(place)}
+              color={this.changeColor(this.state.place)}
             />
             <Text
               style={{
                 fontSize: 65,
                 fontWeight: "bold",
-                color: this.changeColor(place),
+                color: this.changeColor(this.state.place),
               }}
             >
-              {place}
+              {this.state.place}
             </Text>
 
             <Spacer />
@@ -372,7 +374,7 @@ class Profile extends Component {
                 Alert.alert(
                   "¿Qué signfica este número?",
                   "Actualmente ocupas el puesto " +
-                    place +
+                    this.state.place +
                     " entre tus compañer@s de curso. \n\nPara mejorar tu puesto puedes ver el material de tus cursos y sacar buenos resultados en los test y evaluaciones",
                   [{ text: "OK" }],
                   { cancelable: false }
@@ -385,10 +387,13 @@ class Profile extends Component {
             <CustomButton text="Cargar Datos" onPress={() => this.loadData()} />
             <Spacer />
           </Stack>
-          <Text style={styles.TextoDatos}>{active}</Text>
+          <Text style={styles.TextoDatos}>{this.state.active}</Text>
+          <Text style={styles.TextoDatos}>
+            {"Puntaje total:" + this.state.totalScore}
+          </Text>
         </View>
         <FlatList
-          data={resultado}
+          data={this.state.result}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
         />

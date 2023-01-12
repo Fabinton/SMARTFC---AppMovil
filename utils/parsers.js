@@ -211,3 +211,31 @@ export const createEvaluation = (test, evaluationType) => {
   ];
   return { evaluation };
 };
+
+export const getEventsLocalDB = async (id_estudiante) => {
+  const db = SQLite.openDatabase("db5.db");
+  const store = await new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select * from events where id_estudiante = ?;`,
+        [id_estudiante],
+        (query, { rows: { _array } }) => {
+          if (!query._error) {
+            resolve(_array);
+          } else {
+            reject(query._error);
+          }
+        }
+      );
+    });
+  });
+  return store;
+};
+
+export const calculateAllScore = (event) => {
+  let score = 0;
+  if (event.check_video === 1) score = score + 400;
+  if (event.check_download === 1) score = score + 800;
+  if (event.check_inicio === 1) score = score + 150;
+  return (score = score + (event.check_fin + event.check_document));
+};
