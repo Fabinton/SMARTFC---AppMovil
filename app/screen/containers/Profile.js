@@ -76,6 +76,10 @@ class Profile extends Component {
   }
 
   async loadActivities() {
+    this.props.dispatch({
+      type: "SET_LOADING",
+      payload: true,
+    });
     await this.consulta();
     let storageActividad = [
       {
@@ -271,7 +275,11 @@ class Profile extends Component {
         totalScore: prevState.totalScore + (obj.totalScore || 0),
       }))
     );
-    this.getStudentInfo();
+    await this.getStudentInfo();
+    this.props.dispatch({
+      type: "SET_LOADING",
+      payload: false,
+    });
   }
 
   async getStudentInfo() {
