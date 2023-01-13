@@ -309,7 +309,6 @@ class Profile extends Component {
         student[0].id_colegio,
         student[0].grado_estudiante
       );
-      console.log("en bd", studentsTorank.length);
     }
     studentsTorank.find((studentRank, key) => {
       if (studentRank.id_estudiante === student[0].id_estudiante)

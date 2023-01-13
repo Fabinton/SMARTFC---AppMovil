@@ -449,7 +449,6 @@ export const insertStudentDB = async (student) => {
 export const getStudentsInServerByschool = async (ip) => {
   await API.allStudent(ip)
     .then(({ data }) => {
-      console.log("long", data.length);
       data.map(async (student) => {
         await insertStudentDB(student);
       });
