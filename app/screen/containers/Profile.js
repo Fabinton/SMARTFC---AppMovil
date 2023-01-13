@@ -50,14 +50,6 @@ class Profile extends Component {
   };
 
   componentDidMount() {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "create table if not exists events (id_evento integer primary key not null, data_start text, hour_start text, data_end text, hour_end text, id_actividad int, id_estudiante int, check_download int, check_inicio int, check_fin int, check_answer int, count_video int, check_video int, check_document int, check_a1 int, check_a2 int, check_a3 int, check_profile int, check_Ea1 int, check_Ea2 int, check_Ea3 int );"
-      );
-      tx.executeSql(
-        "create table if not exists flatEvent (id_evento integer not null, upload int);"
-      );
-    });
     this.loadActivities();
   }
   async consulta() {
@@ -206,19 +198,19 @@ class Profile extends Component {
             notaFEvaluation = 0;
           }
           if (this.state.storage[i].check_inicio == "1") {
-            progressoActivity = 0.2;
+            progressoActivity = progressoActivity + 0.1;
           }
           if (this.state.storage[i].check_video == "1") {
-            progressoActivity = 0.4;
+            progressoActivity = progressoActivity + 0.1;
           }
           if (this.state.storage[i].check_answer == "1") {
-            progressoActivity = 0.6;
+            progressoActivity = progressoActivity + 0.3;
           }
           if (this.state.storage[i].check_download == "1") {
-            progressoActivity = 0.8;
+            progressoActivity = progressoActivity + 0.2;
           }
           if (this.state.storage[i].check_Ea1 != "0") {
-            progressoActivity = 1;
+            progressoActivity = progressoActivity + 0.3;
           }
           const totalActivity = (notaF + notaFEvaluation) / 2;
           const dataActividadEvent = {
@@ -346,7 +338,8 @@ class Profile extends Component {
       );
     }
   };
-  loadData() {
+  async loadData() {
+    await this.consulta();
     if (Object.keys(this.state.storage)?.length === 0) {
       Alert.alert(
         "Error",
@@ -373,14 +366,16 @@ class Profile extends Component {
   }
 
   renderItem = ({ item }) => {
-    return (
-      <ActivityEvents
-        {...item}
-        onPress={() => {
-          this.viewContenido(item);
-        }}
-      />
-    );
+    if (item.id_actividad != 0) {
+      return (
+        <ActivityEvents
+          {...item}
+          onPress={() => {
+            this.viewContenido(item);
+          }}
+        />
+      );
+    } else return null;
   };
   render() {
     return (
