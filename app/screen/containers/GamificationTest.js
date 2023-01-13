@@ -25,6 +25,8 @@ const GamificationTest = ({ navigation }) => {
     evaluationType,
     IDstudent,
     IDactivity,
+    internetConnection,
+    selectedIPConfig,
   } = navigation?.state?.params;
   useEffect(() => {
     const backAction = () => {
@@ -40,6 +42,7 @@ const GamificationTest = ({ navigation }) => {
     return Alert.alert(
       "Felicitaciones.",
       "La evaluación ha sido completada.",
+      "Recuerda que si no tienes acceso a internet, debes sincronizar desde mis cursos en el futuro.",
       [
         {
           text: "Ir a Mis materias.",
@@ -49,7 +52,9 @@ const GamificationTest = ({ navigation }) => {
               IDactivity,
               allAnswers,
               evaScore,
-              evaluationType
+              evaluationType,
+              internetConnection,
+              selectedIPConfig
             );
             navigation.dispatch(
               NavigationActions.navigate({

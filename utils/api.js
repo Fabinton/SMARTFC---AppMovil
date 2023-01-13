@@ -51,7 +51,7 @@ class Api {
     return predata2;
   }
   createEvents(BASE_IP, eventsStudents) {
-    console.log("metricas", eventsStudents);
+    // console.log("metricas", eventsStudents);
     var BASE_API_EVENTS = "http://" + BASE_IP + ":3000" + "/createEventos";
     return axios.post(`${BASE_API_EVENTS}`, eventsStudents);
   }

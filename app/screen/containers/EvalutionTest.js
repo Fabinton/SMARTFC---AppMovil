@@ -10,11 +10,13 @@ const EvalutionTest = ({ navigation }) => {
   const [evaluationStep, setEvaluationStep] = useState(0);
   const [index, setIndex] = useState(0);
   const [StartCounting, setStartCounting] = useState(false);
-  const { selectedActivity, selectedStudent } = useSelector(
+  const { selectedActivity, selectedStudent, selectedIPConfig } = useSelector(
     (state) => state.videos
   );
+  const { isConnected } = useSelector((state) => state.connection);
   const test = useMemo(() => selectedActivity, [selectedActivity]);
   const student = useMemo(() => selectedStudent, [selectedStudent]);
+  const connection = useMemo(() => isConnected, [isConnected]);
   const alredyTested = false;
   const evaluationType =
     navigation?.state?.params?.toRender === 0 ? true : false;
@@ -105,6 +107,8 @@ const EvalutionTest = ({ navigation }) => {
                     evaluationType: evaluationType,
                     IDstudent: student.id_estudiante,
                     IDactivity: test.id_actividad,
+                    internetConnection: connection,
+                    selectedIPConfig: selectedIPConfig,
                   },
                 })
               );

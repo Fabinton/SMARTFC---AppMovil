@@ -29,7 +29,9 @@ export const saveEventsDB = async (
   id_actividad,
   answers,
   evaScore,
-  evaluationType
+  evaluationType,
+  internetConnection,
+  selectedIPConfig
 ) => {
   console.log(
     "evaScore",
@@ -120,6 +122,9 @@ export const saveEventsDB = async (
   });
   const allEvents = await selectAllEventsBd();
   await inserFlatEventsBd(allEvents[allEvents.length - 1].id_evento);
+  const allFlatEvents = await selectAllFlatEventsBd();
+  internetConnection &&
+    syncServer(allEvents, allFlatEvents, selectedIPConfig, id_estudiante);
 };
 
 export const createEvaluation = (test, evaluationType) => {
@@ -310,6 +315,26 @@ export const selectAllEventsBd = async () => {
   return store;
 };
 
+export const selectAllFlatEventsBd = async () => {
+  const db = SQLite.openDatabase("db5.db");
+  const store = await new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select * from flatEvent ;`,
+        [],
+        (query, { rows: { _array } }) => {
+          if (!query._error) {
+            resolve(_array);
+          } else {
+            reject(query._error);
+          }
+        }
+      );
+    });
+  });
+  return store;
+};
+
 export const inserFlatEventsBd = async (id) => {
   const db = SQLite.openDatabase("db5.db");
   await new Promise((resolve, reject) => {
@@ -327,4 +352,57 @@ export const inserFlatEventsBd = async (id) => {
       );
     });
   });
+};
+
+export const updateUploadedFlat = async (state = 1, id) => {
+  const db = SQLite.openDatabase("db5.db");
+  await new Promise(() => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `update flatEvent set upload = ? where id_evento = ? ;`,
+        [state, id],
+        (query, { rows: { _array } }) => {
+          if (!query._error) {
+            resolve(_array);
+          } else {
+            reject(query._error);
+          }
+        }
+      );
+    });
+  });
+};
+
+export const syncServer = async (
+  allEvents,
+  allFlatEvents,
+  selectedIPConfig,
+  id_estudiante
+) => {
+  let EventsServerlength = 0;
+  await API.loadEventsLast(selectedIPConfig)
+    .then(({ data }) => (EventsServerlength = data.length + 1))
+    .catch((e) => {
+      console.log("fallo al traer todos los eventos", e);
+    });
+  const id_estudianteF = parseInt("" + id_estudiante + EventsServerlength);
+  if (EventsServerlength.toString().length > 0) {
+    allFlatEvents?.map((flat) => {
+      const id_eventoFs = flat.id_evento;
+      if (flat.upload === 0) {
+        allEvents?.map((event) => {
+          if (flat.id_evento === event.id_evento) {
+            event.id_evento = id_estudianteF;
+            API.createEvents(selectedIPConfig, event)
+              .then(async () => {
+                await updateUploadedFlat(1, id_eventoFs);
+              })
+              .catch((e) => {
+                console.log("fallo guardando evento en bd", e);
+              });
+          }
+        });
+      }
+    });
+  }
 };
