@@ -41,8 +41,7 @@ const GamificationTest = ({ navigation }) => {
   const alertMessage = () => {
     return Alert.alert(
       "Felicitaciones.",
-      "La evaluación ha sido completada.",
-      "Recuerda que si no tienes acceso a internet, debes sincronizar desde mis cursos en el futuro.",
+      "La evaluación ha sido completada, Recuerda que si no tienes acceso a internet, debes sincronizar desde mis cursos en el futuro.",
       [
         {
           text: "Ir a Mis materias.",
