@@ -3,6 +3,7 @@ import API from "./api";
 import {
   createResult,
   evaluationQuery,
+  studentToDBQuery,
   testQuery,
   updateStudentQuery,
 } from "./dbQueries";
@@ -380,7 +381,7 @@ export const syncServer = async (
   id_estudiante
 ) => {
   let EventsServerlength = 0;
-  await API.loadEventsLast(selectedIPConfig)
+  await API.loadEventsLast(selectedIPConfig) // loading all events (extract length) to set the current event an id.
     .then(({ data }) => (EventsServerlength = data.length + 1))
     .catch((e) => {
       console.log("fallo al traer todos los eventos", e);
@@ -391,11 +392,12 @@ export const syncServer = async (
       const id_eventoFs = flat.id_evento;
       if (flat.upload === 0) {
         allEvents?.map((event) => {
+          // map all flat events to check if it is uploaded,map all event to set the id event and sending it to the server.
           if (flat.id_evento === event.id_evento) {
             event.id_evento = id_estudianteF;
             API.createEvents(selectedIPConfig, event)
               .then(async () => {
-                await updateUploadedFlat(1, id_eventoFs);
+                await updateUploadedFlat(1, id_eventoFs); // change the upload state to 1 (uploaded)
               })
               .catch((e) => {
                 console.log("fallo guardando evento en bd", e);
@@ -405,4 +407,57 @@ export const syncServer = async (
       }
     });
   }
+};
+
+export const getStudentsByschool = async (id_school, id_grado) => {
+  const db = SQLite.openDatabase("db5.db");
+  const store = await new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select * from students where id_colegio = ? and grado_estudiante = ? order by nombre_usuario + 0 desc ;`,
+        [id_school, id_grado],
+        (query, { rows: { _array } }) => {
+          if (!query._error) {
+            resolve(_array);
+          } else {
+            reject(query._error);
+          }
+        }
+      );
+    });
+  });
+
+  return store;
+};
+
+export const insertStudentDB = async (student) => {
+  const db = SQLite.openDatabase("db5.db");
+  const { text, studentInfo } = studentToDBQuery(student);
+  await new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(text, studentInfo, (query, { rows: { _array } }) => {
+        if (!query._error) {
+          resolve(_array);
+        } else {
+          reject(query._error);
+        }
+      });
+    });
+  });
+};
+
+export const getStudentsInServerByschool = async (ip) => {
+  await API.allStudent(ip)
+    .then(({ data }) => {
+      console.log("long", data.length);
+      data.map(async (student) => {
+        await insertStudentDB(student);
+      });
+      // Promise.all(
+      //   data.map((student) => {
+      //     insertStudentDB(student);
+      //   })
+      // ).then;
+    })
+    .catch((e) => console.log("error trayendo estudiantes", e));
 };

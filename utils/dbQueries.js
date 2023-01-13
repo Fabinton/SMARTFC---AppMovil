@@ -160,3 +160,22 @@ export const updateStudentQuery = (student) => {
   ];
   return { text, studentValues };
 };
+
+export const studentToDBQuery = (student) => {
+  const text =
+    "insert into students (id_estudiante, tipo_usuario, nombre_estudiante, apellido_estudiante, grado_estudiante, curso_estudiante, id_colegio, nombre_usuario, contrasena, correo_electronico) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+  const studentInfo = [
+    student.id_estudiante,
+    student.tipo_usuario,
+    student.nombre_estudiante,
+    student.apellido_estudiante,
+    student.grado_estudiante,
+    student.curso_estudiante,
+    student.id_colegio,
+    student.nombre_usuario,
+    student.contrasena,
+    student.correo_electronico,
+  ];
+  return { text, studentInfo };
+};

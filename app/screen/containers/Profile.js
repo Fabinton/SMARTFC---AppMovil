@@ -20,6 +20,8 @@ import {
   calculateAllScore,
   getEventsLocalDB,
   getStudentdb,
+  getStudentsByschool,
+  getStudentsInServerByschool,
   updateStudentdb,
 } from "../../../utils/parsers";
 
@@ -276,6 +278,7 @@ class Profile extends Component {
       }))
     );
     await this.getStudentInfo();
+    await this.studentRanked();
     this.props.dispatch({
       type: "SET_LOADING",
       payload: false,
@@ -290,6 +293,28 @@ class Profile extends Component {
       this.props.ipconfig,
       this.props.internetConnection
     );
+  }
+
+  async studentRanked() {
+    let student = await getStudentdb(this.props.student.id_estudiante);
+    let studentsTorank = [];
+    if (!this.props.internetConnection) {
+      studentsTorank = await getStudentsByschool(
+        student[0].id_colegio,
+        student[0].grado_estudiante
+      );
+    } else {
+      await getStudentsInServerByschool(this.props.ipconfig);
+      studentsTorank = await getStudentsByschool(
+        student[0].id_colegio,
+        student[0].grado_estudiante
+      );
+      console.log("en bd", studentsTorank.length);
+    }
+    studentsTorank.find((studentRank, key) => {
+      if (studentRank.id_estudiante === student[0].id_estudiante)
+        this.setState({ place: key + 1 });
+    });
   }
 
   keyExtractor = (item) => item.id_actividad.toString();
@@ -388,33 +413,39 @@ class Profile extends Component {
               <Text style={styles.grado}>
                 Grado: {this.props.student.grado_estudiante}
               </Text>
+              <Text style={styles.grado}>
+                {"Puntaje: " + this.state.totalScore}
+              </Text>
             </Stack>
             <Spacer />
           </Stack>
           <Stack direction="row" alignItems="center">
             <Spacer />
-            <TouchableOpacity
-              onPress={() =>
-                Alert.alert(
-                  "¿Qué signfica este número?",
-                  "Actualmente ocupas el puesto " +
-                    this.state.place +
-                    " entre tus compañer@s de curso. \n\nPara mejorar tu puesto puedes ver el material de tus cursos y sacar buenos resultados en los test y evaluaciones",
-                  [{ text: "OK" }],
-                  { cancelable: false }
-                )
-              }
-            >
-              <FontAwesome5 name="question-circle" size={35} color="#70C2E5" />
-            </TouchableOpacity>
+            {this.state.place !== 1 && (
+              <TouchableOpacity
+                onPress={() =>
+                  Alert.alert(
+                    "¿Qué signfica este número?",
+                    "Actualmente ocupas el puesto " +
+                      this.state.place +
+                      " entre tus compañer@s de curso. \n\nPara mejorar tu puesto puedes ver el material de tus cursos y sacar buenos resultados en los test y evaluaciones",
+                    [{ text: "OK" }],
+                    { cancelable: false }
+                  )
+                }
+              >
+                <FontAwesome5
+                  name="question-circle"
+                  size={35}
+                  color="#70C2E5"
+                />
+              </TouchableOpacity>
+            )}
             <Spacer />
             <CustomButton text="Cargar Datos" onPress={() => this.loadData()} />
             <Spacer />
           </Stack>
           <Text style={styles.TextoDatos}>{this.state.active}</Text>
-          <Text style={styles.TextoDatos}>
-            {"Puntaje total:" + this.state.totalScore}
-          </Text>
         </View>
         <FlatList
           data={this.state.result}
