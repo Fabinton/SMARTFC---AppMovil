@@ -452,11 +452,6 @@ export const getStudentsInServerByschool = async (ip) => {
       data.map(async (student) => {
         await insertStudentDB(student);
       });
-      // Promise.all(
-      //   data.map((student) => {
-      //     insertStudentDB(student);
-      //   })
-      // ).then;
     })
     .catch((e) => console.log("error trayendo estudiantes", e));
 };
