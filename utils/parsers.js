@@ -1,5 +1,6 @@
 import * as SQLite from "expo-sqlite";
 import API from "./api";
+import { NavigationActions } from "react-navigation";
 import {
   createResult,
   evaluationQuery,
@@ -33,8 +34,18 @@ export const saveEventsDB = async (
   evaScore,
   evaluationType,
   internetConnection,
-  selectedIPConfig
+  selectedIPConfig,
+  dispatch
 ) => {
+  dispatch({
+    type: "SET_LOADING",
+    payload: true,
+  });
+  dispatch(
+    NavigationActions.navigate({
+      routeName: "Activity",
+    })
+  );
   console.log(
     "evaScore, ans in order they'll save",
     evaScore,
@@ -125,8 +136,20 @@ export const saveEventsDB = async (
   const allEvents = await selectAllEventsBd();
   await inserFlatEventsBd(allEvents[allEvents.length - 1].id_evento);
   const allFlatEvents = await selectAllFlatEventsBd();
-  internetConnection &&
-    syncServer(allEvents, allFlatEvents, selectedIPConfig, id_estudiante);
+  if (internetConnection) {
+    await syncServer(
+      allEvents,
+      allFlatEvents,
+      selectedIPConfig,
+      id_estudiante,
+      dispatch
+    );
+  } else {
+    dispatch({
+      type: "SET_LOADING",
+      payload: false,
+    });
+  }
 };
 
 export const createEvaluation = (test, evaluationType) => {
@@ -379,7 +402,8 @@ export const syncServer = async (
   allEvents,
   allFlatEvents,
   selectedIPConfig,
-  id_estudiante
+  id_estudiante,
+  dispatch
 ) => {
   let EventsServerlength = 0;
   await API.loadEventsLast(selectedIPConfig) // loading all events (extract length) to set the current event an id.
@@ -402,6 +426,12 @@ export const syncServer = async (
               })
               .catch((e) => {
                 console.log("fallo guardando evento en bd", e);
+              })
+              .finally(() => {
+                dispatch({
+                  type: "SET_LOADING",
+                  payload: false,
+                });
               });
           }
         });

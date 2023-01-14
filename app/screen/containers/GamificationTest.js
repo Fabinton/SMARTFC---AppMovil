@@ -9,10 +9,11 @@ import {
 import CustomButton from "../../components/customButton";
 import React, { useEffect, useState } from "react";
 import ProgressBar from "../../components/ProgressBar";
-import { NavigationActions } from "react-navigation";
 import { calculateTestGrade, saveEventsDB } from "../../../utils/parsers";
+import { useDispatch } from "react-redux";
 
 const GamificationTest = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [allAnswers, setAllAnswers] = useState({});
   const [evaScore, setEvaScore] = useState(0);
   const {
@@ -53,12 +54,8 @@ const GamificationTest = ({ navigation }) => {
               evaScore,
               evaluationType,
               internetConnection,
-              selectedIPConfig
-            );
-            navigation.dispatch(
-              NavigationActions.navigate({
-                routeName: "Activity",
-              })
+              selectedIPConfig,
+              dispatch
             );
           },
         },
