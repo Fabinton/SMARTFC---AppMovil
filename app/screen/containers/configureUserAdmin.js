@@ -40,7 +40,6 @@ class Configure extends Component {
     students: null,
   };
   async componentDidMount() {
-    console.log(this.props.student.grado_estudiante);
     var query2 = await API.loadSchool(this.props.ipconfig);
     var query = await API.allStudent(this.props.ipconfig);
     this.setState({ students: query });
@@ -61,7 +60,6 @@ class Configure extends Component {
       correo_electronico: this.state.email,
     };
     var student = await API.updateStudents(this.props.ipconfig, data);
-    console.log(student);
     db.transaction(
       (tx) => {
         //id_estudiante, tipo_usuario, nombre_estudiante, apellido_estudiante, grado_estudiante, curso_estudiante, id_colegio, nombre_usuario, contrasena, correo_electronico
@@ -79,8 +77,10 @@ class Configure extends Component {
             this.props.student.id_estudiante,
           ]
         );
-        tx.executeSql("select * from students", [], (_, { rows: { _array } }) =>
-          console.log(_array)
+        tx.executeSql(
+          "select * from students",
+          [],
+          (_, { rows: { _array } }) => {}
         );
       },
       null,
@@ -96,8 +96,6 @@ class Configure extends Component {
     if (this.state.school == null) {
       itemsInPicker = null;
     } else {
-      console.log("Imprimiendo State");
-      //console.log(datasSchool);
       datasSchoolFull = this.state.school;
       itemsInPicker = datasSchoolFull.map((data) => {
         return (
@@ -136,7 +134,6 @@ class Configure extends Component {
         grado: "11",
       },
     ];
-    console.log(dataGrado);
     let itemsInPicker2 = dataGrado.map((data) => {
       return (
         <Picker.Item

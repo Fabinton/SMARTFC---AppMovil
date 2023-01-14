@@ -10,7 +10,7 @@ function Suggestion(props) {
           <Text style={styles.title}>Actividad: {props.nombre_actividad}</Text>
           <Text style={styles.teacher}>Nota Quiz: {props.nota}</Text>
           <Text style={styles.teacher}>
-            Nota Evaluation: {props.notaEvaluation}
+            Nota Evaluación: {props.notaEvaluation}
           </Text>
           <Text style={styles.teacher}>Nota Actividad: {props.totalNota}</Text>
           <Progress.Bar

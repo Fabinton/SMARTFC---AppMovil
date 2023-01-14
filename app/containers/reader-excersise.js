@@ -57,16 +57,11 @@ class Player extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFilter: _array })
       );
     });
-    console.log("Storage Print");
-    console.log(this.state.storageFilter);
+
     var storageFilterGood = this.state.storageFilter;
     var storageFilter = storageFilterGood.reverse();
-    console.log("Imprimiendo Resultado");
-    //console.log(storageFilter);
 
-    console.log(storageFilterGood);
     if (storageFilter.length == 0) {
-      console.log("Entro a Cero");
       resultado = [
         {
           check_a1: 0,
@@ -160,7 +155,7 @@ class Player extends Component {
         this.setState({ storage: _array })
       );
     });
-    //console.log(this.state.storage [this.state.storage.length-1]);
+
     this.update();
   }
   updateFlat() {
@@ -171,7 +166,6 @@ class Player extends Component {
         (_, { rows: { _array } }) => this.setState({ storageFlats: _array })
       );
     });
-    console.log(this.state.storageFlats);
   }
   update() {
     db.transaction((tx) => {
@@ -179,7 +173,7 @@ class Player extends Component {
         this.setState({ storage: _array })
       );
     });
-    console.log(this.state.storage[this.state.storage.length - 1]);
+
     db.transaction(
       (tx) => {
         tx.executeSql(
@@ -209,8 +203,6 @@ class Player extends Component {
     this.props.onPress && this.props.onPress();
   };
   render() {
-    //const url = this.props.descripcion_CREA;
-    //console.log(this.props.descripcion_CREA);
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.touchableButtonSignIn}>

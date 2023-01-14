@@ -75,8 +75,7 @@ class SuggestionList extends Component {
           });
           var data = this.state.storage;
           var Flats = this.state.storageFlats;
-          // console.log("storage", data);
-          // console.log("flats", Flats);
+
           Flats.map((flat) => {
             if (flat.upload === 0 && !onScroll) {
               data.map((event) => {
@@ -104,7 +103,7 @@ class SuggestionList extends Component {
                             tx.executeSql(
                               "select * from flatEvent",
                               [],
-                              (_, { rows: { _array } }) => console.log(_array)
+                              (_, { rows: { _array } }) => {}
                             );
                           });
                         })
@@ -165,7 +164,6 @@ class SuggestionList extends Component {
         subject: item,
       },
     });
-    //console.log(this.props.dispatch)
     this.props.dispatch(
       NavigationActions.navigate({
         routeName: "ActivitySubj",

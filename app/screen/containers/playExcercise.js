@@ -34,8 +34,6 @@ class playExcercise extends Component {
     }).start();
   }
   render() {
-    console.log("Abriendo PlayContents");
-    console.log(this.props.activity.video);
     if (this.props.activity.taller == "1") {
       return (
         <Animated.View style={{ flex: 1, opacity: this.state.opacity }}>

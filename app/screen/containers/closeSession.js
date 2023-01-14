@@ -45,7 +45,6 @@ class CloseSession extends Component {
   }
   render() {
     this.closeSesion();
-    //console.log(this.props.navigation);
     return (
       <View style={styles.container}>
         <Text>Gracias por usar nuestros servicios, somos SMART FC</Text>

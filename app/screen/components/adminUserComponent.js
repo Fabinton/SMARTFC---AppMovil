@@ -1,8 +1,7 @@
 import React from "react";
-import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 function Suggestion(props) {
-  console.log("Imprimiendo URLs");
   return (
     <TouchableOpacity onPress={props.onPress}>
       <View style={styles.container}>

@@ -260,7 +260,7 @@ class testActivity extends Component {
                         tx.executeSql(
                           "select * from flatEvent",
                           [],
-                          (_, { rows: { _array } }) => console.log(_array)
+                          (_, { rows: { _array } }) => {}
                         );
                       });
                       Alert.alert(

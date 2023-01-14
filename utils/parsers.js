@@ -14,6 +14,7 @@ export const calculateTestGrade = (
   time,
   evaluationType
 ) => {
+  console.log("selected - correct", selectedAns, correctAns);
   const maxTime = 35;
   const value = evaluationType ? 200 : 100; // max value if user press the correct answer in the lowest time.
   const correct = evaluationType ? 200 : 100; // default value if user press the correct answer.
@@ -35,7 +36,7 @@ export const saveEventsDB = async (
   selectedIPConfig
 ) => {
   console.log(
-    "evaScore",
+    "evaScore, ans in order they'll save",
     evaScore,
     Object.values(answers)[0],
     Object.values(answers)[1],

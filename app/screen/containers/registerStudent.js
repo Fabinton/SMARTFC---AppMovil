@@ -198,7 +198,6 @@ class Register extends Component {
     if (this.state.school == null) {
       itemsInPicker = null;
     } else {
-      //console.log(datasSchool);
       datasSchoolFull = this.state.school;
 
       itemsInPicker = datasSchoolFull.map((data) => {

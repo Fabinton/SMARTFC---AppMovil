@@ -201,7 +201,7 @@ class evaluationActivity extends Component {
     Alert.alert(
       "Almacenamiento Exitoso",
       "Sus respuestas han sido almacenadas recuerde sincronizar con su servidor cuando este en el colegio",
-      [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+      [{ text: "OK", onPress: () => {} }],
       { cancelable: false }
     );
   }

@@ -101,7 +101,7 @@ const GamificationTest = ({ navigation }) => {
                 onPress={() => {
                   setAllAnswers({
                     ...allAnswers,
-                    [ans.res]: ans.id,
+                    [`  ${ans.res}` + ans.res]: ans.id, //to prevent automatic sort of javascript it key its a number.
                   });
                   const totalValue = calculateTestGrade(
                     ans.id,

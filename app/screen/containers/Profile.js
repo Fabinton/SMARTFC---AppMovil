@@ -264,6 +264,7 @@ class Profile extends Component {
     const arr = this.state.result.filter((value, index, self) => {
       return self.indexOf(value) === index;
     });
+    this.setState({ totalScore: 0 }); //reset counter
     arr.map((obj) =>
       this.setState((prevState) => ({
         totalScore: prevState.totalScore + (obj.totalScore || 0),

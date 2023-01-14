@@ -80,7 +80,6 @@ class Player extends Component {
     const name = shorthash.unique(uri);
     const path = `${FileSystem.cacheDirectory}${name}`;
     const video = await FileSystem.getInfoAsync(path);
-    console.log("video", video);
     if (video.exists) {
       this.setState({
         source: {
