@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Dimensions } from "react-native";
 import React from "react";
 import LottieView from "lottie-react-native";
 
@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.3)",
     zIndex: 2,
+    height: Dimensions.get("screen").height,
   },
   loadingText: {
     color: "#36EBC3",

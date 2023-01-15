@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import * as SQLite from "expo-sqlite";
-import HeaderLogin from "../../components/headerLogin";
 import API from "../../../utils/api";
 import CustomButton from "../../components/customButton";
 import ConnectIp from "../../components/ConnectIp";
@@ -19,11 +18,6 @@ import ConnectIp from "../../components/ConnectIp";
 const db = SQLite.openDatabase("db5.db");
 
 class Login extends Component {
-  static options = () => {
-    return {
-      header: <HeaderLogin></HeaderLogin>,
-    };
-  };
   state = {
     email: null,
     password: null,

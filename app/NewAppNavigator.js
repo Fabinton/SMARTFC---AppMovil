@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Profile from "./screen/containers/Profile";
 import Configure from "./screen/containers/configure";
 import Login from "./screen/containers/login";
-import contenido from "./screen/containers/contenido";
+import Home from "./containers/home";
 import Registro from "./screen/containers/registerStudent";
 import Activity from "./containers/home_subject";
 import HeaderLogin from "./components/headerLogin";
@@ -84,12 +84,12 @@ const DrawerNav = () => {
         }}
       />
       <Drawer.Screen
-        name="contenido"
-        component={contenido}
+        name="Contenido"
+        component={Home}
         options={{
-          drawerIcon: () => <Ionicons name="settings-outline" size={22} />,
+          drawerIcon: () => <Ionicons name="search-circle-outline" size={22} />,
           header: ({ navigation }) => (
-            <Header {...navigation}>contenido</Header>
+            <Header {...navigation}>Contenido Rea</Header>
           ),
         }}
       />
