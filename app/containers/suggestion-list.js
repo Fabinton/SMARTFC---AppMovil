@@ -25,6 +25,8 @@ function mapStateToProps(state) {
 class SuggestionList extends Component {
   state = {
     stateData: this.props.list,
+    area: "",
+    curso: "",
   };
   fetchContent() {
     API.getContent(this.props.ipconfig)
@@ -105,7 +107,11 @@ class SuggestionList extends Component {
                 height: 30,
               }}
               mode="dropdown"
-              onValueChange={(value) => this.filterDropdown({ area: value })}
+              onValueChange={(value) => {
+                this.filterDropdown({ area: value });
+                this.setState({ area: value });
+              }}
+              selectedValue={this.state.area}
             >
               <Picker.Item color="gray" label="Áreas" value="" />
               <Picker.Item label="Matemáticas" value="1" />
@@ -119,7 +125,11 @@ class SuggestionList extends Component {
                 height: 30,
               }}
               mode="dropdown"
-              onValueChange={(value) => this.filterDropdown({ curso: value })}
+              onValueChange={(value) => {
+                this.filterDropdown({ curso: value });
+                this.setState({ curso: value });
+              }}
+              selectedValue={this.state.curso}
             >
               <Picker.Item color="gray" label="Curso" value="" />
               <Picker.Item label="6" value="6" />
@@ -176,7 +186,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     overflow: "hidden",
     height: 30,
-    padding: 0,
+    paddingBottom: 40,
     backgroundColor: "#FFF",
     width: 105,
     marginLeft: 5,

@@ -84,7 +84,7 @@ const DrawerNav = () => {
         }}
       />
       <Drawer.Screen
-        name="Contenido"
+        name="Contenido Rea"
         component={Home}
         options={{
           drawerIcon: () => <Ionicons name="search-circle-outline" size={22} />,
