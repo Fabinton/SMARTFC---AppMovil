@@ -9,6 +9,7 @@ import SplashScreen from "./app/components/SplashScreen";
 import OnBoardScreens from "./app/components/OnBoardScreens";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import "react-native-gesture-handler"; //this line is needed
+import NewAppNavigator from "./app/NewAppNavigator";
 
 const App = () => {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -49,7 +50,8 @@ const App = () => {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           {firstLaunch && <OnBoardScreens setFirstLaunch={setFirstLaunch} />}
-          <AppNavigator />
+          {/* <AppNavigator /> */}
+          <NewAppNavigator />
         </PersistGate>
       </Provider>
     );

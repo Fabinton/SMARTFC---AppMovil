@@ -5,7 +5,7 @@ import API from "../../utils/api";
 import { connect } from "react-redux";
 
 class Home extends Component {
-  static navigationOptions = ({ navigation }) => {
+  static options = ({ navigation }) => {
     return {
       header: (
         <Header onPress={() => navigation.openDrawer()}>Mis Cursos</Header>

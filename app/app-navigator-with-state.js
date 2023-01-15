@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import AppNavigator from "./app-navigator";
 import { createReduxContainer } from "react-navigation-redux-helpers";
-import { NavigationActions } from "react-navigation";
+import { CommonActions } from "@react-navigation/native";
 import { BackHandler } from "react-native";
+import NewAppNavigator from "./NewAppNavigator";
 
-const ReduxifyApp = createReduxContainer(AppNavigator);
+const ReduxifyApp = createReduxContainer(NewAppNavigator);
 
 class AppNavigatorWithState extends ReduxifyApp {
   componentDidMount() {
@@ -22,7 +23,7 @@ class AppNavigatorWithState extends ReduxifyApp {
     // cuando le piques al back de android
 
     this.props.dispatch(
-      NavigationActions.back({
+      CommonActions.back({
         key: null,
       })
     );

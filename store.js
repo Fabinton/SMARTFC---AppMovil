@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from "redux";
 import { persistStore, persistReducer } from "redux-persist";
 import reducer from "./reducer/index";
-import { AsyncStorage } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createReactNavigationReduxMiddleware } from "react-navigation-redux-helpers";
 
 const persistConfig = {

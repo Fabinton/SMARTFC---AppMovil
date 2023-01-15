@@ -21,7 +21,7 @@ function Header(props) {
         <SafeAreaView style={style.statusBar}></SafeAreaView>
         <View style={style.bar}>
           <View style={style.container}>
-            <TouchableOpacity onPress={props.onPress}>
+            <TouchableOpacity onPress={() => props.openDrawer()}>
               <Ionicons
                 name="md-menu"
                 size={32}
@@ -47,7 +47,7 @@ const style = StyleSheet.create({
     marginTop: 10,
   },
   statusBar: {
-    paddingTop: 25.5,
+    marginTop: -18,
     backgroundColor: "#272D34",
   },
   container: {

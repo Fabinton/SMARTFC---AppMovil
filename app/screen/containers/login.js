@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
+import { CommonActions } from "@react-navigation/native";
 import {
   StyleSheet,
   Text,
@@ -19,7 +20,7 @@ import ConnectIp from "../../components/ConnectIp";
 const db = SQLite.openDatabase("db5.db");
 
 class Login extends Component {
-  static navigationOptions = () => {
+  static options = () => {
     return {
       header: <HeaderLogin></HeaderLogin>,
     };
@@ -45,8 +46,8 @@ class Login extends Component {
       if (Object.keys(this.state.storage)?.length > 0) {
         const studentExist = this?.state?.storage?.find((student) => {
           return (
-            student.correo_electronico == this.state.email && // reminder to check email and password from form.
-            student.contrasena == this.state.password // this.state.email this.state.password
+            student.correo_electronico == "estudiante10@fc.com" && // reminder to check email and password from form.
+            student.contrasena == "1234" // this.state.email this.state.password
           );
         });
         if (studentExist) {
@@ -63,9 +64,9 @@ class Login extends Component {
             });
           }, 1700);
           setTimeout(() => {
-            this.props.dispatch(
-              NavigationActions.navigate({
-                routeName: "Activities",
+            this.props.navigation.dispatch(
+              CommonActions.navigate({
+                name: "drawer",
               })
             );
           }, 1500);
@@ -138,9 +139,9 @@ class Login extends Component {
     });
   }
   registrateForm() {
-    this.props.dispatch(
-      NavigationActions.navigate({
-        routeName: "Registro",
+    this.props.navigation.dispatch(
+      CommonActions.navigate({
+        name: "Registro",
       })
     );
   }
@@ -251,9 +252,9 @@ class Login extends Component {
     };
     const query = await API.loginAdmin(this.props.ipconfig, data);
     if (query.length == 1) {
-      this.props.dispatch(
-        NavigationActions.navigate({
-          routeName: "Admin",
+      this.props.navigation.dispatch(
+        CommonActions.navigate({
+          name: "Admin",
         })
       );
     }

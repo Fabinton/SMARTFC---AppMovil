@@ -7,7 +7,6 @@ import API from "../../../utils/api";
 import CustomButton from "../../components/customButton";
 import { Feather, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Stack, TextInput, Flex, Spacer } from "@react-native-material/core";
-import { NavigationEvents } from "react-navigation";
 import { Picker } from "@react-native-picker/picker";
 
 const db = SQLite.openDatabase("db5.db");
@@ -36,6 +35,10 @@ class Configure extends Component {
     students: null,
   };
   componentDidMount() {
+    this.props.navigation.addListener("focus", () => {
+      this.setState({ ...this.state, password: null }); //to clear password when entering to the page
+    });
+
     API.loadSchool(this.props.ipconfig)
       .then(({ data }) => {
         this.setState({ school: data });
@@ -222,9 +225,6 @@ class Configure extends Component {
         alignItems="stretch"
         spacing={6}
       >
-        <NavigationEvents
-          onDidFocus={() => this.setState({ ...this.state, password: null })} //to clear password when leaving
-        />
         <TextInput
           color="#70C2E5"
           variant="standard"
