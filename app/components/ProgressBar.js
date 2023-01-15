@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   statusBar: {
-    paddingTop: 25.5,
+    paddingTop: 5,
     marginTop: -10,
     height: 0,
     backgroundColor: "#272D34",

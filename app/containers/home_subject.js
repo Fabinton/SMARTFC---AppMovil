@@ -21,6 +21,9 @@ class Home extends Component {
   }
 
   componentDidMount() {
+    this.props.navigation.addListener("beforeRemove", (e) => {
+      e.preventDefault();
+    });
     API.getCourses(
       this.props.ipconfig,
       this.props.student.grado_estudiante,

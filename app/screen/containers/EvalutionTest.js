@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React, { useState, useEffect, useMemo } from "react";
-import { NavigationActions } from "react-navigation";
 import { Stack } from "@react-native-material/core";
 import CustomButton from "../../components/customButton";
 import { useSelector } from "react-redux";
