@@ -77,9 +77,7 @@ const EvalutionTest = ({ navigation, route }) => {
               text="Jugar"
               onPress={() => {
                 setEvaluationStep(1);
-                setTimeout(() => {
-                  setStartCounting(true);
-                });
+                setStartCounting(true);
                 setIndex(0);
               }}
             />

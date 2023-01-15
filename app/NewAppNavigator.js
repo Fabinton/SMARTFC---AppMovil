@@ -83,6 +83,16 @@ const DrawerNav = () => {
           ),
         }}
       />
+      <Drawer.Screen
+        name="contenido"
+        component={contenido}
+        options={{
+          drawerIcon: () => <Ionicons name="settings-outline" size={22} />,
+          header: ({ navigation }) => (
+            <Header {...navigation}>contenido</Header>
+          ),
+        }}
+      />
     </Drawer.Navigator>
   );
 };
@@ -100,16 +110,15 @@ const NewAppNavigator = () => {
           options={{ header: () => <HeaderLogin /> }}
         />
         <Stack.Screen
-          name="contenido"
-          component={contenido}
-          initialParams={{}}
-        />
-        <Stack.Screen
           name="drawer"
           component={DrawerNav}
           options={{ header: () => null }}
         />
-        <Stack.Screen name="Registro" component={Registro} />
+        <Stack.Screen
+          name="Registro"
+          component={Registro}
+          options={{ header: () => <HeaderLogin /> }}
+        />
         <Stack.Screen
           name="ActivitySubj"
           component={ActivitySubj}
@@ -154,7 +163,7 @@ const NewAppNavigator = () => {
           name="EvalutionTest"
           component={EvalutionTest}
           options={{
-            header: () => null,
+            header: () => <HeaderLogin />,
           }}
         />
         <Stack.Screen

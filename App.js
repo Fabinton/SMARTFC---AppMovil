@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./store";
-import AppNavigator from "./app/app-navigator-with-state";
 import { Entypo } from "@expo/vector-icons";
 import * as Font from "expo-font";
 import SplashScreen from "./app/components/SplashScreen";
@@ -50,7 +49,6 @@ const App = () => {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           {firstLaunch && <OnBoardScreens setFirstLaunch={setFirstLaunch} />}
-          {/* <AppNavigator /> */}
           <NewAppNavigator />
         </PersistGate>
       </Provider>

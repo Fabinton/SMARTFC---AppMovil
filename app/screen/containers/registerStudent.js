@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { NavigationActions } from "react-navigation";
 import { StyleSheet, Text, Alert } from "react-native";
 import HeaderLogin from "../../components/headerLogin";
 import * as SQLite from "expo-sqlite";
@@ -127,11 +126,9 @@ class Register extends Component {
                   {
                     text: "OK",
                     onPress: () => {
-                      this.props.dispatch(
-                        NavigationActions.navigate({
-                          routeName: "Notification",
-                        })
-                      );
+                      this.props.navigation.navigate({
+                        name: "Login",
+                      });
                     },
                   },
                 ],
@@ -175,11 +172,9 @@ class Register extends Component {
   }
 
   close() {
-    this.props.dispatch(
-      NavigationActions.navigate({
-        routeName: "Notification",
-      })
-    );
+    this.props.navigation.navigate({
+      name: "Login",
+    });
   }
   validateForm() {
     return (
@@ -332,7 +327,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   container: {
-    backgroundColor: "white",
+    backgroundColor: "#F5F5F5",
     marginLeft: 20,
     marginRight: 20,
   },

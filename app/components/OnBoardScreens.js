@@ -14,7 +14,7 @@ const OnBoardScreens = ({ setFirstLaunch }) => {
   return (
     <View
       style={{
-        height: Dimensions.get("screen").height - 40,
+        height: Dimensions.get("screen").height - 105,
         width: Dimensions.get("screen").width,
       }}
     >
@@ -22,7 +22,7 @@ const OnBoardScreens = ({ setFirstLaunch }) => {
         pages={[
           {
             backgroundColor: "#F5F5F5",
-            image: <Image source={uno} style={{ width: 295, height: 501 }} />,
+            image: <Image source={uno} style={{ width: 295, height: 450 }} />,
             title: "Bienvenid@!",
             subtitle:
               "Este es un pequeño tutorial que te enseñará a usar Smart FC",
