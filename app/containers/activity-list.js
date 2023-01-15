@@ -5,7 +5,6 @@ import Empty from "../components/empty";
 import Separator from "../components/separator";
 import Suggestion from "../components/activity";
 import { connect } from "react-redux";
-import { NavigationActions } from "react-navigation";
 import { View } from "react-native";
 import API from "../../utils/api";
 import { Dimensions } from "react-native";
@@ -35,11 +34,7 @@ class SuggestionList extends Component {
         activity: item,
       },
     });
-    this.props.dispatch(
-      NavigationActions.navigate({
-        routeName: "SelectMoment",
-      })
-    );
+    this.props.navigation.navigate({ name: "SelectMoment" });
   };
   state = {
     storage: [],

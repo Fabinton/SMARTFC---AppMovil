@@ -3,7 +3,6 @@ import { Video } from "expo-av";
 import { StyleSheet, View, Dimensions, Alert } from "react-native";
 import shorthash from "shorthash";
 import * as FileSystem from "expo-file-system";
-import { NavigationActions } from "react-navigation";
 import { connect } from "react-redux";
 import { ScreenOrientation } from "expo";
 import CustomButton from "../components/customButton";
@@ -253,12 +252,9 @@ class Player extends Component {
   }
   continuarContenido() {
     this.state.videoStatus?.isPlaying && this.video.current.pauseAsync();
-    this.props.dispatch(
-      NavigationActions.navigate({
-        //routeName: "TestActivity",
-        routeName: "EvalutionTest",
-      })
-    );
+    this.props.navigation.navigate({
+      name: "EvalutionTest",
+    });
   }
   pruebaLandsCape() {}
   render() {

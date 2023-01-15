@@ -8,11 +8,14 @@ import {
 } from "react-native";
 import CustomButton from "../../components/customButton";
 import React, { useEffect, useState } from "react";
-import ProgressBar from "../../components/ProgressBar";
 import { calculateTestGrade, saveEventsDB } from "../../../utils/parsers";
 import { useDispatch } from "react-redux";
+import { LogBox } from "react-native";
 
-const GamificationTest = ({ navigation }) => {
+LogBox.ignoreLogs([
+  "Non-serializable values were found in the navigation state",
+]);
+const GamificationTest = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const [allAnswers, setAllAnswers] = useState({});
   const [evaScore, setEvaScore] = useState(0);
@@ -28,7 +31,7 @@ const GamificationTest = ({ navigation }) => {
     IDactivity,
     internetConnection,
     selectedIPConfig,
-  } = navigation?.state?.params;
+  } = route?.params;
   useEffect(() => {
     const backAction = () => {
       return true;
@@ -55,7 +58,8 @@ const GamificationTest = ({ navigation }) => {
               evaluationType,
               internetConnection,
               selectedIPConfig,
-              dispatch
+              dispatch,
+              navigation
             );
           },
         },
@@ -117,13 +121,6 @@ const GamificationTest = ({ navigation }) => {
       </View>
     </View>
   );
-};
-
-GamificationTest.navigationOptions = ({ navigation }) => {
-  const { index } = navigation?.state?.params;
-  return {
-    header: <ProgressBar index={index ? index : 0} />,
-  };
 };
 
 const styles = StyleSheet.create({

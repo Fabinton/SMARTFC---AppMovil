@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import { StyleSheet, View, Image, Text, Alert } from "react-native";
 import { connect } from "react-redux";
 import HeaderReturn from "../../components/headerReturn";
-import { NavigationActions } from "react-navigation";
-import QuestionActiviy from "../../components/QuestionActivity";
 import CustomButton from "../../components/customButton";
-import { Stack, TextInput, Flex, Spacer } from "@react-native-material/core";
+import { Stack, Flex, Spacer } from "@react-native-material/core";
 
 class selectMoment extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -19,19 +17,15 @@ class selectMoment extends Component {
   };
 
   detailActivity() {
-    this.props.dispatch(
-      NavigationActions.navigate({
-        routeName: "DetailActivitySubj",
-      })
-    );
+    this.props.navigation.navigate({
+      name: "DetailActivitySubj",
+    });
   }
   excersiceActivity() {
     if (this.props.activity.taller == 1) {
-      this.props.dispatch(
-        NavigationActions.navigate({
-          routeName: "PlayExcersise",
-        })
-      );
+      this.props.navigation.navigate({
+        name: "PlayExcersise",
+      });
     } else {
       Alert.alert(
         "Talller",
@@ -51,13 +45,10 @@ class selectMoment extends Component {
 
   evaluationActivity() {
     if (this.props.activity.evaluacion == 1) {
-      this.props.dispatch(
-        NavigationActions.navigate({
-          // routeName: "EvaluationActivity",
-          routeName: "EvalutionTest",
-          params: { toRender: 0 },
-        })
-      );
+      this.props.navigation.navigate({
+        name: "EvalutionTest",
+        params: { toRender: 0 },
+      });
     } else {
       Alert.alert(
         "Evaluacion",

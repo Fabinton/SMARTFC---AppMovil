@@ -21,7 +21,7 @@ function HeaderReturn(props) {
         <SafeAreaView style={style.statusBar}></SafeAreaView>
         <View style={style.bar}>
           <View style={style.container}>
-            <TouchableOpacity onPress={props.onPress}>
+            <TouchableOpacity onPress={() => props.goBack()}>
               <Ionicons
                 name="md-arrow-back"
                 size={32}
@@ -48,8 +48,8 @@ const style = StyleSheet.create({
   },
   bar: {},
   statusBar: {
-    paddingTop: 25.5,
-    marginTop: -10,
+    paddingTop: 0,
+    marginTop: -15,
     height: 0,
     backgroundColor: "#272D34",
   },

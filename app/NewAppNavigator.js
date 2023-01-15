@@ -12,7 +12,16 @@ import Header from "./components/header";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import CustomDrawer from "./CustomDrawer";
 import Doubts from "./screen/containers/doubtsActivity";
+import ActivitySubj from "./containers/home_activity";
+import SelectMoment from "./screen/containers/selectMoment";
 import { Ionicons } from "@expo/vector-icons";
+import HeaderReturn from "./components/headerReturn";
+import DetailActivitySubj from "./screen/containers/detailActivity";
+import PlayExcersise from "./screen/containers/playExcercise";
+import EvalutionTest from "./screen/containers/EvalutionTest";
+import PlayContent from "./screen/containers/playContent";
+import GamificationTest from "./screen/containers/GamificationTest";
+import ProgressBar from "./components/ProgressBar";
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -101,6 +110,74 @@ const NewAppNavigator = () => {
           options={{ header: () => null }}
         />
         <Stack.Screen name="Registro" component={Registro} />
+        <Stack.Screen
+          name="ActivitySubj"
+          component={ActivitySubj}
+          options={{
+            header: ({ navigation }) => (
+              <HeaderReturn {...navigation}>Mis Actividades</HeaderReturn>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="SelectMoment"
+          component={SelectMoment}
+          options={{
+            header: ({ navigation }) => (
+              <HeaderReturn {...navigation}>Selecciona la etapa</HeaderReturn>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="DetailActivitySubj"
+          component={DetailActivitySubj}
+          options={{
+            header: ({ navigation }) => (
+              <HeaderReturn {...navigation}>
+                Descripción de tu actividad
+              </HeaderReturn>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="PlayExcersise"
+          component={PlayExcersise}
+          options={{
+            header: ({ navigation }) => (
+              <HeaderReturn {...navigation}>
+                Visualiza tu contenido
+              </HeaderReturn>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="EvalutionTest"
+          component={EvalutionTest}
+          options={{
+            header: () => null,
+          }}
+        />
+        <Stack.Screen
+          name="PlayContent"
+          component={PlayContent}
+          options={{
+            header: ({ navigation }) => (
+              <HeaderReturn {...navigation}>
+                Visualiza el contenido
+              </HeaderReturn>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="GamificationTest"
+          component={GamificationTest}
+          options={{
+            header: ({ route }) => {
+              const { index } = route?.params;
+              return <ProgressBar index={index ? index : 0} />;
+            },
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -6,7 +6,7 @@ import CustomButton from "../../components/customButton";
 import { useSelector } from "react-redux";
 import { createEvaluation } from "../../../utils/parsers";
 
-const EvalutionTest = ({ navigation }) => {
+const EvalutionTest = ({ navigation, route }) => {
   const [evaluationStep, setEvaluationStep] = useState(0);
   const [index, setIndex] = useState(0);
   const [StartCounting, setStartCounting] = useState(false);
@@ -18,8 +18,7 @@ const EvalutionTest = ({ navigation }) => {
   const student = useMemo(() => selectedStudent, [selectedStudent]);
   const connection = useMemo(() => isConnected, [isConnected]);
   const alredyTested = false;
-  const evaluationType =
-    navigation?.state?.params?.toRender === 0 ? true : false;
+  const evaluationType = route?.params?.toRender === 0 ? true : false;
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((index + 1) % (35 + 1));
@@ -78,7 +77,9 @@ const EvalutionTest = ({ navigation }) => {
               text="Jugar"
               onPress={() => {
                 setEvaluationStep(1);
-                setStartCounting(true);
+                setTimeout(() => {
+                  setStartCounting(true);
+                });
                 setIndex(0);
               }}
             />
@@ -94,24 +95,22 @@ const EvalutionTest = ({ navigation }) => {
           </Stack>
           {evaluation?.map((eva) => {
             if (evaluationStep === eva.step) {
-              navigation.dispatch(
-                NavigationActions.navigate({
-                  routeName: "GamificationTest",
-                  params: {
-                    question: eva.question,
-                    answers: eva.answers,
-                    setEvaluationStep: setEvaluationStep,
-                    evaluationStep: evaluationStep,
-                    index: index,
-                    setIndex: setIndex,
-                    evaluationType: evaluationType,
-                    IDstudent: student.id_estudiante,
-                    IDactivity: test.id_actividad,
-                    internetConnection: connection,
-                    selectedIPConfig: selectedIPConfig,
-                  },
-                })
-              );
+              navigation.navigate({
+                name: "GamificationTest",
+                params: {
+                  question: eva.question,
+                  answers: eva.answers,
+                  setEvaluationStep: setEvaluationStep,
+                  evaluationStep: evaluationStep,
+                  index: index,
+                  setIndex: setIndex,
+                  evaluationType: evaluationType,
+                  IDstudent: student.id_estudiante,
+                  IDactivity: test.id_actividad,
+                  internetConnection: connection,
+                  selectedIPConfig: selectedIPConfig,
+                },
+              });
             }
           })}
         </View>

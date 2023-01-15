@@ -154,14 +154,10 @@ class QuestionActivity extends Component {
         <View style={styles.box}>
           <TouchableHighlight
             onPress={() => this.doubtActivity()}
-            underlayColor={"#FFFFFF"}
+            underlayColor={"#F2F2F2"}
           >
             <Image source={pregunta} style={{ width: 150, height: 150 }} />
           </TouchableHighlight>
-          {/* <CustomButton
-            text="Realiza una Pregunta"
-            onPress={() => this.doubtActivity()}
-          /> */}
         </View>
         <Modal
           animationType="slide"

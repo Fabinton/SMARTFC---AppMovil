@@ -1,6 +1,5 @@
 import * as SQLite from "expo-sqlite";
 import API from "./api";
-import { NavigationActions } from "react-navigation";
 import {
   createResult,
   evaluationQuery,
@@ -35,17 +34,17 @@ export const saveEventsDB = async (
   evaluationType,
   internetConnection,
   selectedIPConfig,
-  dispatch
+  dispatch,
+  navigation
 ) => {
   dispatch({
     type: "SET_LOADING",
     payload: true,
   });
-  dispatch(
-    NavigationActions.navigate({
-      routeName: "Activity",
-    })
-  );
+  navigation.navigate({
+    name: "Activities",
+  });
+
   console.log(
     "evaScore, ans in order they'll save",
     evaScore,

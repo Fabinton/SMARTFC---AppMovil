@@ -5,7 +5,6 @@ import Details from "../../components/detailActivity";
 import { Animated } from "react-native";
 import { connect } from "react-redux";
 import HeaderReturn from "../../components/headerReturn";
-import { NavigationActions } from "react-navigation";
 import * as SQLite from "expo-sqlite";
 import QuestionActivity from "../../components/QuestionActivity";
 import CustomButton from "../../components/customButton";
@@ -33,6 +32,7 @@ class detailActivity extends Component {
     Animated.timing(this.state.opacity, {
       toValue: 1,
       duration: 1000,
+      useNativeDriver: true,
     }).start();
     db.transaction((tx) => {
       tx.executeSql(
@@ -58,11 +58,9 @@ class detailActivity extends Component {
   }
   continuarContenido() {
     this.almacenaMetrica();
-    this.props.dispatch(
-      NavigationActions.navigate({
-        routeName: "PlayContent",
-      })
-    );
+    this.props.navigation.navigate({
+      name: "PlayContent",
+    });
   }
   updateFlat() {
     db.transaction((tx) => {

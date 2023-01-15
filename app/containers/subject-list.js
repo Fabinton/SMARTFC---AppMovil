@@ -5,7 +5,6 @@ import Empty from "../components/empty";
 import Separator from "../components/separator";
 import Suggestion from "../components/subject";
 import { connect } from "react-redux";
-import { NavigationActions } from "react-navigation";
 import * as SQLite from "expo-sqlite";
 import API from "../../utils/api";
 const db = SQLite.openDatabase("db5.db");
@@ -164,11 +163,9 @@ class SuggestionList extends Component {
         subject: item,
       },
     });
-    this.props.dispatch(
-      NavigationActions.navigate({
-        routeName: "ActivitySubj",
-      })
-    );
+    this.props.navigation.navigate({
+      name: "ActivitySubj",
+    });
   };
 
   renderItem = ({ item }) => {

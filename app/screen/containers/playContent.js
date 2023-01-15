@@ -1,10 +1,9 @@
-import React, { Component, View } from "react";
+import React, { Component } from "react";
 import ContenidoLayout from "../components/detailActivity";
 import { StyleSheet, Animated } from "react-native";
 import { connect } from "react-redux";
 import Player from "../../containers/player-activity";
 import Audio from "../../containers/audio-activity";
-import { NavigationActions } from "react-navigation";
 import Reader from "../../containers/reader-activity";
 import HeaderReturn from "../../components/headerReturn";
 import QuestionActivity from "../../components/QuestionActivity";
@@ -27,22 +26,23 @@ class playContent extends Component {
     Animated.timing(this.state.opacity, {
       toValue: 1,
       duration: 1000,
+      useNativeDriver: true,
     }).start();
   }
   continuarContenido() {
-    this.props.dispatch(
-      NavigationActions.navigate({
-        //routeName: "TestActivity",
-        routeName: "EvalutionTest",
-      })
-    );
+    this.props.navigation.navigate({
+      name: "EvalutionTest",
+    });
   }
   render() {
     if (this.props.activity.video == "1") {
       return (
         <Animated.View style={styles.container}>
           <ContenidoLayout>
-            <Player {...this.props.activity} />
+            <Player
+              {...this.props.activity}
+              navigation={this.props.navigation}
+            />
             <QuestionActivity
               style={{ position: "absolute", top: "72%", left: "12%" }}
             />
@@ -53,7 +53,10 @@ class playContent extends Component {
       return (
         <Animated.View style={styles.container}>
           <ContenidoLayout>
-            <Reader {...this.props.activity} />
+            <Reader
+              {...this.props.activity}
+              navigation={this.props.navigation}
+            />
             <CustomButton
               text="Realiza el TEST"
               onPress={() => this.continuarContenido()}
@@ -68,7 +71,10 @@ class playContent extends Component {
       return (
         <Animated.View style={styles.container}>
           <ContenidoLayout>
-            <Audio {...this.props.activity} />
+            <Audio
+              {...this.props.activity}
+              navigation={this.props.navigation}
+            />
             <CustomButton
               text="Realiza el TEST"
               onPress={() => this.continuarContenido()}

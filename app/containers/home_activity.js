@@ -43,7 +43,7 @@ class Home extends Component {
   render() {
     return (
       <Fragment>
-        <SuggestionList></SuggestionList>
+        <SuggestionList navigation={this.props.navigation}></SuggestionList>
       </Fragment>
     );
   }

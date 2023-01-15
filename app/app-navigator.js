@@ -1,4 +1,3 @@
-import React, { Component } from "react";
 import { createStackNavigator } from "react-navigation-stack";
 import Login from "./screen/containers/login";
 import Configure from "./screen/containers/configure";
