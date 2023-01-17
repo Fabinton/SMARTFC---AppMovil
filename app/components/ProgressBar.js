@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
   statusBar: {
     paddingTop: 5,
-    marginTop: -10,
+    marginTop: 0,
     height: 0,
     backgroundColor: "#272D34",
   },

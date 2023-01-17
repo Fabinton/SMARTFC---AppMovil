@@ -86,7 +86,9 @@ class Profile extends Component {
     ];
     let activity = [];
     this.setState({ active: "ESTOS SON SU PROGRESO EN LA ACTIVIDAD" });
-    activity = await API.getActivities(this.props.ipconfig);
+    await API.getActivities(this.props.ipconfig)
+      .then(({ data }) => (activity = data))
+      .catch((e) => console.log("error al traer actividades", e));
     var notaF = 0;
     var notaFEvaluation = 0;
     var progressoActivity = 0;

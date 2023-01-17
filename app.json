@@ -18,10 +18,6 @@
       "supportsTablet": true
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#FFFFFF"
-      },
       "package": "com.unicauca.fcunicauca"
     },
     "web": {

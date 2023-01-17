@@ -20,10 +20,11 @@ class Api {
   async getActivities(BASE_IP) {
     var BASE_API_ACTIVITIES =
       "http://" + BASE_IP + ":3000" + "/loadAllactivities";
-    const query = await fetch(`${BASE_API_ACTIVITIES}`);
-    const data = await query.json();
-    //console.log(data);
-    return data;
+    return axios.get(`${BASE_API_ACTIVITIES}`);
+    // const query = await fetch(`${BASE_API_ACTIVITIES}`);
+    // const data = await query.json();
+    // //console.log(data);
+    // return data;
   }
   getActivitiesMovil(BASE_IP, id_colegio, id_grado, id_materia) {
     var BASE_API_ACTIVITIES_MOVIL =
