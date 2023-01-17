@@ -1,6 +1,4 @@
-import React, { Component } from "react";
 import { connect } from "react-redux";
-import AppNavigator from "./app-navigator";
 import { createReduxContainer } from "react-navigation-redux-helpers";
 import { CommonActions } from "@react-navigation/native";
 import { BackHandler } from "react-native";

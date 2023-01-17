@@ -99,21 +99,10 @@ class SuggestionList extends Component {
                               `update flatEvent set upload = ? where id_evento = ? ;`,
                               [1, id_eventoFs]
                             );
-                            tx.executeSql(
-                              "select * from flatEvent",
-                              [],
-                              (_, { rows: { _array } }) => {}
-                            );
                           });
                         })
                         .catch((e) => {
                           console.log("error createEvents", e);
-                          Alert.alert(
-                            "ERROR",
-                            "Ha ocurrido un error al momento de guardar los eventos.",
-                            [{ text: "OK", onPress: () => {} }],
-                            { cancelable: false }
-                          );
                         })
                         .finally(() => {
                           this.props.dispatch({
