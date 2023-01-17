@@ -84,13 +84,14 @@ class Profile extends Component {
         totalScore: 0,
       },
     ];
+    let activity = [];
     this.setState({ active: "ESTOS SON SU PROGRESO EN LA ACTIVIDAD" });
-    var activity = await API.getActivities(this.props.ipconfig);
+    activity = await API.getActivities(this.props.ipconfig);
     var notaF = 0;
     var notaFEvaluation = 0;
     var progressoActivity = 0;
     for (var i = this.state.storage.length - 1; i >= 0; i--) {
-      for (var j = 0; j < activity.length; j++) {
+      for (var j = 0; j < activity?.length; j++) {
         if (this.state.storage[i].id_actividad == activity[j].id_actividad) {
           //Comparation with scores for test
           if (
@@ -266,7 +267,7 @@ class Profile extends Component {
     this.setState({ totalScore: 0 }); //reset counter
     arr.map((obj) =>
       this.setState((prevState) => ({
-        totalScore: prevState.totalScore + (obj.totalScore || 0),
+        totalScore: prevState?.totalScore + (obj?.totalScore || 0),
       }))
     );
     await this.getStudentInfo();
