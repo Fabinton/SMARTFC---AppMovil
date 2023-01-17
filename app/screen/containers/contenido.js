@@ -32,6 +32,7 @@ class contenido extends Component {
     Animated.timing(this.state.opacity, {
       toValue: 1,
       duration: 1000,
+      useNativeDriver: true,
     }).start();
   }
   componentWillUnmount() {

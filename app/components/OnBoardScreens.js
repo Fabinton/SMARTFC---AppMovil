@@ -14,7 +14,7 @@ const OnBoardScreens = ({ setFirstLaunch }) => {
   return (
     <View
       style={{
-        height: Dimensions.get("screen").height - 105,
+        height: Dimensions.get("screen").height - 50,
         width: Dimensions.get("screen").width,
       }}
     >

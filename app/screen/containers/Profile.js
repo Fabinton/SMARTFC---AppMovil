@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { NavigationActions } from "react-navigation";
 import {
   StyleSheet,
   Text,
@@ -325,11 +324,9 @@ class Profile extends Component {
     };
     if (item.subject) {
       handler();
-      this.props.dispatch(
-        NavigationActions.navigate({
-          routeName: "SelectMoment",
-        })
-      );
+      this.props.navigation.navigate({
+        name: "SelectMoment",
+      });
     } else {
       Alert.alert(
         "Error",

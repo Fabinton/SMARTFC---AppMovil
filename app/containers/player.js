@@ -5,7 +5,7 @@ import shorthash from "shorthash";
 import * as FileSystem from "expo-file-system";
 import { connect } from "react-redux";
 import { Dimensions } from "react-native";
-import { ScreenOrientation } from "expo";
+import * as ScreenOrientation from "expo-screen-orientation";
 
 class Player extends Component {
   constructor(props) {

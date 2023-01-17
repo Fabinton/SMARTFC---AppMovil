@@ -47,7 +47,7 @@ const style = StyleSheet.create({
     marginTop: 10,
   },
   statusBar: {
-    marginTop: -18,
+    marginTop: 0,
     backgroundColor: "#272D34",
   },
   container: {

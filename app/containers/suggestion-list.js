@@ -10,7 +10,6 @@ import Empty from "../components/empty";
 import Separator from "../components/separator";
 import Suggestion from "../components/suggestion";
 import { connect } from "react-redux";
-import { NavigationActions } from "react-navigation";
 import SearchBar from "../components/search";
 import API from "../../utils/api";
 import { Picker } from "@react-native-picker/picker";
@@ -52,11 +51,9 @@ class SuggestionList extends Component {
         contenido: item,
       },
     });
-    this.props.dispatch(
-      NavigationActions.navigate({
-        routeName: "Contenido",
-      })
-    );
+    this.props.navigation.navigate({
+      name: "Contenido",
+    });
   };
   renderItem = ({ item }) => {
     return (

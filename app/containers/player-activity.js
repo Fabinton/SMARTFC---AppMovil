@@ -4,7 +4,7 @@ import { StyleSheet, View, Dimensions, Alert } from "react-native";
 import shorthash from "shorthash";
 import * as FileSystem from "expo-file-system";
 import { connect } from "react-redux";
-import { ScreenOrientation } from "expo";
+import * as ScreenOrientation from "expo-screen-orientation";
 import CustomButton from "../components/customButton";
 import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("db5.db");

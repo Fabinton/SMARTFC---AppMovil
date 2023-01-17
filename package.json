@@ -46,7 +46,8 @@
     "redux": "^4.2.0",
     "redux-persist": "^6.0.0",
     "shorthash": "^0.0.2",
-    "react-native-reanimated": "~2.12.0"
+    "react-native-reanimated": "~2.12.0",
+    "expo-screen-orientation": "~5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

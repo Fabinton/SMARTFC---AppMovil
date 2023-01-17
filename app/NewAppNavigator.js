@@ -22,6 +22,7 @@ import EvalutionTest from "./screen/containers/EvalutionTest";
 import PlayContent from "./screen/containers/playContent";
 import GamificationTest from "./screen/containers/GamificationTest";
 import ProgressBar from "./components/ProgressBar";
+import contenido from "./screen/containers/contenido";
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -185,6 +186,15 @@ const NewAppNavigator = () => {
               const { index } = route?.params;
               return <ProgressBar index={index ? index : 0} />;
             },
+          }}
+        />
+        <Stack.Screen
+          name="Contenido"
+          component={contenido}
+          options={{
+            header: ({ navigation }) => (
+              <HeaderReturn {...navigation}>CONTENIDO</HeaderReturn>
+            ),
           }}
         />
       </Stack.Navigator>

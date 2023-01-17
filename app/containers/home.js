@@ -38,7 +38,7 @@ class Home extends Component {
     };
   }
   render() {
-    return <SuggestionList />;
+    return <SuggestionList navigation={this.props.navigation} />;
   }
 }
 
