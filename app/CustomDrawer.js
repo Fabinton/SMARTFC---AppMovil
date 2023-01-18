@@ -24,7 +24,7 @@ const CustomDrawer = (props) => {
           style={{ paddingVertical: 15 }}
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Ionicons name="exit-outline" size={22} />
+            <Ionicons name="exit" size={24} color="white" />
             <Text style={{ marginLeft: 10, color: "gray" }}>Cerrar sesión</Text>
           </View>
         </TouchableOpacity>

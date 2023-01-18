@@ -87,7 +87,7 @@ const EvalutionTest = ({ navigation, route }) => {
                 position: "absolute",
                 top: "110%",
               }}
-              source={require("../../../assets/images/expTest.jpg")}
+              source={require("../../../assets/images/expTest.png")}
             />
           </Stack>
           {evaluation?.map((eva) => {

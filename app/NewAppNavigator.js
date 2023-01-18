@@ -25,6 +25,7 @@ import ProgressBar from "./components/ProgressBar";
 import contenido from "./screen/containers/contenido";
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+import { MaterialIcons } from "@expo/vector-icons";
 
 const DrawerNav = () => {
   return (
@@ -44,33 +45,53 @@ const DrawerNav = () => {
       }}
     >
       <Drawer.Screen
-        name="Activities"
-        component={Activity}
-        options={{
-          header: ({ navigation }) => (
-            <Header {...navigation}>Mis Cursos</Header>
-          ),
-          drawerIcon: () => <Ionicons name="home-outline" size={22} />,
-        }}
-        initialParams={{}}
-      />
-      <Drawer.Screen
-        name="Profile"
+        name="Mi perfil"
         component={Profile}
         options={{
-          drawerIcon: () => <Ionicons name="person-outline" size={22} />,
+          drawerIcon: () => <Ionicons name="person" size={24} color="white" />,
           header: ({ navigation }) => (
             <Header {...navigation}>Mi Perfil</Header>
           ),
         }}
       />
       <Drawer.Screen
-        name="Dudas Actividad"
+        name="Mis cursos"
+        component={Activity}
+        options={{
+          header: ({ navigation }) => (
+            <Header {...navigation}>Mis Cursos</Header>
+          ),
+          drawerIcon: () => (
+            <Ionicons name="home-sharp" size={24} color="white" />
+          ),
+        }}
+        initialParams={{}}
+      />
+      <Drawer.Screen
+        name="Dudas"
         component={Doubts}
         options={{
-          drawerIcon: () => <Ionicons name="help-outline" size={22} />,
+          drawerIcon: () => (
+            <MaterialIcons name="question-answer" size={24} color="white" />
+          ),
           header: ({ navigation }) => (
             <Header {...navigation}>Dudas Actividad</Header>
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Contenido REA"
+        component={Home}
+        options={{
+          drawerIcon: () => (
+            <MaterialIcons
+              name="collections-bookmark"
+              size={24}
+              color="white"
+            />
+          ),
+          header: ({ navigation }) => (
+            <Header {...navigation}>Contenido rea</Header>
           ),
         }}
       />
@@ -78,19 +99,11 @@ const DrawerNav = () => {
         name="Actualiza datos"
         component={Configure}
         options={{
-          drawerIcon: () => <Ionicons name="settings-outline" size={22} />,
+          drawerIcon: () => (
+            <MaterialIcons name="list-alt" size={24} color="white" />
+          ),
           header: ({ navigation }) => (
             <Header {...navigation}>Actualiza datos</Header>
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Contenido Rea"
-        component={Home}
-        options={{
-          drawerIcon: () => <Ionicons name="search-circle-outline" size={22} />,
-          header: ({ navigation }) => (
-            <Header {...navigation}>Contenido Rea</Header>
           ),
         }}
       />
