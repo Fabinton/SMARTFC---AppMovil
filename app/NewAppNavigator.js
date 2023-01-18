@@ -30,7 +30,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 const DrawerNav = () => {
   return (
     <Drawer.Navigator
-      initialRouteName="Activities"
+      initialRouteName="Mis cursos"
       drawerContent={(props) => <CustomDrawer {...props} />}
       screenOptions={{
         drawerLabelStyle: {
@@ -45,16 +45,6 @@ const DrawerNav = () => {
       }}
     >
       <Drawer.Screen
-        name="Mi perfil"
-        component={Profile}
-        options={{
-          drawerIcon: () => <Ionicons name="person" size={24} color="white" />,
-          header: ({ navigation }) => (
-            <Header {...navigation}>Mi Perfil</Header>
-          ),
-        }}
-      />
-      <Drawer.Screen
         name="Mis cursos"
         component={Activity}
         options={{
@@ -65,7 +55,16 @@ const DrawerNav = () => {
             <Ionicons name="home-sharp" size={24} color="white" />
           ),
         }}
-        initialParams={{}}
+      />
+      <Drawer.Screen
+        name="Mi perfil"
+        component={Profile}
+        options={{
+          drawerIcon: () => <Ionicons name="person" size={24} color="white" />,
+          header: ({ navigation }) => (
+            <Header {...navigation}>Mi Perfil</Header>
+          ),
+        }}
       />
       <Drawer.Screen
         name="Dudas"

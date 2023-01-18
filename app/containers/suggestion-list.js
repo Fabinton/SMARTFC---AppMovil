@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import SearchBar from "../components/search";
 import API from "../../utils/api";
 import { Picker } from "@react-native-picker/picker";
+import CustomButton from "../components/customButton";
 
 function mapStateToProps(state) {
   return {
@@ -94,13 +95,13 @@ class SuggestionList extends Component {
     const firstData = this.props.list;
 
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         <SearchBar filterSearch={this.filterSearch} />
         <View style={styles.pickerContainer}>
           <View style={styles.pickerStyle}>
             <Picker
               style={{
-                width: 110,
+                width: 125,
                 height: 30,
               }}
               mode="dropdown"
@@ -118,7 +119,7 @@ class SuggestionList extends Component {
           <View style={styles.pickerStyle}>
             <Picker
               style={{
-                width: 115,
+                width: 125,
                 height: 30,
               }}
               mode="dropdown"
@@ -137,6 +138,23 @@ class SuggestionList extends Component {
               <Picker.Item label="11" value="11" />
             </Picker>
           </View>
+          {(this.state.curso || this.state.area) && (
+            <CustomButton
+              text="Limpiar filtros"
+              onPress={() => {
+                this.setState({ stateData: this.props.list });
+                this.setState({ curso: "", area: "" });
+              }}
+              textTouchable={styles.touchableButtonClearFilter}
+              textStyle={{
+                color: "#FFFFFF",
+                textAlign: "center",
+                fontSize: 14,
+                fontWeight: "bold",
+                fontFamily: "Roboto",
+              }}
+            />
+          )}
         </View>
         <FlatList
           keyExtractor={this.keyExtractor}
@@ -185,8 +203,24 @@ const styles = StyleSheet.create({
     height: 30,
     paddingBottom: 40,
     backgroundColor: "#FFF",
-    width: 105,
+    width: 120,
     marginLeft: 5,
+  },
+  touchableButtonClearFilter: {
+    justifyContent: "center",
+    marginLeft: 12,
+    backgroundColor: "#70C2E5",
+    height: 45,
+    width: 100,
+    borderRadius: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
 
