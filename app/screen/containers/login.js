@@ -36,7 +36,7 @@ class Login extends Component {
         payload: true,
       });
       this.consulta();
-      if (Object.keys(this.state.storage)?.length > 0) {
+      if (Object.keys(this.state.storage || {})?.length > 0) {
         const studentExist = this?.state?.storage?.find((student) => {
           return (
             student.correo_electronico == "estudiante10@fc.com" && // reminder to check email and password from form.

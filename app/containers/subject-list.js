@@ -7,6 +7,11 @@ import Suggestion from "../components/subject";
 import { connect } from "react-redux";
 import * as SQLite from "expo-sqlite";
 import API from "../../utils/api";
+import {
+  getEventsLocalDB,
+  selectAllFlatEventsBd,
+  syncServer,
+} from "../../utils/parsers";
 const db = SQLite.openDatabase("db5.db");
 function mapStateToProps(state) {
   return {
@@ -31,36 +36,27 @@ class SuggestionList extends Component {
       tx.executeSql(
         "create table if not exists flatEvent (id_evento integer not null, upload int);"
       );
-      tx.executeSql("select * from events", [], (_, { rows: { _array } }) =>
-        this.setState({ storage: _array })
-      );
-      tx.executeSql(
-        `select * from flatEvent ;`,
-        [],
-        (_, { rows: { _array } }) => this.setState({ storageFlats: _array })
-      );
     });
+    this.updateFlat();
   }
-  updateFlat() {
-    db.transaction((tx) => {
-      tx.executeSql(`select * from events ;`, [], (_, { rows: { _array } }) =>
-        this.setState({ storage: _array })
-      );
-      tx.executeSql(
-        `select * from flatEvent ;`,
-        [],
-        (_, { rows: { _array } }) => this.setState({ storageFlats: _array })
-      );
-    });
+  async updateFlat() {
+    const allFlatEvents = await selectAllFlatEventsBd();
+    this.setState({ storageFlats: allFlatEvents });
+    const studentEvents = await getEventsLocalDB(
+      this.props.student.id_estudiante
+    );
+    this.setState({ storage: studentEvents });
   }
-  doubleSend(onScroll = false) {
+  async doubleSend(onScroll = false) {
     if (this.props.internetConnection) {
       this.props.dispatch({
         type: "SET_LOADING",
         payload: true,
       });
       this.updateFlat();
-      API.getCourses(
+      const data = this.state.storage;
+      const Flats = this.state.storageFlats;
+      await API.getCourses(
         this.props.ipconfig,
         this.props.student.grado_estudiante,
         this.props.student.id_colegio
@@ -72,63 +68,24 @@ class SuggestionList extends Component {
               subject: data,
             },
           });
-          var data = this.state.storage;
-          var Flats = this.state.storageFlats;
-
-          Flats.map((flat) => {
-            if (flat.upload === 0 && !onScroll) {
-              data.map((event) => {
-                if (flat.id_evento === event.id_evento) {
-                  this.props.dispatch({
-                    type: "SET_LOADING",
-                    payload: true,
-                  });
-                  API.loadEventsLast(this.props.ipconfig)
-                    .then(({ data }) => {
-                      let dataLength = data?.length;
-                      dataLength = dataLength + 1;
-                      var id_estudianteF = parseInt(
-                        "" + this.props.student.id_estudiante + dataLength
-                      );
-                      event.id_evento = id_estudianteF;
-                      var id_eventoFs = flat.id_evento;
-                      API.createEvents(this.props.ipconfig, event)
-                        .then(() => {
-                          db.transaction((tx) => {
-                            tx.executeSql(
-                              `update flatEvent set upload = ? where id_evento = ? ;`,
-                              [1, id_eventoFs]
-                            );
-                          });
-                        })
-                        .catch((e) => {
-                          console.log("error createEvents", e);
-                        })
-                        .finally(() => {
-                          this.props.dispatch({
-                            type: "SET_LOADING",
-                            payload: false,
-                          });
-                        });
-                    })
-                    .catch((e) => {
-                      console.log("fallo en load", e);
-                    })
-                    .finally(() => {});
-                }
-              });
-            }
-          });
         })
         .catch((e) => {
           console.log("error", e);
-        })
-        .finally(() => {
-          this.props.dispatch({
-            type: "SET_LOADING",
-            payload: false,
-          });
         });
+      if (!onScroll) {
+        await syncServer(
+          data,
+          Flats,
+          this.props.ipconfig,
+          this.props.student.id_estudiante,
+          this.props.dispatch
+        );
+      } else {
+        this.props.dispatch({
+          type: "SET_LOADING",
+          payload: false,
+        });
+      }
     } else {
       Alert.alert(
         "ERROR",

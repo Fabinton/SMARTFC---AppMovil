@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import Header from "../../components/header";
-import * as SQLite from "expo-sqlite";
 import API from "../../../utils/api";
 import ActivityEvents from "../../components/profileActivity";
 import CustomButton from "../../components/customButton";
@@ -23,8 +22,16 @@ import {
   getStudentsInServerByschool,
   updateStudentdb,
 } from "../../../utils/parsers";
+import { useFocusEffect } from "@react-navigation/native";
 
-const db = SQLite.openDatabase("db5.db");
+function FetchUserData({ loadAll }) {
+  useFocusEffect(
+    useCallback(() => {
+      loadAll();
+    }, [])
+  );
+  return null;
+}
 class Profile extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -451,6 +458,7 @@ class Profile extends Component {
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
         />
+        <FetchUserData loadAll={this.loadActivities.bind(this)} />
       </View>
     );
   }
