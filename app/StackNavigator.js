@@ -2,9 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import HeaderLogin from "./components/headerLogin";
 import HeaderReturn from "./components/headerReturn";
-import login from "./screen/containers/login";
 import StackDrawerNavigator from "./StackDrawerNavigator";
-import Registro from "./screen/containers/registerStudent";
 import ActivitySubj from "./containers/home_activity";
 import SelectMoment from "./screen/containers/selectMoment";
 import DetailActivitySubj from "./screen/containers/detailActivity";
@@ -25,16 +23,6 @@ const StackNavigator = () => {
         name="drawer"
         component={StackDrawerNavigator}
         options={{ header: () => null }}
-      />
-      <Stack.Screen
-        name="Registro"
-        component={Registro}
-        options={{ header: () => <HeaderLogin /> }}
-      />
-      <Stack.Screen
-        name="Login"
-        component={login}
-        options={{ header: () => <HeaderLogin /> }}
       />
       <Stack.Screen
         name="ActivitySubj"
