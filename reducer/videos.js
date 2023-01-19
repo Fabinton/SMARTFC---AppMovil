@@ -31,6 +31,9 @@ function videos(state = {}, action) {
     case "SET_IPCONFIG": {
       return { ...state, selectedIPConfig: action.payload.ipconfig };
     }
+    case "SET_USER_LOGGED_IN": {
+      return { ...state, loggedIn: action.payload.loggedIn };
+    }
     case "SET_DOUBT_STUDENT": {
       return { ...state, selectedDuda: action.payload.duda };
     }

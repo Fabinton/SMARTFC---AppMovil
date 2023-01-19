@@ -50,6 +50,10 @@ class Login extends Component {
               student: studentExist,
             },
           });
+          this.props.dispatch({
+            type: "SET_USER_LOGGED_IN",
+            payload: { loggedIn: true },
+          });
           setTimeout(() => {
             this.props.dispatch({
               type: "SET_LOADING",

@@ -12,6 +12,10 @@ const SplashScreen = () => {
   const fadeAnimation = useRef(new Animated.Value(0)).current;
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch({
+      type: "SET_USER_LOGGED_IN",
+      payload: { loggedIn: false },
+    });
     setTimeout(() => {
       Animated.sequence([
         Animated.timing(imagesScale, {

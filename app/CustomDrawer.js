@@ -5,7 +5,9 @@ import {
 } from "@react-navigation/drawer";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
 const CustomDrawer = (props) => {
+  const dispatch = useDispatch();
   return (
     <View style={{ flex: 1, backgroundColor: "#272D34" }}>
       <DrawerContentScrollView
@@ -19,6 +21,10 @@ const CustomDrawer = (props) => {
       <View style={{ padding: 20, borderTopWidth: 1, borderTopColor: "#ccc" }}>
         <TouchableOpacity
           onPress={() => {
+            dispatch({
+              type: "SET_USER_LOGGED_IN",
+              payload: { loggedIn: false },
+            });
             BackHandler.exitApp();
           }}
           style={{ paddingVertical: 15 }}

@@ -42,7 +42,7 @@ export const saveEventsDB = async (
     payload: true,
   });
   navigation.navigate({
-    name: "Activities",
+    name: "Mis cursos",
   });
 
   console.log(
