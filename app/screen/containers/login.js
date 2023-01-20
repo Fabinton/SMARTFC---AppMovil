@@ -50,10 +50,6 @@ class Login extends Component {
               student: studentExist,
             },
           });
-          this.props.dispatch({
-            type: "SET_USER_LOGGED_IN",
-            payload: { loggedIn: true },
-          });
           setTimeout(() => {
             this.props.dispatch({
               type: "SET_LOADING",
@@ -61,6 +57,10 @@ class Login extends Component {
             });
           }, 1700);
           setTimeout(() => {
+            this.props.dispatch({
+              type: "SET_USER_LOGGED_IN",
+              payload: { loggedIn: true },
+            });
             this.props.navigation.dispatch(
               CommonActions.navigate({
                 name: "drawer",
