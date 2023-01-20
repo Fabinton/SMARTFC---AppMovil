@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { calculateTestGrade, saveEventsDB } from "../../../utils/parsers";
 import { useDispatch } from "react-redux";
 import { LogBox } from "react-native";
+import { Audio } from "expo-av";
 
 LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",
@@ -19,6 +20,8 @@ const GamificationTest = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const [allAnswers, setAllAnswers] = useState({});
   const [evaScore, setEvaScore] = useState(0);
+  const [sound, setSound] = useState();
+  const [clockSound, setClockSound] = useState();
   const {
     setIndex,
     question,
@@ -76,6 +79,7 @@ const GamificationTest = ({ navigation, route }) => {
     if (index === 35 && evaluationStep >= 3) {
       alertMessage();
     }
+    if (index === 28) playClockSound();
   }, [index]);
 
   const completedTest = () => {
@@ -88,6 +92,34 @@ const GamificationTest = ({ navigation, route }) => {
     completedTest();
   }, [allAnswers]);
 
+  async function playButtonSound() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../../../assets/sounds/buttonClick.mp3")
+    );
+    setSound(sound);
+    await sound.playAsync();
+  }
+  async function playClockSound() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../../../assets/sounds/clock-ticking.mp3")
+    );
+    setClockSound(sound);
+    await sound.playAsync();
+  }
+  useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+  useEffect(() => {
+    return clockSound
+      ? () => {
+          clockSound.unloadAsync();
+        }
+      : undefined;
+  }, [clockSound]);
   return (
     <View style={styles.viewContainer}>
       <View style={styles.questionAnswer}>
@@ -100,6 +132,7 @@ const GamificationTest = ({ navigation, route }) => {
               <CustomButton
                 text={ans.res}
                 onPress={() => {
+                  playButtonSound();
                   setAllAnswers({
                     ...allAnswers,
                     [`  ${ans.res}` + ans.res]: ans.id, //to prevent automatic sort of javascript it key its a number.

@@ -53,7 +53,7 @@ const Progress = ({ step, steps, height }) => {
             left: 0,
             top: 0,
             borderRadius: height,
-            backgroundColor: "#2A7E19",
+            backgroundColor: step < 28 ? "#2A7E19" : "#CA0B00",
             transform: [{ translateX: animatedValue }],
           }}
         />
