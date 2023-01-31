@@ -53,6 +53,7 @@ class Profile extends Component {
     active: "",
     uniqueEvents: [],
     totalScore: 0,
+    allActivities: [],
   };
 
   componentDidMount() {
@@ -64,14 +65,18 @@ class Profile extends Component {
     );
     this.setState({ storage: studentEvents });
   }
-  async filtro(activeSub) {
+  filtro(activeSub) {
     const data = [];
-    async function esActividad(elemento) {
+    function esActividad(elemento) {
       if (elemento.id_actividad == activeSub) {
         data.push(elemento);
       }
     }
-    await this.props.list.filter(esActividad);
+    if (!(this.props.list.filter(esActividad).length > 0)) {
+      this.state.allActivities.filter(esActividad);
+    } else {
+      this.props.list.filter(esActividad);
+    }
     return data;
   }
 
@@ -95,7 +100,10 @@ class Profile extends Component {
     this.setState({ active: "ESTOS SON SU PROGRESO EN LA ACTIVIDAD" });
     if (this.props.internetConnection) {
       await API.getActivities(this.props.ipconfig)
-        .then(({ data }) => (activity = data))
+        .then(({ data }) => {
+          activity = data;
+          this.setState({ allActivities: data });
+        })
         .catch((e) => console.log("error al traer actividades", e));
     } else {
       activity = this.props.list;
@@ -334,9 +342,9 @@ class Profile extends Component {
 
   viewContenido = (item) => {
     let activity = {};
-    const handler = async () => {
-      const res = await item.subject; //handler to send data for the selected activity.
-      activity = await res;
+    const handler = () => {
+      const res = item.subject; //handler to send data for the selected activity.
+      activity = res;
       this.props.dispatch({
         type: "SET_SELECT_ACTIVITIES_SUBJECT_LIST",
         payload: {
