@@ -100,6 +100,14 @@ class Profile extends Component {
     } else {
       activity = this.props.list;
     }
+    let student = await getStudentdb(this.props.student.id_estudiante);
+    activity = activity.filter((act) => {
+      return (
+        act?.id_colegio === student[0]?.id_colegio &&
+        act?.id_grado === student[0]?.grado_estudiante
+      );
+    });
+
     var notaF = 0;
     var notaFEvaluation = 0;
     var progressoActivity = 0;
