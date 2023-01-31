@@ -68,23 +68,25 @@ class SuggestionList extends Component {
   };
   keyExtractor = (item) => item.id_CREA.toString();
   filterSearch = (text) => {
-    const data = this.props.list;
+    const data = this.props.list || [];
     var newData = [];
-    var count = Object.keys(data).length;
+    var count = Object.keys(data)?.length;
     for (var i = 0; i < count; i++) {
       if (
-        data[i].nombre_CREA.toUpperCase().includes(text.toUpperCase().trim())
+        data[i]?.nombre_CREA
+          ?.toUpperCase()
+          ?.includes(text?.toUpperCase()?.trim())
       ) {
         newData.push(data[i]);
         this.setState({ stateData: newData });
       } else {
-        newData.length == 0 && this.setState({ stateData: [] });
+        newData?.length == 0 && this.setState({ stateData: [] });
       }
     }
   };
   filterDropdown({ curso, area }) {
     const data = this.props.list;
-    const byCurso = data.filter((list) => {
+    const byCurso = data?.filter((list) => {
       const toFilter = curso ? list.id_grado : list.id_materia;
       const filter = curso ? curso : area;
       return String(toFilter) === filter;

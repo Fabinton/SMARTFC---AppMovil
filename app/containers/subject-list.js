@@ -80,6 +80,10 @@ class SuggestionList extends Component {
           this.props.student.id_estudiante,
           this.props.dispatch
         );
+        this.props.dispatch({
+          type: "SET_LOADING",
+          payload: false,
+        });
       } else {
         this.props.dispatch({
           type: "SET_LOADING",
