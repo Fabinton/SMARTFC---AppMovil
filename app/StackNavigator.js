@@ -66,7 +66,9 @@ const StackNavigator = () => {
         name="EvalutionTest"
         component={EvalutionTest}
         options={{
-          header: () => <HeaderLogin />,
+          header: ({ navigation }) => (
+            <HeaderLogin showGoBack {...navigation} />
+          ),
         }}
       />
       <Stack.Screen

@@ -1,14 +1,25 @@
 import React from "react";
 import { SafeAreaView } from "react-native";
-import { View, StyleSheet, StatusBar } from "react-native";
+import { View, StyleSheet, StatusBar, TouchableOpacity } from "react-native";
 import { useSelector } from "react-redux";
 import LoadingModal from "./LoadingModal";
 import CheckConnection from "./CheckConnection";
+import { Ionicons } from "@expo/vector-icons";
 function Header(props) {
   const { loading } = useSelector((state) => state.connection);
   return (
     <>
       <View>
+        {props.showGoBack && (
+          <TouchableOpacity onPress={() => props.goBack()}>
+            <Ionicons
+              name="md-arrow-back"
+              size={32}
+              color="black"
+              style={style.menu}
+            />
+          </TouchableOpacity>
+        )}
         <StatusBar backgroundColor="#F5F5F5" barStyle="light-content" />
         <SafeAreaView style={style.statusBar}></SafeAreaView>
         <CheckConnection />
