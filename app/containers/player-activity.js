@@ -1,6 +1,6 @@
 import React, { Component, createRef } from "react";
 import { Video } from "expo-av";
-import { StyleSheet, View, Dimensions, Alert } from "react-native";
+import { StyleSheet, View, Dimensions, ActivityIndicator } from "react-native";
 import shorthash from "shorthash";
 import * as FileSystem from "expo-file-system";
 import { connect } from "react-redux";
@@ -24,6 +24,7 @@ class Player extends Component {
     source: null,
     videoStatus: {},
     updatedEvent: false,
+    loadingVideo: true,
   };
   setOrientation() {
     if (Dimensions.get("window").height > Dimensions.get("window").width) {
@@ -86,13 +87,6 @@ class Player extends Component {
         },
       });
       return;
-    } else {
-      Alert.alert(
-        "Alerta",
-        "Su video está siendo cargado",
-        [{ text: "OK", onPress: () => {} }],
-        { cancelable: false }
-      );
     }
     const newVideo = await FileSystem.downloadAsync(uri, path);
     this.setState({
@@ -274,7 +268,12 @@ class Player extends Component {
             this.handlePlayAndPause();
             this.setState({ videoStatus: state });
           }}
-        />
+          onReadyForDisplay={() => this.setState({ loadingVideo: false })}
+        >
+          {this.state.loadingVideo && (
+            <ActivityIndicator size="small" color="#70C2E5" />
+          )}
+        </Video>
         <View style={{ alignSelf: "center" }}>
           <CustomButton
             text="Realiza el TEST"

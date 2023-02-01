@@ -8,7 +8,7 @@ const CheckConnection = () => {
   const dispatch = useDispatch();
   const { selectedIPConfig } = useSelector((state) => state.videos);
   useEffect(() => {
-    response = api.checkIp(selectedIPConfig, dispatch);
+    const response = api.checkIp(selectedIPConfig, dispatch);
   }, [NetInfo, selectedIPConfig]);
 
   return <Text style={{ height: 0.01 }}>{}</Text>;
