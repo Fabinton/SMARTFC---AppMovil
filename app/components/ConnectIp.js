@@ -10,6 +10,7 @@ const ConnectIp = ({ modalVisible, setModalVisible }) => {
   const { loading } = useSelector((state) => state.connection);
   const dispatch = useDispatch();
   const [IpValue, setIpValue] = useState("");
+
   const registrateIP = () => {
     dispatch({
       type: "SET_LOADING",
@@ -31,7 +32,10 @@ const ConnectIp = ({ modalVisible, setModalVisible }) => {
             [
               {
                 text: "OK",
-                onPress: () => setModalVisible(!modalVisible),
+                onPress: () => {
+                  setIpValue("");
+                  setModalVisible(!modalVisible);
+                },
               },
             ],
             { cancelable: false }
@@ -44,7 +48,12 @@ const ConnectIp = ({ modalVisible, setModalVisible }) => {
           Alert.alert(
             "ERROR",
             "La conexión con el servidor es erronea por favor verifica tu IP",
-            [{ text: "OK", onPress: () => {} }],
+            [
+              {
+                text: "OK",
+                onPress: () => setIpValue(""),
+              },
+            ],
             { cancelable: false }
           );
         }, 300);
@@ -62,6 +71,7 @@ const ConnectIp = ({ modalVisible, setModalVisible }) => {
       transparent={false}
       visible={modalVisible && !loading}
       onRequestClose={() => {
+        setIpValue("");
         setModalVisible(false);
       }}
     >
@@ -95,6 +105,7 @@ const ConnectIp = ({ modalVisible, setModalVisible }) => {
             textTouchable={styles.touchableButtonSignIn}
             text="Cancelar"
             onPress={() => {
+              setIpValue("");
               setModalVisible(!modalVisible);
             }}
           />
