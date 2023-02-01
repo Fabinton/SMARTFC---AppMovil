@@ -49,7 +49,7 @@ const App = () => {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           {firstLaunch && <OnBoardScreens setFirstLaunch={setFirstLaunch} />}
-          <NewAppNavigator />
+          {!firstLaunch && <NewAppNavigator />}
         </PersistGate>
       </Provider>
     );

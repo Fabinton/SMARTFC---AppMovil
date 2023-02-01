@@ -1,4 +1,4 @@
-import { View, Image, Dimensions, Text } from "react-native";
+import { View, Image, Text } from "react-native";
 import React, { useState } from "react";
 import Onboarding from "react-native-onboarding-swiper";
 import imagen from "../../assets/images/f5f5f5.png";
@@ -12,12 +12,7 @@ const OnBoardScreens = ({ setFirstLaunch }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <View
-      style={{
-        height: Dimensions.get("screen").height - 50,
-        width: Dimensions.get("screen").width,
-      }}
-    >
+    <View style={{ flex: 1 }}>
       <Onboarding
         pages={[
           {

@@ -25,7 +25,7 @@ function Suggestion(props) {
             progress={props.progresso}
             width={310}
             height={12}
-            color="#70C2E5"
+            color={props.progresso === 1 ? "#70C2E5" : "#FFFFFF"}
           />
           <Text style={styles.curso}></Text>
         </View>
