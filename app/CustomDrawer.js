@@ -14,7 +14,7 @@ import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import blueBackground from "../assets/images/backgroundImage.png";
-import userProfile from "../assets/images/user-profile.jpg";
+import userProfile from "../assets/images/user-profile.png";
 
 const CustomDrawer = (props) => {
   const { selectedStudent } = useSelector((state) => state.videos);
@@ -29,29 +29,43 @@ const CustomDrawer = (props) => {
           <Image
             source={userProfile}
             style={{
-              height: 80,
-              width: 80,
+              height: 85,
+              width: 85,
               borderRadius: 40,
               marginBottom: 10,
             }}
           />
           <Text
             numberOfLines={1}
-            style={{ fontFamily: "Roboto", fontSize: 15, color: "#333" }}
+            style={{
+              fontFamily: "sans-serif",
+              fontSize: 18,
+              color: "#272D34",
+              fontWeight: "bold",
+            }}
           >
-            Usuario:{" "}
             {selectedStudent?.nombre_estudiante?.split(" ")[0] +
               " " +
               selectedStudent?.apellido_estudiante?.split(" ")[0]}
           </Text>
-          <Text style={{ fontFamily: "Roboto", fontSize: 15, color: "#333" }}>
-            Curso: {selectedStudent?.grado_estudiante}
-          </Text>
           <Text
             numberOfLines={1}
-            style={{ fontFamily: "Roboto", fontSize: 15, color: "#333" }}
+            style={{
+              fontFamily: "sans-serif-thin",
+              fontSize: 15,
+              color: "#272D34",
+            }}
           >
-            Correo: {selectedStudent?.correo_electronico}
+            {selectedStudent?.correo_electronico}
+          </Text>
+          <Text
+            style={{
+              fontFamily: "sans-serif-thin",
+              fontSize: 15,
+              color: "#272D34",
+            }}
+          >
+            Curso: {selectedStudent?.grado_estudiante}
           </Text>
         </ImageBackground>
         <View style={{ flex: 1, backgroundColor: "#272D34", paddingTop: 10 }}>

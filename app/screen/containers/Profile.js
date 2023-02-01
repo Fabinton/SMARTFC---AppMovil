@@ -467,7 +467,6 @@ class Profile extends Component {
             <CustomButton text="Cargar Datos" onPress={() => this.loadData()} />
             <Spacer />
           </Stack>
-          <Text style={styles.TextoDatos}>{this.state.active}</Text>
         </View>
         <FlatList
           data={this.state.result}

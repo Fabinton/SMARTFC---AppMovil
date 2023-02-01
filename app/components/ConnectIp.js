@@ -80,9 +80,8 @@ const ConnectIp = ({ modalVisible, setModalVisible }) => {
           onChangeText={(text) => setIpValue(text)}
         ></TextInput>
         <Text style={styles.textDocument}>
-          Para guardar el IP necesita conexión, en caso de no estar conectado
-          dirijase a su director o docente para que se le proporcione la
-          conexión
+          Para utilizar la app necesita conexión, en caso de no estar conectado
+          dirijase al docente para que se le proporcione la conexión.
         </Text>
         <Flex inline center self="baseline">
           <CustomButton
