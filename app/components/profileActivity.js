@@ -16,10 +16,10 @@ function Suggestion(props) {
                 Nota Evaluación: {props.notaEvaluation}
               </Text>
               <Text style={styles.teacher}>
-                Nota Actividad: {props.totalScore}
+                Nota Actividad: {props.totalNota}
               </Text>
             </View>
-            <Text style={styles.puntaje}>{props.totalNota}</Text>
+            <Text style={styles.puntaje}>{props.totalScore}</Text>
           </HStack>
           <Progress.Bar
             progress={props.progresso}
