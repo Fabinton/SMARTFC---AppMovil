@@ -16,7 +16,7 @@ function Suggestion(props) {
                 Nota Evaluación: {props.notaEvaluation}
               </Text>
               <Text style={styles.teacher}>
-                Nota Actividad: {props.totalNota}
+                Nota Actividad: {props.totalScore}
               </Text>
             </View>
             <Text style={styles.puntaje}>{props.totalNota}</Text>
@@ -25,7 +25,7 @@ function Suggestion(props) {
             progress={props.progresso}
             width={310}
             height={12}
-            color={props.progresso === 1 ? "#70C2E5" : "#FFFFFF"}
+            color={props.progresso === 1 ? "#70C2E5" : "rgba(0,0,0,0.3)"}
           />
           <Text style={styles.curso}></Text>
         </View>
