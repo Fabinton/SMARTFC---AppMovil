@@ -11,7 +11,17 @@ function Subject(props) {
     <TouchableOpacity onPress={props.onPress}>
       <View style={styles.container}>
         <View style={styles.left}>
-          <Image style={styles.cover} source={{ uri: uri }} />
+          {uristring.substr(41) == "matematicasImagen.jpg" ? (
+            <Image
+              style={styles.cover}
+              source={require("../../assets/images/math.png")}
+            />
+          ) : (
+            <Image
+              style={styles.cover}
+              source={require("../../assets/images/other.png")}
+            />
+          )}
         </View>
         <View style={styles.right}>
           <Text style={styles.title}>{props.nombre_materiaActiva}</Text>
@@ -29,13 +39,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     height: 120,
     overflow: "hidden",
+    marginLeft: 7,
+    marginRight: 7,
   },
   cover: {
     marginTop: 10,
     height: 100,
     width: 100,
     resizeMode: "cover",
-    borderRadius: 50,
     overflow: "hidden",
   },
   left: {
@@ -44,13 +55,13 @@ const styles = StyleSheet.create({
   right: {
     paddingLeft: 10,
     justifyContent: "center",
+    marginLeft: 10,
   },
   title: {
     color: "#424B5B",
     textAlign: "center",
     fontSize: 25,
-    fontWeight: "bold",
-    fontFamily: "Roboto",
+    fontFamily: "monospace",
   },
   curso: {
     fontSize: 15,
