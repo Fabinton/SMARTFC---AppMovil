@@ -315,8 +315,7 @@ class Profile extends Component {
 
   async getStudentInfo() {
     let student = await getStudentdb(this.props.student.id_estudiante);
-    student[0].nombre_usuario =
-      String(this.state.totalScore) + "$" + student[0].correo_electronico; //total score into nombre_usuario key.
+    student[0].curso_estudiante = this.state.totalScore; //total score into nombre_usuario key.
     await updateStudentdb(
       student[0],
       this.props.ipconfig,

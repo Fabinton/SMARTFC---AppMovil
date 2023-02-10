@@ -312,7 +312,8 @@ export const updateStudentdb = async (
       });
     });
   });
-  const currentStudent = await getStudentdb(studentToUpdate.id_estudiante); //this just in case saving in db fails.
+  const currentStudent =
+    internetConnection && (await getStudentdb(studentToUpdate.id_estudiante)); //this just in case saving in db fails.
   internetConnection &&
     API.updateStudents(ip, currentStudent[0])
       .then()
@@ -444,7 +445,7 @@ export const getStudentsByschool = async (id_school, id_grado) => {
   const store = await new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        `select * from students where id_colegio = ? and grado_estudiante = ? order by nombre_usuario  desc ;`,
+        `select * from students where id_colegio = ? and grado_estudiante = ? order by curso_estudiante  desc ;`,
         [id_school, id_grado],
         (query, { rows: { _array } }) => {
           if (!query._error) {
@@ -456,22 +457,22 @@ export const getStudentsByschool = async (id_school, id_grado) => {
       );
     });
   });
-  const userNameNumber = store.flatMap((stu) => {
-    //function to create an array with the username transform to number
-    if (!stu.nombre_usuario.includes("$")) return [];
-    else {
-      return {
-        ...stu,
-        nombre_usuario: +stu.nombre_usuario.split("$")[0],
-      };
-    }
-  });
-  // sorting the previous array to get the student rank
-  const sortedStudents = userNameNumber.sort(
-    (a, b) => b.nombre_usuario - a.nombre_usuario
-  );
-
-  return sortedStudents;
+  // const userNameNumber = store.flatMap((stu) => {
+  //   //function to create an array with the username transform to number
+  //   if (!stu.nombre_usuario.includes("$")) return [];
+  //   else {
+  //     return {
+  //       ...stu,
+  //       nombre_usuario: +stu.nombre_usuario.split("$")[0],
+  //     };
+  //   }
+  // });
+  // // sorting the previous array to get the student rank
+  // const sortedStudents = userNameNumber.sort(
+  //   (a, b) => b.nombre_usuario - a.nombre_usuario
+  // );
+  console.log("store updated", store);
+  return store;
 };
 
 export const insertStudentDB = async (student) => {
@@ -494,7 +495,8 @@ export const getStudentsInServerByschool = async (ip) => {
   await API.allStudent(ip)
     .then(({ data }) => {
       data.map(async (student) => {
-        await insertStudentDB(student);
+        if (student.id_estudiante === 81700346411)
+          await updateStudentdb(student, "45.231.184.246", false);
       });
     })
     .catch((e) => console.log("error trayendo estudiantes", e));

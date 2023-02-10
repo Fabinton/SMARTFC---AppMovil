@@ -33,6 +33,7 @@ class Configure extends Component {
     email: this.props.student.correo_electronico,
     storage: null,
     students: null,
+    curso: this.props.student.curso_estudiante,
   };
   componentDidMount() {
     this.props.navigation.addListener("focus", () => {
@@ -68,7 +69,7 @@ class Configure extends Component {
           nombre_estudiante: this.state.name,
           apellido_estudiante: this.state.last_name,
           grado_estudiante: this.state.grado,
-          curso_estudiante: 1,
+          curso_estudiante: this.state.curso,
           id_colegio: this.state.schoolSelected,
           nombre_usuario: this.state.user,
           contrasena: this.state.password,
@@ -97,7 +98,7 @@ class Configure extends Component {
                     this.state.name,
                     this.state.last_name,
                     this.state.grado,
-                    1,
+                    this.state.curso,
                     this.state.schoolSelected,
                     this.state.user,
                     this.state.password,

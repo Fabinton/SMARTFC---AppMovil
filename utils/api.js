@@ -81,6 +81,7 @@ class Api {
     return axios.post(`${BASE_API_STUDENTS}`, Student);
   }
   async updateStudents(BASE_IP, Student) {
+    console.log(Student);
     var BASE_UPDATE_API_STUDENTS =
       "http://" + BASE_IP + ":3000" + "/uploadEstudiante";
     return axios.post(`${BASE_UPDATE_API_STUDENTS}`, Student);
