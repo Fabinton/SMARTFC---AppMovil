@@ -65,7 +65,7 @@ class Configure extends Component {
         });
         const data = {
           id_estudiante: this.props.student.id_estudiante,
-          //tipo_usuario: 1,
+          tipo_usuario: 1,
           nombre_estudiante: this.state.name,
           apellido_estudiante: this.state.last_name,
           grado_estudiante: this.state.grado,
@@ -105,11 +105,6 @@ class Configure extends Component {
                     this.state.email,
                     this.props.student.id_estudiante,
                   ]
-                );
-                tx.executeSql(
-                  "select * from students", // to verify if data is different
-                  [],
-                  (_, { rows: { _array } }) => {}
                 );
               },
               null,
@@ -260,21 +255,6 @@ class Configure extends Component {
             }
           >
             {itemsInPicker2}
-          </Picker>
-        </Flex>
-        <Flex inline center>
-          <MaterialCommunityIcons name="warehouse" size={24} color="black" />
-          <Spacer />
-          <Picker
-            mode="dropdown"
-            style={[styles.picker]}
-            itemStyle={styles.pickerItem}
-            selectedValue={this.state.schoolSelected}
-            onValueChange={(itemValue, itemIndex) =>
-              this.setState({ schoolSelected: itemValue })
-            }
-          >
-            {itemsInPicker}
           </Picker>
         </Flex>
         <TextInput

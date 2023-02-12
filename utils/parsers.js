@@ -381,7 +381,7 @@ export const inserFlatEventsBd = async (id) => {
 
 export const updateUploadedFlat = async (state = 1, id) => {
   const db = SQLite.openDatabase("db5.db");
-  await new Promise(() => {
+  await new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
         `update flatEvent set upload = ? where id_evento = ? ;`,
@@ -457,21 +457,6 @@ export const getStudentsByschool = async (id_school, id_grado) => {
       );
     });
   });
-  // const userNameNumber = store.flatMap((stu) => {
-  //   //function to create an array with the username transform to number
-  //   if (!stu.nombre_usuario.includes("$")) return [];
-  //   else {
-  //     return {
-  //       ...stu,
-  //       nombre_usuario: +stu.nombre_usuario.split("$")[0],
-  //     };
-  //   }
-  // });
-  // // sorting the previous array to get the student rank
-  // const sortedStudents = userNameNumber.sort(
-  //   (a, b) => b.nombre_usuario - a.nombre_usuario
-  // );
-  console.log("store updated", store);
   return store;
 };
 
@@ -495,8 +480,7 @@ export const getStudentsInServerByschool = async (ip) => {
   await API.allStudent(ip)
     .then(({ data }) => {
       data.map(async (student) => {
-        if (student.id_estudiante === 81700346411)
-          await updateStudentdb(student, "45.231.184.246", false);
+        await updateStudentdb(student, "", false);
       });
     })
     .catch((e) => console.log("error trayendo estudiantes", e));

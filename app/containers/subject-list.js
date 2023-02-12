@@ -53,7 +53,7 @@ class SuggestionList extends Component {
         type: "SET_LOADING",
         payload: true,
       });
-      this.updateFlat();
+      await this.updateFlat();
       const data = this.state.storage;
       const Flats = this.state.storageFlats;
       await API.getCourses(
