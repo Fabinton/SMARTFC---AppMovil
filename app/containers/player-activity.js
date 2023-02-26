@@ -1,12 +1,19 @@
 import React, { Component, createRef } from "react";
 import { Video } from "expo-av";
-import { StyleSheet, View, Dimensions, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  ActivityIndicator,
+  Alert,
+} from "react-native";
 import shorthash from "shorthash";
 import * as FileSystem from "expo-file-system";
 import { connect } from "react-redux";
 import * as ScreenOrientation from "expo-screen-orientation";
 import CustomButton from "../components/customButton";
 import * as SQLite from "expo-sqlite";
+import { getLocalEventsByStudent } from "../../utils/parsers";
 const db = SQLite.openDatabase("db5.db");
 
 class Player extends Component {
@@ -243,11 +250,32 @@ class Player extends Component {
     });
     this.updateFlat();
   }
-  continuarContenido() {
+  async continuarContenido() {
     this.state.videoStatus?.isPlaying && this.video.current.pauseAsync();
-    this.props.navigation.navigate({
-      name: "EvalutionTest",
-    });
+    const localEvents = await getLocalEventsByStudent(
+      this.props.student.id_estudiante,
+      this.props.id_actividad
+    );
+    const lastEvent = localEvents?.reverse();
+    if (!lastEvent[0]?.check_document)
+      this.props.navigation.navigate({
+        name: "EvalutionTest",
+      });
+    else {
+      Alert.alert(
+        "Test de Actividad",
+        "El test de la actividad ya ha sido realizado.",
+        [
+          {
+            text: "Cancel",
+            onPress: () => {},
+            style: "cancel",
+          },
+          { text: "OK", onPress: () => {} },
+        ],
+        { cancelable: false }
+      );
+    }
   }
   pruebaLandsCape() {}
   render() {

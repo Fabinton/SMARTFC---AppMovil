@@ -485,3 +485,22 @@ export const getStudentsInServerByschool = async (ip) => {
     })
     .catch((e) => console.log("error trayendo estudiantes", e));
 };
+export const getLocalEventsByStudent = async (id_estudiante, id_actividad) => {
+  const db = SQLite.openDatabase("db5.db");
+  const store = await new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select * from events where id_estudiante=? and id_actividad=?;`,
+        [id_estudiante, id_actividad],
+        (query, { rows: { _array } }) => {
+          if (!query._error) {
+            resolve(_array);
+          } else {
+            reject(query._error);
+          }
+        }
+      );
+    });
+  });
+  return store;
+};

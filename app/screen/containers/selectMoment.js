@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import HeaderReturn from "../../components/headerReturn";
 import CustomButton from "../../components/customButton";
 import { Stack, Flex, Spacer } from "@react-native-material/core";
+import { getLocalEventsByStudent } from "../../../utils/parsers";
 
 class selectMoment extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -43,12 +44,31 @@ class selectMoment extends Component {
     }
   }
 
-  evaluationActivity() {
-    if (this.props.activity.evaluacion == 1) {
+  async evaluationActivity() {
+    const localEvents = await getLocalEventsByStudent(
+      this.props.student.id_estudiante,
+      this.props.activity.id_actividad
+    );
+    const lastEvent = localEvents?.reverse();
+    if (this.props.activity.evaluacion == 1 && !lastEvent[0]?.check_fin) {
       this.props.navigation.navigate({
         name: "EvalutionTest",
         params: { toRender: 0 },
       });
+    } else if (lastEvent[0]?.check_fin) {
+      Alert.alert(
+        "Evaluacion",
+        "La evaluación ya ha sido realizada.",
+        [
+          {
+            text: "Cancel",
+            onPress: () => {},
+            style: "cancel",
+          },
+          { text: "OK", onPress: () => {} },
+        ],
+        { cancelable: false }
+      );
     } else {
       Alert.alert(
         "Evaluacion",
