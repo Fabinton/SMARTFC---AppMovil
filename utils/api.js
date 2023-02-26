@@ -89,12 +89,13 @@ class Api {
       "http://" + BASE_IP + ":3000" + "/loadAllStudent";
     return axios.get(`${BASE_API_ALL_STUDENTS}`);
   }
-  async allDoubts(BASE_IP) {
-    var BASE_API_ALL_STUDENTS = "http://" + BASE_IP + ":3000" + "/loadAllDudas";
-    const query = await fetch(`${BASE_API_ALL_STUDENTS}`);
-    const data = await query.json();
+  allDoubts(BASE_IP) {
+    const BASE_API_ALL_STUDENTS =
+      "http://" + BASE_IP + ":3000" + "/loadAllDudas";
+    // const query = await fetch(`${BASE_API_ALL_STUDENTS}`);
+    // const data = await query.json();
     //console.log(data);
-    return data;
+    return axios.get(`${BASE_API_ALL_STUDENTS}`);
   }
   allDoubtsStudents(BASE_IP, student) {
     var BASE_API_LOAD_DOUBTS_STUDENT =
@@ -117,7 +118,6 @@ class Api {
     return data2;
   }
   generateDoubt(BASE_IP, dataDoubt) {
-    console.log("duda en app nueva", dataDoubt);
     var BASE_API_CREATE_DOUBT = "http://" + BASE_IP + ":3000" + "/createDuda";
     return axios.post(`${BASE_API_CREATE_DOUBT}`, dataDoubt);
   }

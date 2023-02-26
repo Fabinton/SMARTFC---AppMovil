@@ -15,6 +15,11 @@ import { connect } from "react-redux";
 import CustomButton from "./customButton";
 import { Stack, Flex, Spacer } from "@react-native-material/core";
 import pregunta from "../../assets/images/pregunta.png";
+import {
+  getLocalDoubts,
+  getLocalDoubtsByStudent,
+  setLocalDoubtsByStudent,
+} from "../../utils/parsers";
 
 const db = SQLite.openDatabase("db5.db");
 
@@ -45,74 +50,69 @@ class QuestionActivity extends Component {
       );
     });
   }
-  registrateDoubt() {
+  async registrateDoubt(showAlert = true) {
     let id_doubt_cont;
     let id_duda;
-    db.transaction((tx) => {
-      tx.executeSql("select * from doubts", [], (_, { rows: { _array } }) =>
-        this.setState({ storage: _array })
-      );
-    });
-    var storageDoubts = this.state.storage;
-    if (storageDoubts.length == 0) {
-      id_doubt_cont = 1;
-    } else {
-      id_doubt_cont = storageDoubts.length + 1;
+    if (this.props.internetConnection)
+      await API.allDoubts(this.props.ipconfig)
+        .then(({ data }) => {
+          this.setState({ storage: data });
+          if (data.length == 0) id_doubt_cont = 1;
+          else id_doubt_cont = data.length + 1;
+        })
+        .catch((e) => console.log(e));
+    else {
+      this.setState({ storage: await getLocalDoubts() });
+      const storageDoubts = this.state.storage;
+      if (storageDoubts.length == 0) id_doubt_cont = 1;
+      else id_doubt_cont = storageDoubts + 1;
     }
     id_duda = "" + this.props.student.id_estudiante + id_doubt_cont;
     id_duda = parseInt(id_duda);
-    db.transaction((tx) => {
-      tx.executeSql(
-        "insert into doubts (id_duda, id_actividad, id_estudiante, pregunta, respuesta, estado_duda) values (?, ?, ?, ?, ?, ?)",
-        [
-          id_duda,
-          this.props.activity.id_actividad,
-          this.props.student.id_estudiante,
-          this.state.pregunta,
-          "",
-          0,
-        ]
-      );
-      tx.executeSql("select * from doubts", [], (_, { rows: { _array } }) =>
-        this.setState({ storage: _array })
-      );
-    });
-    Alert.alert(
-      "Almacenamiento",
-      "Su duda ha sido almacenada por favor recuerde sincronizarla para tener alguna respuesta.",
-      [{ text: "OK", onPress: () => {} }],
-      { cancelable: false }
+    await setLocalDoubtsByStudent(
+      id_duda,
+      this.props.student.id_estudiante,
+      this.props.activity.id_actividad,
+      this.state.pregunta
     );
+    if (showAlert)
+      Alert.alert(
+        "Almacenamiento",
+        "Su duda ha sido almacenada por favor recuerde sincronizarla para tener alguna respuesta.",
+        [{ text: "OK", onPress: () => {} }],
+        { cancelable: false }
+      );
   }
 
-  sincronizaDoubt() {
+  async sincronizaDoubt() {
     if (this.props.internetConnection) {
       this.props.dispatch({
         type: "SET_LOADING",
         payload: true,
       });
-      db.transaction((tx) => {
-        tx.executeSql("select * from doubts", [], (_, { rows: { _array } }) =>
-          this.setState({ storage: _array })
-        );
-      });
-      const storageDoubts = this.state.storage;
-      storageDoubts.map((doubt) => {
+      const storageDoubts = await getLocalDoubtsByStudent(
+        this.props.student.id_estudiante,
+        this.props.activity.id_actividad
+      );
+      storageDoubts.forEach((doubt) => {
         if (doubt.estado_duda === 0) {
           API.generateDoubt(this.props.ipconfig, doubt)
-            .then(() => {
+            .then(async () => {
               const id_dudosa = doubt.id_duda;
-              db.transaction((tx) => {
-                tx.executeSql(
-                  "update doubts set estado_duda = ? where id_duda = ? ",
-                  [1, id_dudosa]
-                );
-                tx.executeSql(
-                  "select * from doubts",
-                  [],
-                  (_, { rows: { _array } }) =>
-                    this.setState({ storage: _array })
-                );
+              await new Promise((resolve, reject) => {
+                db.transaction((tx) => {
+                  tx.executeSql(
+                    "update doubts set estado_duda = ? where id_duda = ? ",
+                    [1, id_dudosa],
+                    (query, { rows: { _array } }) => {
+                      if (!query._error) {
+                        resolve(_array);
+                      } else {
+                        reject(query._error);
+                      }
+                    }
+                  );
+                });
               });
               Alert.alert(
                 "Sincronización Exitosa",
@@ -164,6 +164,7 @@ class QuestionActivity extends Component {
           transparent={false}
           visible={this.state.modalVisible}
           onRequestClose={() => {
+            this.setState({ pregunta: "" });
             this.setModalVisible(!this.state.modalVisible);
           }}
         >
@@ -204,11 +205,13 @@ class QuestionActivity extends Component {
             <CustomButton
               text="Sincroniza tu pregunta"
               onPress={() => this.sincronizaDoubt()}
+              disabled={!(this?.state?.pregunta?.length > 0)}
             />
             <Spacer />
             <CustomButton
               text="Cancelar"
               onPress={() => {
+                this.setState({ pregunta: "" });
                 this.setModalVisible(!this.state.modalVisible);
               }}
             />

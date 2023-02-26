@@ -17,6 +17,7 @@ function mapStateToProps(state) {
     loading: state.connection.loading,
   };
 }
+
 class SuggestionList extends Component {
   renderEmpty = () => (
     <Empty text="No hay materias asociadas al colegio"></Empty>
@@ -36,16 +37,16 @@ class SuggestionList extends Component {
     );
   };
   keyExtractor = (item) => item.id_duda.toString();
-  getAllDoubts() {
+  async getAllDoubts() {
     if (this.props.internetConnection) {
       this.props.dispatch({
         type: "SET_LOADING",
         payload: true,
       });
-      var data = {
+      const body = {
         id_estudiante: this.props.student.id_estudiante,
       };
-      API.allDoubtsStudents(this.props.ipconfig, data)
+      await API.allDoubtsStudents(this.props.ipconfig, body)
         .then(({ data }) => {
           this.props.dispatch({
             type: "SET_DOUBT_LIST",
@@ -78,8 +79,9 @@ class SuggestionList extends Component {
     }
   }
   render() {
-    var data = [];
+    let data = [];
     data = this.props.duda;
+
     return (
       <Layout
         title="Tus Dudas"

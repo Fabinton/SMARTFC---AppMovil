@@ -1,9 +1,18 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment, useCallback } from "react";
 import Header from "../../components/header";
 import SuggestionList from "../containers/doubtsList";
 import API from "../../../utils/api";
 import { connect } from "react-redux";
+import { useFocusEffect } from "@react-navigation/native";
 
+function FetchUserData({ loadAll }) {
+  useFocusEffect(
+    useCallback(() => {
+      loadAll();
+    }, [])
+  );
+  return null;
+}
 class Home extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -17,7 +26,7 @@ class Home extends Component {
       duda: [],
     };
   }
-  componentDidMount() {
+  async componentDidMount() {
     this.props.dispatch({
       type: "SET_LOADING",
       payload: true,
@@ -25,7 +34,7 @@ class Home extends Component {
     var data = {
       id_estudiante: this.props.student.id_estudiante,
     };
-    API.allDoubtsStudents(this.props.ipconfig, data)
+    await API.allDoubtsStudents(this.props.ipconfig, data)
       .then(({ data }) => {
         this.props.dispatch({
           type: "SET_DOUBT_LIST",
@@ -55,6 +64,7 @@ class Home extends Component {
     return (
       <Fragment>
         <SuggestionList></SuggestionList>
+        <FetchUserData loadAll={this.componentDidMount.bind(this)} />
       </Fragment>
     );
   }

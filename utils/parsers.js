@@ -504,3 +504,64 @@ export const getLocalEventsByStudent = async (id_estudiante, id_actividad) => {
   });
   return store;
 };
+export const getLocalDoubts = async () => {
+  const db = SQLite.openDatabase("db5.db");
+  const store = await new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select * from doubts;`,
+        [],
+        (query, { rows: { _array } }) => {
+          if (!query._error) {
+            resolve(_array);
+          } else {
+            reject(query._error);
+          }
+        }
+      );
+    });
+  });
+  return store;
+};
+export const getLocalDoubtsByStudent = async (id_estudiante, id_actividad) => {
+  const db = SQLite.openDatabase("db5.db");
+  const store = await new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select * from doubts where id_estudiante=? and id_actividad=?;`,
+        [id_estudiante, id_actividad],
+        (query, { rows: { _array } }) => {
+          if (!query._error) {
+            resolve(_array);
+          } else {
+            reject(query._error);
+          }
+        }
+      );
+    });
+  });
+  return store;
+};
+export const setLocalDoubtsByStudent = async (
+  id_duda,
+  id_estudiante,
+  id_actividad,
+  question
+) => {
+  const db = SQLite.openDatabase("db5.db");
+  await new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "insert into doubts (id_duda, id_actividad, id_estudiante, pregunta, respuesta, estado_duda) values (?, ?, ?, ?, ?, ?)",
+        [id_duda, id_actividad, id_estudiante, question, "", 0],
+        (query, { rows: { _array } }) => {
+          if (!query._error) {
+            resolve(_array);
+          } else {
+            reject(query._error);
+          }
+        }
+      );
+    });
+  });
+};
