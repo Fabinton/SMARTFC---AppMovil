@@ -82,9 +82,10 @@ class QuestionActivity extends Component {
         [{ text: "OK", onPress: () => {} }],
         { cancelable: false }
       );
+    await this.sincronizaDoubt(false);
   }
 
-  async sincronizaDoubt() {
+  async sincronizaDoubt(showAlert = true) {
     if (this.props.internetConnection) {
       this.props.dispatch({
         type: "SET_LOADING",
@@ -139,12 +140,13 @@ class QuestionActivity extends Component {
         }
       });
     } else {
-      Alert.alert(
-        "ERROR",
-        "Recuerda que debes estar conectado para sincronizar las preguntas.",
-        [{ text: "OK", onPress: () => {} }],
-        { cancelable: false }
-      );
+      if (showAlert)
+        Alert.alert(
+          "ERROR",
+          "Recuerda que debes estar conectado para sincronizar las preguntas.",
+          [{ text: "OK", onPress: () => {} }],
+          { cancelable: false }
+        );
     }
   }
 
