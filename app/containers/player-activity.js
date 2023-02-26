@@ -86,7 +86,6 @@ class Player extends Component {
           uri: video.uri,
         },
       });
-      return;
     }
     const newVideo = await FileSystem.downloadAsync(uri, path);
     this.setState({

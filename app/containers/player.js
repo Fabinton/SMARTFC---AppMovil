@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Video } from "expo-av";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
 import shorthash from "shorthash";
 import * as FileSystem from "expo-file-system";
 import { connect } from "react-redux";
@@ -14,6 +14,7 @@ class Player extends Component {
   state = {
     mute: false,
     shouldPlay: false,
+    loadingVideo: true,
   };
   handlePlayAndPause = async () => {
     this.setState((prevState) => ({
@@ -53,7 +54,6 @@ class Player extends Component {
           uri: video.uri,
         },
       });
-      return;
     }
     const newVideo = await FileSystem.downloadAsync(uri, path);
     this.setState({
@@ -74,7 +74,12 @@ class Player extends Component {
           useNativeControls
           onFullscreenUpdate={this.setOrientation}
           posterSource={this.state.source}
-        />
+          onReadyForDisplay={() => this.setState({ loadingVideo: false })}
+        >
+          {this.state.loadingVideo && (
+            <ActivityIndicator size="small" color="#70C2E5" />
+          )}
+        </Video>
       </View>
     );
   }
