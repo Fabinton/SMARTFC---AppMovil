@@ -133,6 +133,7 @@ const GamificationTest = ({ navigation, route }) => {
                 text={ans.res}
                 onPress={() => {
                   playButtonSound();
+                  clockSound.unloadAsync();
                   setAllAnswers({
                     ...allAnswers,
                     [`  ${ans.res}` + ans.res]: ans.id, //to prevent automatic sort of javascript it key its a number.
