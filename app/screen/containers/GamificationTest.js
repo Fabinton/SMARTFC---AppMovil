@@ -5,12 +5,12 @@ import {
   Dimensions,
   BackHandler,
   Alert,
+  LogBox,
 } from "react-native";
 import CustomButton from "../../components/customButton";
 import React, { useEffect, useState } from "react";
 import { calculateTestGrade, saveEventsDB } from "../../../utils/parsers";
 import { useDispatch } from "react-redux";
-import { LogBox } from "react-native";
 import { Audio } from "expo-av";
 
 LogBox.ignoreLogs([

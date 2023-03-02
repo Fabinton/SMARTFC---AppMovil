@@ -286,19 +286,14 @@ class Login extends Component {
             secureTextEntry={!this.state.showPassword}
             onChangeText={(text) => this.setState({ password: text })}
           ></TextInput>
-          <TouchableOpacity
+          <Ionicons
             onPress={() =>
               this.setState({ showPassword: !this.state.showPassword })
             }
-          >
-            <Ionicons
-              size={18}
-              style={{ position: "absolute", top: -55, right: 10 }}
-              name={
-                !this.state.showPassword ? "eye-outline" : "eye-off-outline"
-              }
-            />
-          </TouchableOpacity>
+            size={18}
+            style={{ position: "absolute", top: 36, right: 10 }}
+            name={!this.state.showPassword ? "eye-outline" : "eye-off-outline"}
+          />
         </View>
         <CustomButton text="Iniciar sesión" onPress={() => this.signIn()} />
         <CustomButton
