@@ -31,6 +31,15 @@ function videos(state = {}, action) {
     case "SET_IPCONFIG": {
       return { ...state, selectedIPConfig: action.payload.ipconfig };
     }
+    case "SET_VIDEO_EXITS": {
+      return {
+        ...state,
+        videosDownloaded: {
+          ...state.videosDownloaded,
+          [action.payload.video]: action.payload.video,
+        },
+      };
+    }
     case "SET_USER_LOGGED_IN": {
       return { ...state, loggedIn: action.payload.loggedIn };
     }

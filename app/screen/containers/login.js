@@ -14,6 +14,7 @@ import * as SQLite from "expo-sqlite";
 import API from "../../../utils/api";
 import CustomButton from "../../components/customButton";
 import ConnectIp from "../../components/ConnectIp";
+import { Ionicons } from "@expo/vector-icons";
 
 const db = SQLite.openDatabase("db5.db");
 
@@ -25,6 +26,7 @@ class Login extends Component {
     modalVisible: false,
     ipconfig: null,
     internetConnection: this.props.internetConnection,
+    showPassword: false,
   };
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
@@ -39,8 +41,10 @@ class Login extends Component {
       if (Object.keys(this.state.storage || {})?.length > 0) {
         const studentExist = this?.state?.storage?.find((student) => {
           return (
-            student.correo_electronico == this.state.email && // reminder to check email and password from form.
-            student.contrasena == this.state.password // this.state.email this.state.password
+            student.correo_electronico.toLowerCase() ==
+              this.state.email.toLowerCase() && // reminder to check email and password from form.
+            student.contrasena.toLowerCase() ==
+              this.state.password.toLowerCase() // this.state.email this.state.password
           );
         });
         if (studentExist) {
@@ -275,12 +279,27 @@ class Login extends Component {
           autoCapitalize="none"
           onChangeText={(text) => this.setState({ email: text })}
         ></TextInput>
-        <TextInput
-          style={styles.password}
-          placeholder="Password"
-          secureTextEntry={true}
-          onChangeText={(text) => this.setState({ password: text })}
-        ></TextInput>
+        <View style={{ position: "relative" }}>
+          <TextInput
+            style={styles.password}
+            placeholder="Contraseña"
+            secureTextEntry={!this.state.showPassword}
+            onChangeText={(text) => this.setState({ password: text })}
+          ></TextInput>
+          <TouchableOpacity
+            onPress={() =>
+              this.setState({ showPassword: !this.state.showPassword })
+            }
+          >
+            <Ionicons
+              size={18}
+              style={{ position: "absolute", top: -55, right: 10 }}
+              name={
+                !this.state.showPassword ? "eye-outline" : "eye-off-outline"
+              }
+            />
+          </TouchableOpacity>
+        </View>
         <CustomButton text="Iniciar sesión" onPress={() => this.signIn()} />
         <CustomButton
           text="Sincroniza datos usuario"

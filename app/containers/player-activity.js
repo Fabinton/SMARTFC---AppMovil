@@ -87,12 +87,13 @@ class Player extends Component {
     const name = shorthash.unique(uri);
     const path = `${FileSystem.cacheDirectory}${name}`;
     const video = await FileSystem.getInfoAsync(path);
-    if (video.exists) {
+    if (this.props.videoDown && this.props?.videoDown[video.uri]) {
       this.setState({
         source: {
           uri: video.uri,
         },
       });
+      return;
     }
     const newVideo = await FileSystem.downloadAsync(uri, path);
     this.setState({
@@ -295,7 +296,15 @@ class Player extends Component {
             this.handlePlayAndPause();
             this.setState({ videoStatus: state });
           }}
-          onReadyForDisplay={() => this.setState({ loadingVideo: false })}
+          onReadyForDisplay={() => {
+            this.props.dispatch({
+              type: "SET_VIDEO_EXITS",
+              payload: {
+                video: this.state.source.uri,
+              },
+            });
+            this.setState({ loadingVideo: false });
+          }}
         >
           {this.state.loadingVideo && (
             <ActivityIndicator size="small" color="#70C2E5" />
@@ -335,6 +344,7 @@ function mapStateToProps(state) {
     activity: state.videos.selectedActivity,
     student: state.videos.selectedStudent,
     ipconfig: state.videos.selectedIPConfig,
+    videoDown: state.videos.videosDownloaded,
   };
 }
 export default connect(mapStateToProps)(Player);

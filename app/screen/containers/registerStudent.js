@@ -88,8 +88,8 @@ class Register extends Component {
             curso_estudiante: 1,
             id_colegio: this.state.schoolSelected,
             nombre_usuario: this.state.email,
-            contrasena: this.state.password,
-            correo_electronico: this.state.email,
+            contrasena: this.state.password.toLowerCase(),
+            correo_electronico: this.state.email.toLowerCase(),
           };
           API.createStudents(this.props.ipconfig, dataToSave)
             .then(({ data }) => {
@@ -106,8 +106,8 @@ class Register extends Component {
                       1,
                       this.state.schoolSelected,
                       0,
-                      this.state.password,
-                      this.state.email,
+                      this.state.password.toLowerCase(),
+                      this.state.email.toLowerCase(),
                     ]
                   );
                   tx.executeSql(
