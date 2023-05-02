@@ -133,37 +133,37 @@ class Profile extends Component {
             this.state.storage[i].check_a2 == activity[j].CA2 &&
             this.state.storage[i].check_a3 == activity[j].CA3
           ) {
-            notaF = 4;
+            notaF = 3.3;
           } else if (
             this.state.storage[i].check_a1 == activity[j].CA1 &&
             this.state.storage[i].check_a2 != activity[j].CA2 &&
             this.state.storage[i].check_a3 == activity[j].CA3
           ) {
-            notaF = 4;
+            notaF = 3.3;
           } else if (
             this.state.storage[i].check_a1 == activity[j].CA1 &&
             this.state.storage[i].check_a2 == activity[j].CA2 &&
             this.state.storage[i].check_a3 != activity[j].CA3
           ) {
-            notaF = 4;
+            notaF = 3.3;
           } else if (
             this.state.storage[i].check_a1 != activity[j].CA1 &&
             this.state.storage[i].check_a2 != activity[j].CA2 &&
             this.state.storage[i].check_a3 == activity[j].CA3
           ) {
-            notaF = 3;
+            notaF = 1.7;
           } else if (
             this.state.storage[i].check_a1 != activity[j].CA1 &&
             this.state.storage[i].check_a2 == activity[j].CA2 &&
             this.state.storage[i].check_a3 != activity[j].CA3
           ) {
-            notaF = 3;
+            notaF = 1.7;
           } else if (
             this.state.storage[i].check_a1 == activity[j].CA1 &&
             this.state.storage[i].check_a2 != activity[j].CA2 &&
             this.state.storage[i].check_a3 != activity[j].CA3
           ) {
-            notaF = 3;
+            notaF = 1.7;
           } else if (
             this.state.storage[i].check_a1 != activity[j].CA1 &&
             this.state.storage[i].check_a2 != activity[j].CA2 &&
@@ -185,37 +185,37 @@ class Profile extends Component {
             this.state.storage[i].check_Ea2 == activity[j].ECA2 &&
             this.state.storage[i].check_Ea3 == activity[j].ECA3
           ) {
-            notaFEvaluation = 4;
+            notaFEvaluation = 3.3;
           } else if (
             this.state.storage[i].check_Ea1 == activity[j].ECA1 &&
             this.state.storage[i].check_Ea2 != activity[j].ECA2 &&
             this.state.storage[i].check_Ea3 == activity[j].ECA3
           ) {
-            notaFEvaluation = 4;
+            notaFEvaluation = 3.3;
           } else if (
             this.state.storage[i].check_Ea1 == activity[j].ECA1 &&
             this.state.storage[i].check_Ea2 == activity[j].ECA2 &&
             this.state.storage[i].check_Ea3 != activity[j].ECA3
           ) {
-            notaFEvaluation = 4;
+            notaFEvaluation = 3.3;
           } else if (
             this.state.storage[i].check_Ea1 != activity[j].ECA1 &&
             this.state.storage[i].check_Ea2 != activity[j].ECA2 &&
             this.state.storage[i].check_Ea3 == activity[j].ECA3
           ) {
-            notaFEvaluation = 3;
+            notaFEvaluation = 1.7;
           } else if (
             this.state.storage[i].check_Ea1 != activity[j].ECA1 &&
             this.state.storage[i].check_Ea2 == activity[j].ECA2 &&
             this.state.storage[i].check_Ea3 != activity[j].ECA3
           ) {
-            notaFEvaluation = 3;
+            notaFEvaluation = 1.7;
           } else if (
             this.state.storage[i].check_Ea1 == activity[j].ECA1 &&
             this.state.storage[i].check_Ea2 != activity[j].ECA2 &&
             this.state.storage[i].check_Ea3 != activity[j].ECA3
           ) {
-            notaFEvaluation = 3;
+            notaFEvaluation = 1.7;
           } else if (
             this.state.storage[i].check_Ea1 != activity[j].ECA1 &&
             this.state.storage[i].check_Ea2 != activity[j].ECA2 &&

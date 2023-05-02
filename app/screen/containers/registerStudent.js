@@ -139,7 +139,7 @@ class Register extends Component {
               console.log("error register", e);
               Alert.alert(
                 "Error",
-                "Ha ocurrido un error al registrar usuario.",
+                "Ha ocurrido un error al registrar usuario, El correo ya está registrado.",
                 [{ text: "OK", onPress: () => {} }],
                 { cancelable: false }
               );
