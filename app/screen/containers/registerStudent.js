@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, Alert } from "react-native";
+import { StyleSheet, Text, Alert, View } from "react-native";
 import HeaderLogin from "../../components/headerLogin";
 import * as SQLite from "expo-sqlite";
 import API from "../../../utils/api";
@@ -9,13 +9,14 @@ import { Feather, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Stack, TextInput, Flex, Spacer } from "@react-native-material/core";
 import { Picker } from "@react-native-picker/picker";
 import Checkbox from "expo-checkbox";
+import { Ionicons } from "@expo/vector-icons";
 
 const db = SQLite.openDatabase("db5.db");
 
 class Register extends Component {
   state = {
     val: "ed",
-    seePass: true,
+    showPassword: false,
   };
   static navigationOptions = () => {
     return {
@@ -279,16 +280,26 @@ class Register extends Component {
           onChangeText={(text) => this.setState({ user: text, email: text })}
           leading={() => <Feather name="mail" size={24} color="black" />}
         />
-        <TextInput
-          secureTextEntry={true}
-          color="#70C2E5"
-          variant="standard"
-          placeholder="Contraseña *"
-          onChangeText={(text) => this.setState({ password: text })}
-          leading={() => (
-            <MaterialCommunityIcons name="key" size={24} color="black" />
-          )}
-        />
+        <View style={{ position: "relative" }}>
+          <TextInput
+            secureTextEntry={!this.state.showPassword}
+            color="#70C2E5"
+            variant="standard"
+            placeholder="Contraseña *"
+            onChangeText={(text) => this.setState({ password: text })}
+            leading={() => (
+              <MaterialCommunityIcons name="key" size={24} color="black" />
+            )}
+          />
+          <Ionicons
+            onPress={() =>
+              this.setState({ showPassword: !this.state.showPassword })
+            }
+            size={18}
+            style={{ position: "absolute", top: 15, right: 10 }}
+            name={!this.state.showPassword ? "eye-outline" : "eye-off-outline"}
+          />
+        </View>
         <Flex inline center style={{ marginLeft: 10 }}>
           <Checkbox
             value={this.state.checked}
