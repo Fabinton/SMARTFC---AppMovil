@@ -115,7 +115,16 @@ class SuggestionList extends Component {
             >
               <Picker.Item color="gray" label="Áreas" value="" />
               <Picker.Item label="Matemáticas" value="1" />
-              <Picker.Item label="Otros" value="81700346411" />
+              <Picker.Item
+                label="Tecnología e Informática"
+                value="81700346411"
+              />
+              <Picker.Item label="Español" value="2" />
+              <Picker.Item label="Sociales" value="3" />
+              <Picker.Item label="Física" value="4" />
+              <Picker.Item label="Biologia" value="5" />
+              <Picker.Item label="Quimica" value="6" />
+              <Picker.Item label="Educación Fisica" value="81700554271" />
             </Picker>
           </View>
           <View style={styles.pickerStyle}>
