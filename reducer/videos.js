@@ -36,7 +36,10 @@ function videos(state = {}, action) {
         ...state,
         videosDownloaded: {
           ...state.videosDownloaded,
-          [action.payload.video]: action.payload.video,
+          [action.payload.video]: [
+            action.payload.video,
+            action.payload.countVideo,
+          ],
         },
       };
     }

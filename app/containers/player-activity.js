@@ -30,6 +30,8 @@ class Player extends Component {
     controls: false,
     source: null,
     videoStatus: {},
+    videoCount: 0,
+    videoViewed: false,
     updatedEvent: false,
     loadingVideo: true,
   };
@@ -92,6 +94,7 @@ class Player extends Component {
         source: {
           uri: video.uri,
         },
+        videoCount: this.props?.videoDown[video.uri][1] || 0,
       });
       return;
     }
@@ -194,7 +197,7 @@ class Player extends Component {
             1,
             resultado[0].check_fin,
             resultado[0].check_answer,
-            resultado[0].count_video + 1,
+            this.state.videoCount,
             1,
             resultado[0].check_document,
             resultado[0].check_a1,
@@ -278,6 +281,7 @@ class Player extends Component {
       );
     }
   }
+
   pruebaLandsCape() {}
   render() {
     return (
@@ -293,16 +297,44 @@ class Player extends Component {
           useNativeControls
           onFullscreenUpdate={this.setOrientation}
           onPlaybackStatusUpdate={(state) => {
+            if (state.isPlaying && !this.state.videoViewed) {
+              this.setState(
+                (prevState) => ({
+                  videoStatus: state,
+                  videoCount: prevState.videoCount + 1,
+                  videoViewed: true,
+                }),
+                () => {
+                  //callback to save in redux the counter after the component state was updated.
+                  this.props.dispatch({
+                    type: "SET_VIDEO_EXITS",
+                    payload: {
+                      video: this.state.source.uri,
+                      countVideo: this.state.videoCount,
+                    },
+                  });
+                }
+              );
+            } else {
+              this.setState({ videoStatus: state });
+            }
             this.handlePlayAndPause();
-            this.setState({ videoStatus: state });
           }}
-          onReadyForDisplay={() => {
-            this.props.dispatch({
-              type: "SET_VIDEO_EXITS",
-              payload: {
-                video: this.state.source.uri,
-              },
-            });
+          onReadyForDisplay={async () => {
+            const uristring = this.props.urlvideo;
+            const ip = this.props.ipconfig;
+            const uri = "http://" + ip + ":3000" + uristring.substr(28);
+            const name = shorthash.unique(uri);
+            const path = `${FileSystem.cacheDirectory}${name}`;
+            const video = await FileSystem.getInfoAsync(path);
+            if (this.props.videoDown && !this.props?.videoDown[video.uri]) {
+              this.props.dispatch({
+                type: "SET_VIDEO_EXITS",
+                payload: {
+                  video: this.state.source.uri,
+                },
+              });
+            }
             this.setState({ loadingVideo: false });
           }}
         >
