@@ -413,29 +413,32 @@ export const syncServer = async (
     });
   const id_estudianteF = parseInt("" + id_estudiante + EventsServerlength);
   if (EventsServerlength.toString().length > 0) {
-    allFlatEvents?.map((flat) => {
+    const temporalEVENTS = allEvents?.reverse();
+    const notUploadedFlat = allFlatEvents.filter(
+      // filter only te flat events that  hasnt been uploaded
+      (currentFlat) => currentFlat.upload === 0
+    );
+    notUploadedFlat?.map((flat) => {
       const id_eventoFs = flat.id_evento;
-      if (flat.upload === 0) {
-        allEvents?.map((event) => {
-          // map all flat events to check if it is uploaded,map all event to set the id event and sending it to the server.
-          if (flat.id_evento === event.id_evento) {
-            event.id_evento = id_estudianteF;
-            API.createEvents(selectedIPConfig, event)
-              .then(async () => {
-                await updateUploadedFlat(1, id_eventoFs); // change the upload state to 1 (uploaded)
-              })
-              .catch((e) => {
-                console.log("fallo guardando evento en bd", e);
-              })
-              .finally(() => {
-                dispatch({
-                  type: "SET_LOADING",
-                  payload: false,
-                });
+      temporalEVENTS?.map((event) => {
+        // map all flat events to check if it is uploaded,map all event to set the id event and sending it to the server.
+        if (flat.id_evento === event.id_evento) {
+          event.id_evento = id_estudianteF;
+          API.createEvents(selectedIPConfig, event)
+            .then(async () => {
+              await updateUploadedFlat(1, id_eventoFs); // change the upload state to 1 (uploaded)
+            })
+            .catch((e) => {
+              console.log("fallo guardando evento en bd", e);
+            })
+            .finally(() => {
+              dispatch({
+                type: "SET_LOADING",
+                payload: false,
               });
-          }
-        });
-      }
+            });
+        }
+      });
     });
   }
 };
