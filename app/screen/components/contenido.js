@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
 function ContenidoLayout(props) {
-    return props.children
+  return props.children;
 }
 
 export default ContenidoLayout;
