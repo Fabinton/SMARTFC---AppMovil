@@ -1,97 +1,136 @@
-import React,{Component} from 'react';
-import {View, TextInput,StyleSheet,TouchableOpacity} from 'react-native';
-import API from '../../utils/api';
-import {connect} from 'react-redux';
-import { Ionicons , Octicons } from '@expo/vector-icons';
-class Search extends Component{
-    state={
-        text:''
-    }
-    handleSubmit= async()=>{
-        console.log(this.state.text);
-        const content = await API.SearchContent(this.props.ipconfig,this.state.text);
-        console.log(content);
-        this.props.dispatch({
-            type:'SET_CONTENTS_LIST',
-            payload:
-            {
-                contenido: content
-            }
-        })
-    }
-    handleChangeText=async (text)=>{
-        this.setState({
-            text
-        })
-        const content = await API.SearchContent(this.props.ipconfig,this.state.text);
-        this.props.dispatch({
-            type:'SET_CONTENTS_LIST',
-            payload:
-            {
-                contenido: content
-            }
-        })
-    }
-    render(){
-        return(
-            <View style={styles.container}>
-                <TextInput 
-                placeholder="Busca tu Contenido"
-                autoCorrect={false}
-                autoCapitalize="none"
-                underlineColorAndroid="transparent"
-                onSubmitEditing={this.handleSubmit}
-                onChangeText={this.handleChangeText}
-                style={styles.input}
-                />
-                <TouchableOpacity 
-                    style={styles.button}
-                    onPress={this.handleSubmit}
-                >
-                    <Ionicons name="md-search" size={50} color="gray" style={styles.menu}/>
-                </TouchableOpacity>
-            </View>
-            
+// SearchBar.js
+import React, { Component } from "react";
+import { StyleSheet, TextInput, View, Keyboard, Button } from "react-native";
+import { Feather, Entypo } from "@expo/vector-icons";
+import CustomButton from "./customButton";
 
-        )
-    }
-}
-
-const styles = StyleSheet.create({
-    input:{
-        marginTop:2,
-        marginLeft:4,
-        padding: 15,
-        fontSize:15,
-        borderWidth:1,
-        height: 50,
-        width: 300,
-        borderRadius:5,
-        borderColor: '#eaeaea'
-
-    },
-    button:{
-        flex: 1,
-        padding: 2,
-        marginLeft:4,
-        flexDirection:'row',
-        justifyContent: 'flex-end'
-    },
-    container:{
-        padding: 1,
-        flexDirection: 'row'
-    },
-    menu:{
-        marginLeft:2,
-        width:50,
-        height:50,
-    },
-})
-
-function mapStateToProps(state){
-    return{
-        ipconfig: state.videos.selectedIPConfig
-    }
+class SearchBar extends Component {
+  constructor(props) {
+    super(props);
   }
-export default connect(mapStateToProps) (Search);
 
+  state = {
+    clicked: false,
+    val: "",
+  };
+
+  handlePress = (text) => {
+    // Need to check to prevent null exception.
+    this.props.filterSearch?.(text);
+  };
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <View
+          style={
+            this.state.clicked
+              ? styles.searchBar__clicked
+              : styles.searchBar__unclicked
+          }
+        >
+          <Feather
+            name="search"
+            size={20}
+            color="black"
+            style={{ marginLeft: 1, marginRight: 1 }}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Busca contenido"
+            value={this.state.val}
+            onChangeText={(text) => {
+              this.handlePress?.(text);
+              this.setState({ val: text });
+            }}
+            onFocus={() => {
+              this.setState({ clicked: true });
+            }}
+          />
+          {this.state.clicked && (
+            <Entypo
+              name="cross"
+              size={20}
+              color="black"
+              style={{ padding: 2 }}
+              onPress={() => {
+                this.handlePress?.("");
+                this.setState({ val: "" });
+              }}
+            />
+          )}
+        </View>
+        {this.state.clicked && (
+          <CustomButton
+            text="Cancelar"
+            onPress={() => {
+              Keyboard.dismiss();
+              this.setState({ clicked: false });
+              this.handlePress?.("");
+              this.setState({ val: "" });
+            }}
+            textTouchable={styles.touchableButtonSignIn}
+            textStyle={{
+              color: "#FFFFFF",
+              textAlign: "center",
+              fontSize: 14,
+              fontWeight: "bold",
+              fontFamily: "Roboto",
+            }}
+          />
+        )}
+      </View>
+    );
+  }
+}
+export default SearchBar;
+
+// styles
+const styles = StyleSheet.create({
+  container: {
+    margin: 15,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    flexDirection: "row",
+    width: "90%",
+  },
+  searchBar__unclicked: {
+    padding: 10,
+    flexDirection: "row",
+    width: "100%",
+    backgroundColor: "#d9dbda",
+    borderRadius: 15,
+    alignItems: "center",
+  },
+  searchBar__clicked: {
+    padding: 10,
+    flexDirection: "row",
+    width: "75%",
+    backgroundColor: "#d9dbda",
+    borderRadius: 15,
+    alignItems: "center",
+    justifyContent: "space-evenly",
+  },
+  input: {
+    fontSize: 20,
+    marginLeft: 10,
+    width: "90%",
+  },
+
+  touchableButtonSignIn: {
+    justifyContent: "center",
+    marginLeft: 12,
+    backgroundColor: "#70C2E5",
+    height: 45,
+    width: 100,
+    borderRadius: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+});
