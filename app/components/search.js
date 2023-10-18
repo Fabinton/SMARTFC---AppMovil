@@ -37,7 +37,7 @@ class SearchBar extends Component {
           />
           <TextInput
             style={styles.input}
-            placeholder="Busca contenido"
+            placeholder="Busca contenido*"
             value={this.state.val}
             onChangeText={(text) => {
               this.handlePress?.(text);

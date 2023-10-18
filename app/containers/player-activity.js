@@ -288,6 +288,11 @@ class Player extends Component {
     });
     this.updateFlat();
   }
+  ratingstart() {
+    this.props.navigation.navigate({
+      name: "RatingStart",
+    });
+  }
   async continuarContenido() {
     this.state.videoStatus?.isPlaying && this.video.current.pauseAsync();
     const localEvents = await getLocalEventsByStudent(

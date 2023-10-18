@@ -8,6 +8,8 @@ import Reader from "../../containers/reader-activity";
 import HeaderReturn from "../../components/headerReturn";
 import QuestionActivity from "../../components/QuestionActivity";
 import CustomButton from "../../components/customButton";
+import RatingStart from '../../components/rating-start';
+import RatingStartContenido from '../../components/rating-start-contenido';
 
 class playContent extends Component {
   state = {
@@ -46,6 +48,7 @@ class playContent extends Component {
             <QuestionActivity
               style={{ position: "absolute", top: "72%", left: "12%" }}
             />
+            <RatingStart {...this.props.contenido}/>
           </ContenidoLayout>
         </Animated.View>
       );
@@ -113,8 +116,11 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
+  //console.log('estados ',state);
+  console.log('state ',state.videos.selectedContenido);
   return {
     activity: state.videos.selectedActivity,
+    contenido: state.videos.selectedContenido,
   };
 }
 export default connect(mapStateToProps)(playContent);

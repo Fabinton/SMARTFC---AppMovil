@@ -23,7 +23,7 @@ class detailActivity extends Component {
     return {
       header: (
         <HeaderReturn onPress={() => navigation.goBack()}>
-          Descripción de tu actividad**
+          Descripción de tu actividad
         </HeaderReturn>
       ),
     };

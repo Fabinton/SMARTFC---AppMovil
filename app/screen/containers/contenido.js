@@ -6,6 +6,8 @@ import Details from "../../components/details";
 import { Animated } from "react-native";
 import { connect } from "react-redux";
 import HeaderReturn from "../../components/headerReturn";
+import RatingStart from '../../components/rating-start';
+import RatingStartContenido from "../../components/rating-start-contenido";
 
 class contenido extends Component {
   state = {
@@ -47,6 +49,7 @@ class contenido extends Component {
         <ContenidoLayout>
           <Player {...this.props.contenido} />
           <Details {...this.props.contenido} />
+          <RatingStartContenido {...this.props.contenido}/>
         </ContenidoLayout>
       </Animated.View>
     );

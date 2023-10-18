@@ -25,6 +25,8 @@ import DetailRetroalimentacionTaller from "./screen/containers/DetailRetroAlimen
 import CloseSession from "./screen/containers/closeSession";
 import Profile from "./screen/containers/Profile";
 import QuizTest from "./screen/containers/QuizTest";
+import RatingStart from "./components/rating-start";
+import RatingStartContenido from "./components/rating-start-contenido";
 //import { createDrawerNavigator } from "react-navigation-drawer";
 import { Ionicons, Octicons } from "@expo/vector-icons";
 import { BackHandler, Alert } from "react-native";
@@ -77,6 +79,8 @@ const Activities = createStackNavigator(
     RetroalimentacionEvaluationTest:RetroalimentacionEvaluationTest,
     GamificationTest: GamificationTest,
     GamificationEvaluation: GamificationEvaluation,
+    RatingStart: RatingStart,
+    RatingStartContenido: RatingStartContenido,
     DetailRetroalimentacionTaller:DetailRetroalimentacionTaller,
   },
   {

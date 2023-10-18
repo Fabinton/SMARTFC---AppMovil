@@ -15,6 +15,10 @@ import API from "../../../utils/api";
 import CustomButton from "../../components/customButton";
 import ConnectIp from "../../components/ConnectIp";
 import { Ionicons } from "@expo/vector-icons";
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
+} from "@react-navigation/drawer";
 
 const db = SQLite.openDatabase("db5.db");
 
@@ -263,71 +267,73 @@ class Login extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Image
-          style={{ width: 300, height: 200 }}
-          source={require("../../../assets/images/LogoSinFondo.png")}
-        />
-        <Image
-          style={{ width: 350, height: 84 }}
-          source={require("../../../assets/images/SmartFC.png")}
-        />
+      <DrawerContentScrollView>
+        <View style={styles.container}>
+          <Image
+            style={{ width: 300, height: 200 }}
+            source={require("../../../assets/images/LogoSinFondo.png")}
+          />
+          <Image
+            style={{ width: 350, height: 84 }}
+            source={require("../../../assets/images/SmartFC.png")}
+          />
 
-        <TextInput
-          style={styles.IP}
-          placeholder="Correo Electronico"
-          autoCapitalize="none"
-          onChangeText={(text) => this.setState({ email: text })}
-
-        ></TextInput>
-        <View style={{ position: "relative" }}>
           <TextInput
-            style={styles.password}
-            placeholder="Contraseña"
-            secureTextEntry={!this.state.showPassword}
-            onChangeText={(text) => this.setState({ password: text })}
+            style={styles.IP}
+            placeholder="Correo Electronico"
+            autoCapitalize="none"
+            onChangeText={(text) => this.setState({ email: text })}
+
           ></TextInput>
-          <Ionicons
-            onPress={() =>
-              this.setState({ showPassword: !this.state.showPassword })
-            }
-            size={18}
-            style={{ position: "absolute", top: 36, right: 10 }}
-            name={!this.state.showPassword ? "eye-outline" : "eye-off-outline"}
-          />
-        </View>
-        <CustomButton text="Iniciar sesión" onPress={() => this.signIn()} />
-        <CustomButton
-          text="Sincroniza datos usuario"
-          onPress={() => this.sincronizarDatas()}
-        />
-        <CustomButton
-          text="Login como Admin"
-          onPress={() => this.loginAdmin()}
-        />
-        <View style={styles.registrate}>
-          <Text style={{ color: "#424B5B", fontSize: 20 }}>
-            ¿No tienes Cuenta?
-          </Text>
+          <View style={{ position: "relative" }}>
+            <TextInput
+              style={styles.password}
+              placeholder="Contraseña"
+              secureTextEntry={!this.state.showPassword}
+              onChangeText={(text) => this.setState({ password: text })}
+            ></TextInput>
+            <Ionicons
+              onPress={() =>
+                this.setState({ showPassword: !this.state.showPassword })
+              }
+              size={18}
+              style={{ position: "absolute", top: 36, right: 10 }}
+              name={!this.state.showPassword ? "eye-outline" : "eye-off-outline"}
+            />
+          </View>
+          <CustomButton text="Iniciar sesión" onPress={() => this.signIn()} />
           <CustomButton
-            text="Registrate"
-            textStyle={{ color: "#70C2E5", marginLeft: 5, fontSize: 20 }}
-            textTouchable={{}} //empty cuz of default style in button
-            onPress={() => this.registrateForm()}
+            text="Sincroniza datos usuario"
+            onPress={() => this.sincronizarDatas()}
           />
+          <CustomButton
+            text="Login como Admin"
+            onPress={() => this.loginAdmin()}
+          />
+          <View style={styles.registrate}>
+            <Text style={{ color: "#424B5B", fontSize: 20 }}>
+              ¿No tienes Cuenta?
+            </Text>
+            <CustomButton
+              text="Registrate"
+              textStyle={{ color: "#70C2E5", marginLeft: 5, fontSize: 20 }}
+              textTouchable={{}} //empty cuz of default style in button
+              onPress={() => this.registrateForm()}
+            />
+          </View>
+          <ConnectIp
+            modalVisible={this.state.modalVisible}
+            setModalVisible={() => this.setModalVisible(!this.state.modalVisible)}
+          />
+          <TouchableOpacity
+            onPress={() => {
+              this.setModalVisible(true);
+            }}
+          >
+            <Text>Conectar IP</Text>
+          </TouchableOpacity>
         </View>
-        <ConnectIp
-          modalVisible={this.state.modalVisible}
-          setModalVisible={() => this.setModalVisible(!this.state.modalVisible)}
-        />
-        <TouchableOpacity
-          onPress={() => {
-            this.setModalVisible(true);
-          }}
-        >
-          <Text>Conectar IP</Text>
-        </TouchableOpacity>
-      </View>
+      </DrawerContentScrollView>
     );
   }
 }

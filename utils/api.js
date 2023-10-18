@@ -162,5 +162,80 @@ class Api {
       return false;
     }
   }
+  async updateRatingActivity(BASE_IP, dataReviews, id_contenidoREA,id_estudiante) {
+    var data = {"id_contenidoREA":id_contenidoREA,"id_estudiante":id_estudiante,"reviews":dataReviews}
+    console.log(JSON.stringify(data));
+    var BASE_UPDATE_API_STUDENTS = 'http://' + BASE_IP + ':3000' + '/updateRatingActivity';
+    const query2 = await fetch(`${BASE_UPDATE_API_STUDENTS}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+    });
+    const data2 = await query2.json();
+    return data2;
+}
+async updateRatingActivityComent(BASE_IP, coments, id_contenidoREA,id_estudiante) {
+  var data = {"id_contenidoREA":id_contenidoREA,"id_estudiante":id_estudiante,"coments":coments}
+  console.log(JSON.stringify(data));
+  var BASE_UPDATE_API_STUDENTS = 'http://' + BASE_IP + ':3000' + '/updateRatingActivityComent';
+  const query2 = await fetch(`${BASE_UPDATE_API_STUDENTS}`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+  });
+  const data2 = await query2.json();
+  console.log('update rating ', data2);
+  return data2;
+}
+
+async createNivelSatisfaccion(BASE_IP,nivelSatisfaccion) {
+  var BASE_API_SATISFACCION = 'http://' + BASE_IP + ':3000' + '/createNivelSatisfaccion';
+  const query2 = await fetch(`${BASE_API_SATISFACCION}`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(nivelSatisfaccion),
+  });
+  const data2 = await query2.json();
+  console.log('data2 create nivel satisfaccion ');
+  console.log(JSON.stringify(data2));
+  return JSON.stringify(data2);
+}
+
+async createComentarios(BASE_IP,comentario) {
+  var BASE_API_COMENTARIOS = 'http://' + BASE_IP + ':3000' + '/createComentario';
+  const query2 = await fetch(`${BASE_API_COMENTARIOS}`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(comentario),
+  });
+  const data2 = await query2.json();
+  console.log('data2 create comentarios ', data2);
+  return data2;
+}
+
+async getNivelSatisfaccion(BASE_IP, id_CREA, id_estudiante) {
+  var BASE_API_NIVEL_SATISFACCION_GET = 'http://' + BASE_IP + ':3000' + '/loadNivelSatisfaccionUsuario';
+  var datajson = { id_CREA: id_CREA, id_estudiante: id_estudiante };
+
+  const query2 = await fetch(`${BASE_API_NIVEL_SATISFACCION_GET}`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(datajson),
+  });
+  const data2 = await query2.json();
+  console.log('prueba get nivel satisfaccion');
+  //console.log(data2);
+  return data2;
+}
 }
 export default new Api();

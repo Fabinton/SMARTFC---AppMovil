@@ -18,6 +18,8 @@ import GamificationEvaluation from "./screen/containers/GamificationEvaluation";
 import DetailRetroalimentacionTaller from "./screen/containers/DetailRetroAlimentacionTaller";
 import ProgressBar from "./components/ProgressBar";
 import contenido from "./screen/containers/contenido";
+import RatingStart from "./components/rating-start";
+import RatingStartContenido from "./components/rating-start-contenido";
 const Stack = createStackNavigator();
 const StackNavigator = () => {
   return (
@@ -63,7 +65,7 @@ const StackNavigator = () => {
         options={{
           header: ({ navigation }) => (
             <HeaderReturn {...navigation}>
-              Descripción de tu actividad*
+              Descripción de tu actividad
             </HeaderReturn>
           ),
         }}
@@ -89,6 +91,24 @@ const StackNavigator = () => {
       <Stack.Screen
         name="QuizTest"
         component={QuizTest}
+        options={{
+          header: ({ navigation }) => (
+            <HeaderLogin showGoBack {...navigation} />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="RatingStart"
+        component={RatingStart}
+        options={{
+          header: ({ navigation }) => (
+            <HeaderLogin showGoBack {...navigation} />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="RatingStartContenido"
+        component={RatingStartContenido}
         options={{
           header: ({ navigation }) => (
             <HeaderLogin showGoBack {...navigation} />
